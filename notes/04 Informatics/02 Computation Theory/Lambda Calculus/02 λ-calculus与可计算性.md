@@ -1,18 +1,24 @@
-$\newcommand{\l}{\lambda}$图灵证明了图灵机可计算的函数等价于由$\lambda$-calculus定义的可计算函数。$\lambda$-calculus定义的可计算函数就是能用$\l$-term表示的函数（从自然数到自然数的映射）。在$\l$-calculus中，“计算”是通过term的rewrite来完成的，因此函数的计算往往意味着符号串的“递归”。我们将会定义递归函数(recursive functions)的概念，并证明满足该定义的函数等价于能用$\l$-term表示。
+[^Date]: 2026.01.11
+[^ERT ]: 15min
+[^Author]: DennyQi
+[^Title]: 02 λ-calculus与可计算性
+[^Tag]: Informatics, Computation Theory, Lambda Calculus
+
+$\newcommand{\l}{\lambda}$图灵证明了图灵机可计算的函数等价于由$\lambda$-calculus定义的可计算函数。在$\l$-calculus中，“计算”是通过term的rewrite来完成的，因此函数的计算往往意味着符号串的“递归”。我们将会定义递归函数(recursive functions)的概念，并证明满足该定义的函数等价于能用$\l$-term表示。
 
 ## 数学的$\l$-calculus表示
 
 ### 逻辑的表示(Logic)
 
-$\newcommand{\true}{\textsf{true}}\newcommand{false}{\textsf{false}}$我们可以用$\l$-term表示逻辑真和逻辑假。我们可以用combinator $\textsf{K}\equiv \l xy.x$表示逻辑真，$\textsf{K}_\ast \equiv \l xy.y$表示逻辑假。记$\textsf{K}\equiv \textsf{true},\textsf{K}_\ast\equiv \textsf{false}$。把$\l$-term的集合$\{\textsf{true},\textsf{false}\}$称为布尔式(Boolean)，那么假设一个$\l$-term $B$可以演算得到一个布尔式（$B=\textsf{true}$或$B=\false$），那么对于任意的$P,Q\in \Lambda$，$BPQ$就可以用来表示一个“if语句”：`if B then P else Q`。
+$\newcommand{\true}{\textsf{true}}\newcommand{false}{\textsf{false}}$我们可以用$\l$-term表示逻辑真和逻辑假。我们可以用combinator $\textsf{K}\equiv \l xy.x$表示逻辑真，$\textsf{K}_\ast \equiv \l xy.y$表示逻辑假。记$\textsf{K}\equiv \textsf{true},\textsf{K}_\ast\equiv \textsf{false}$。把$\l$-term的集合$\{\textsf{true},\textsf{false}\}$称为布尔式(Boolean)。
+
+假设一个$\l$-term $B$可以演算得到一个布尔式（$B=\textsf{true}$或$B=\false$），那么对于任意的$P,Q\in \Lambda$，$BPQ$就可以用来表示一个“if语句”：`if B then P else Q`。
 
 ### 自然数的表示(Numerals)
 
 利用布尔值，我们可以表示有序对(ordered pair)。对于$M,N\in\Lambda$，$(\l z.(zMN) )\true$ $=\true MN=M$，$(\l z.(zMN) )\false$ $=\false MN=N$。我们把$\l z.(zMN)$记为$[M,N]$，于是得到$[M,N]\true=M,[M,N]\false=N$。
 
-$\newcommand{\num}[1]{\lceil #1 \rceil}$利用有序对，我们可以表示自然数。首先，用$\l x.x$表示$0$，记为$\num 0$；假设$n$表示为$\num n$，那么$\num{n+1}$可以表示为$[\false,\num n]$。
-
-在这样的表示下，我们可以找到一个combinator用来表示自然数的后继(successor)：令$\textsf{S}^+ \equiv \l x.[\false,x]$，我们有$\textsf{S}^+ \num n=(\l x.[\false ,x])\num n$ $= [\false,\num n] = \num {n+1}$。
+$\newcommand{\num}[1]{\lceil #1 \rceil}$利用有序对，我们可以表示自然数。首先，用$\l x.x$表示$0$，记为$\num 0$；假设$n$表示为$\num n$，那么$\num{n+1}$可以表示为$[\false,\num n]$。在这样的表示下，我们可以找到一个combinator用来表示自然数的后继(successor)：令$\textsf{S}^+ \equiv \l x.[\false,x]$，我们有$\textsf{S}^+ \num n=(\l x.[\false ,x])\num n$ $= [\false,\num n] = \num {n+1}$。
 
 我们可以找到一个combinator用来表示前驱(predecessor)：令$\textsf{P}^-\equiv\l x.(x\ \false)$，我们有$\textsf{P}^-\num{n+1}\equiv$ $(\l x.(x \ \false))[\false,\num n]=[\false,\num n]\false = \num n$。
 
@@ -20,11 +26,11 @@ $\newcommand{\num}[1]{\lceil #1 \rceil}$利用有序对，我们可以表示自�
 
 ### 数值函数的表示(Numeric Functions)
 
-自然数的$p$元函数$\N^p\to \N$称为一个$p$-数值函数。对于一个$p$-数值函数，如果能找到一个combinator $F$满足：对于任意的$n_1,\cdots,c_p\in\N$，都有$\num{\varphi(n_1,\cdots,n_p)} = F\num{n_1}\cdots \num{n_p}$，就称$\varphi$是$\lambda$-definable的（具体地，也称$\l$-defined by $F$）。
+自然数的$p$元函数$\N^p\to \N$称为一个$p$-数值函数。对于一个$p$-数值函数$\varphi$，如果能找到一个combinator $F$满足：对于任意的$n_1,\cdots,c_p\in\N$，都有$\num{\varphi(n_1,\cdots,n_p)} = F\num{n_1}\cdots \num{n_p}$，就称$\varphi$是$\lambda$-definable的（或称$\varphi$ is $\l$-defined by $F$）。
 
 ## 递归函数(Recursive Functions)
 
-我们已经看到，$S^+(n)=n+1$可以由$\textsf{S}^+$定义，$Z(n)=0$可以由$\l x.\num 0$定义。函数$U_i^n(x_1,\cdots,x_n)=x_i$很容易由有序对的combinator来定义。以上三个数值函数$U_i^n,S^+,Z$称为initial functions(初始函数)。Initial functions都是$\lambda$-definable的。
+我们已经看到，数值函数$S^+(n)=n+1$可以由$\textsf{S}^+$定义，数值函数$Z(n)=0$可以由$\l x.\num 0$定义。数值函数函数$U_i^n(x_1,\cdots,x_n)=x_i$很容易用有序对的combinator来定义。以上三个数值函数$U_i^n,S^+,Z$称为initial functions(初始函数)。Initial functions都是$\lambda$-definable的。
 
 $\newcommand{\A}{\mathcal{A}}$对于一个数值函数的集合$\mathcal{A}$，如果$\mathcal{A}$满足：$\forall p,m$，对任意的$\mathcal{A}$中的$p$-数值函数$\psi_1,\cdots,\psi_m$，以及$\A$中的$m$-数值函数$\chi$，复合函数$\chi(\psi_1(n_1,\cdots,n_p),\cdots,\psi_m(n_1,\cdots,n_p))$也是$\A$中的一个$p$-数值函数，就称集合$\A$对复合封闭(closed under composition)。
 

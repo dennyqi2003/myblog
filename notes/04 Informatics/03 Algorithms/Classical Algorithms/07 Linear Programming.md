@@ -1,3 +1,9 @@
+[^Date]: 2023.06.16
+[^ERT ]: 57min
+[^Author]: DennyQi
+[^Title]: 07 Linear Programming
+[^Tag]: Informatics, Algorithms, Classical Algorithms
+
 ## 线性规划问题
 
 线性规划问题指的是：给定若干个变量，这些变量满足一系列线性等式关系或线性不等式关系，要在满足这些关系的前提下求出某个这些变量的线性函数的最大值或最小值。

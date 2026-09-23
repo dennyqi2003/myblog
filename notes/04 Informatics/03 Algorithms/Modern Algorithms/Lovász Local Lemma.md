@@ -1,3 +1,9 @@
+[^Date]: 2023.05.22
+[^ERT ]: 30min
+[^Author]: DennyQi
+[^Title]: Lovász Local Lemma
+[^Tag]: Informatics, Algorithms, Modern Algorithms
+
 ## 洛瓦兹局部引理(Lovász Local Lemma, LLL)
 
 给定一个“坏事件”的集合$\mathcal{B}=\{B_1,\cdots,B_m\}$，其中$\Pr[B_i]<1$。当我们希望一个坏事件都不发生的时候，我们等价于希望有坏事件发生的概率$<1$，即$\Pr[\bigcup\limits_{i=1}^{m}B_i]<1$。根据以往的做法，我们可以根据Union Bound直接放缩为$\sum\limits_{i=1}^{m}\Pr[B_i]$，证明它小于1即可。

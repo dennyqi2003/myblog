@@ -1,3 +1,9 @@
+[^Date]: 2023.06.15
+[^ERT ]: 17min
+[^Author]: DennyQi
+[^Title]: 02 Divide-and-Conquer
+[^Tag]: Informatics, Algorithms, Classical Algorithms
+
 ## 乘法的优化
 
 暴力的乘法复杂度是$O(n^2)$的。

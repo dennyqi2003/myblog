@@ -1,4 +1,14 @@
 node_modules/
 dist/
+dist-ssr/
+src/generated/
+public/image/
+.probe/
+.tmp_ref/
 *.local
-server/.password
+.DS_Store
+Thumbs.db
+
+# Reference material, not part of the deliverable
+hexo-theme-next/
+reference picture/

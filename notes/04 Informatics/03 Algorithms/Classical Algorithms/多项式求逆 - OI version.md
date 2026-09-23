@@ -1,3 +1,9 @@
+[^Date]: 2022.08.07
+[^ERT ]: 8min
+[^Author]: DennyQi
+[^Title]: 多项式求逆 - OI version
+[^Tag]: Informatics, Algorithms, Classical Algorithms
+
 # 多项式求逆
 
 ## 多项式的逆

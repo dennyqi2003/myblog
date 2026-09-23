@@ -1,0 +1,310 @@
+/* Note body typography. The plugin contract comes from
+   markdown-rendering/source/markdown.tsx; the spacing follows the geometry
+   measured off reference picture/post.png. */
+
+.markdown-body {
+  color: var(--text-body);
+  font-size: 15px;
+  line-height: 1.85;
+  overflow-wrap: break-word;
+}
+
+.markdown-body > *:first-child {
+  margin-top: 0;
+}
+
+.markdown-body > *:last-child {
+  margin-bottom: 0;
+}
+
+.markdown-body p {
+  margin: 0 0 1.1em;
+}
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  color: var(--text);
+  font-weight: 700;
+  line-height: 1.4;
+  margin: 1.9em 0 0.75em;
+}
+
+.markdown-body h1 {
+  font-size: 23px;
+}
+
+.markdown-body h2 {
+  font-size: 20px;
+}
+
+.markdown-body h3 {
+  font-size: 17px;
+}
+
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  font-size: 15px;
+}
+
+.markdown-body a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.markdown-body a:hover {
+  text-decoration: underline;
+}
+
+.markdown-body strong {
+  color: var(--text);
+  font-weight: 700;
+}
+
+.markdown-body em {
+  font-style: italic;
+}
+
+.markdown-body u {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.markdown-body del {
+  color: var(--text-muted);
+}
+
+.markdown-body hr {
+  border: 0;
+  border-top: 1px solid var(--rule);
+  margin: 2em 0;
+}
+
+.markdown-body ul,
+.markdown-body ol {
+  margin: 0 0 1.1em;
+  padding-left: 1.7em;
+}
+
+.markdown-body li {
+  margin: 0.3em 0;
+}
+
+.markdown-body li > ul,
+.markdown-body li > ol {
+  margin: 0.3em 0;
+}
+
+.markdown-body li::marker {
+  color: var(--text-muted);
+}
+
+.markdown-body input[type='checkbox'] {
+  margin-right: 6px;
+}
+
+.markdown-body blockquote {
+  border-left: 3px solid var(--border-strong);
+  color: #666;
+  margin: 1.2em 0;
+  padding: 2px 0 2px 16px;
+}
+
+.markdown-body blockquote > *:last-child {
+  margin-bottom: 0;
+}
+
+.markdown-body img {
+  display: block;
+  margin: 1.2em auto;
+  max-width: 100%;
+}
+
+.markdown-body p > img:only-child {
+  margin: 1.2em auto;
+}
+
+.markdown-body code {
+  background: var(--code-inline-bg);
+  border-radius: 3px;
+  color: #c7254e;
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  padding: 2px 5px;
+}
+
+.markdown-body pre {
+  border-radius: 4px;
+  margin: 1.3em 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.markdown-body pre code {
+  background: none;
+  color: inherit;
+  display: block;
+  font-size: 13px;
+  line-height: 1.65;
+  overflow-x: auto;
+  padding: 1em 1.1em;
+}
+
+.markdown-body pre code.code-body {
+  position: relative;
+}
+
+/* --- code block chrome (copy button + fold) ------------------------------- */
+
+.markdown-body pre .copy-code-button {
+  background-color: #2f3349;
+  border: 1px solid #3b4261;
+  border-radius: 10px;
+  color: #cbd2ea;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  opacity: 0;
+  padding: 1px 8px;
+  pointer-events: none;
+  position: absolute;
+  right: 10px;
+  top: 1em;
+  transform: translateX(10px);
+  transition: all ease 0.3s;
+}
+
+.markdown-body pre .copy-code-button::after {
+  content: 'copy';
+}
+
+.markdown-body pre .copy-code-button.copied::after {
+  content: 'copied';
+}
+
+.markdown-body pre .copy-code-button.failed::after {
+  content: 'failed';
+}
+
+.markdown-body pre:hover .copy-code-button,
+.markdown-body pre .copy-code-button:focus-visible {
+  opacity: 0.85;
+  pointer-events: all;
+  transform: translateX(0);
+}
+
+.markdown-body pre .copy-code-button:hover {
+  opacity: 1;
+}
+
+.markdown-body pre .show-hide-button {
+  border-radius: 10px;
+  inset: 0 0 auto 0;
+  margin: auto;
+  pointer-events: none;
+  position: absolute;
+  width: 100%;
+}
+
+.markdown-body pre.collapsed .show-hide-button {
+  background-image: linear-gradient(to bottom, rgba(26, 27, 38, 0.85), rgba(26, 27, 38, 0.06));
+  bottom: 0;
+  height: auto;
+}
+
+.markdown-body pre .show-hide-button button {
+  background: #464e4e;
+  border: 0;
+  border-radius: 14px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 12px;
+  margin-bottom: 4em;
+  margin-top: 3em;
+  padding: 5px 16px;
+  pointer-events: auto;
+}
+
+.markdown-body pre.expanded .show-hide-button button {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+/* --- mermaid -------------------------------------------------------------- */
+
+.markdown-body .mermaid-block {
+  margin: 1.5em 0;
+  text-align: center;
+}
+
+.markdown-body .mermaid-block svg {
+  height: auto;
+  max-width: 100%;
+}
+
+.markdown-body .mermaid-failed {
+  background: #fafafa;
+  border: 1px solid var(--rule);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 12px;
+  text-align: left;
+  white-space: pre-wrap;
+}
+
+/* --- maths ---------------------------------------------------------------- */
+
+.markdown-body .katex {
+  font-size: 1.05em;
+}
+
+.markdown-body .katex-display {
+  margin: 1.3em 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 2px 0;
+}
+
+/* --- tables --------------------------------------------------------------- */
+
+.markdown-body table {
+  border-collapse: collapse;
+  display: block;
+  margin: 1.3em 0;
+  max-width: 100%;
+  overflow-x: auto;
+  width: max-content;
+}
+
+.markdown-body th,
+.markdown-body td {
+  border: 1px solid var(--border-strong);
+  font-size: 14px;
+  padding: 7px 12px;
+  text-align: left;
+}
+
+.markdown-body th {
+  background: #fafafa;
+  color: var(--text);
+  font-weight: 700;
+}
+
+.markdown-body tr:nth-child(even) td {
+  background: #fcfcfc;
+}
+
+/* --- misc raw HTML present in the corpus ---------------------------------- */
+
+.markdown-body div[align='center'] {
+  text-align: center;
+}
+
+.markdown-body div[align='center'] img {
+  margin-left: auto;
+  margin-right: auto;
+}

@@ -1,3 +1,9 @@
+[^Date]: 2025.12.16
+[^ERT ]: 11min
+[^Author]: DennyQi
+[^Title]: 01 Representing and Manipulating Information
+[^Tag]: Informatics, Computer Systems, Computer Architecture
+
 ## 信息的表示
 
 电子计算机用高电平表示1，低电平表示0，由此实现对一个二进制位(bit)的存储和运算。

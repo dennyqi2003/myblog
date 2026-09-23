@@ -1,3 +1,9 @@
+[^Date]: 2023.06.08
+[^ERT ]: 58min
+[^Author]: DennyQi
+[^Title]: Spectral Graph Theory
+[^Tag]: Informatics, Algorithms, Modern Algorithms
+
 现在我们想用线性代数的方法来研究组合数学问题。
 
 ## 邻接矩阵的特征值
@@ -58,7 +64,7 @@ $K_n$恰好是一个每个点度数都相等的图，也就是$d$-regular graph�
 
 既然$Q$是对称矩阵，那么它可以做谱分解$Q=\sum\limits_{i=1}^{n}\lambda_i u_iu_i^\top$，而$Q=\Pi^{1/2} P \Pi^{-1/2}$。于是$P=\Pi^{-1/2} Q \Pi^{1/2}=\Pi^{-1/2}\left(\sum\limits_{i=1}^{n}\lambda_i u_iu_i^\top\right)\Pi^{1/2}$，根据分配律$P=\sum\limits_{i=1}^{n}\lambda_i \Pi^{-1/2}u_iu_i^\top\Pi^{1/2}$。令$\Pi^{-1/2}u_i=:v_i$，那么$v_i^\top=u_i^\top(\Pi^{-1/2})^\top = u_i^\top \Pi^{-1/2}$。所以$P=\sum\limits_{i=1}^{n}\lambda_i v_iv_i^\top\Pi$。我们发现，所有的$v_j$就是$P$的特征向量，因为$Pv_j=P=\sum\limits_{i=1}^{n}\lambda_i \Pi^{-1/2}u_iu_i^\top\Pi^{1/2} v_j$ $=\sum\limits_{i=1}^{n}\lambda_i \Pi^{-1/2}u_iu_i^\top\Pi^{1/2} (\Pi^{-1/2}u_j)=\sum\limits_{i=1}^{n}\lambda_i \Pi^{-1/2}u_iu_i^\top u_j=\lambda_j\Pi^{-1/2}u_j=\lambda_j v_j$，并且我们还顺便验证了对应的特征值就是$Q$的特征值$\lambda_j$，$P$的特征值和$Q$是完全相同的。
 
-但可惜的是$v_i,v_j$并不两两正交，$v_i^\top v_j=(\Pi^{-1/2}u_i)^\top \Pi^{-1/2}u_j=u_i^\top \Pi^{-1}u_j$ $=\sum\limits_{k=1}^{n}[\pi(k)]^{-1}u_i(k)u_j(k)$，我们只知道$u_i^\top u_j=0$，因此并不能保证$v_i^\top v_j$也为0。我们“希望它能是正交的”，这样我们才能方便地讨论特征空间。所以我们把向量的内积定义修改为$\lang v_i,v_j\rang_\Pi=v_i^\top \Pi v_j$。于是$\lang v_i,v_j\rang$ $=u_i^\top \Pi^{-1/2}\Pi \Pi^{-1/2}u_j$$=u_i^\top u_j=0$。也就是我们找到了$P$的一组加权意义下的特征空间的标准正交基。
+但可惜的是$v_i,v_j$并不两两正交，$v_i^\top v_j=(\Pi^{-1/2}u_i)^\top \Pi^{-1/2}u_j=u_i^\top \Pi^{-1}u_j$ $=\sum\limits_{k=1}^{n}[\pi(k)]^{-1}u_i(k)u_j(k)$，我们只知道$u_i^\top u_j=0$，因此并不能保证$v_i^\top v_j$也为0。我们“希望它能是正交的”，这样我们才能方便地讨论特征空间。所以我们把向量的内积定义修改为$\lang v_i,v_j\rang_\Pi=v_i^\top \Pi v_j$。于是$\lang v_i,v_j\rang$ $=u_i^\top \Pi^{-1/2}\Pi \Pi^{-1/2}u_j$ $=u_i^\top u_j=0$。也就是我们找到了$P$的一组加权意义下的特征空间的标准正交基。
 
 于是我们就可以把先前涉及到内积的讨论全都替换为这种形式的内积，从而完成所有的谱图的性质在reversible matrix上的推广。对于它的拉普拉斯矩阵$L=I-P$，依然满足特征值$\gamma_1 \leq \gamma_2 \leq \cdots \leq \gamma _n$中， 最小值$\gamma_1$恒为0，最大值$\gamma_n \leq 2$（因为特征值的绝对值不超过最大度数，在这里是1，经过单位矩阵的减法以后不超过2）。我们还知道$\gamma_2=0$当且仅当图是不连通的。
 

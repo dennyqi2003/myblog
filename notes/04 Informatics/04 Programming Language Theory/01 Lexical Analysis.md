@@ -1,3 +1,9 @@
+[^Date]: 2024.01.07
+[^ERT ]: 20min
+[^Author]: DennyQi
+[^Title]: 01 Lexical Analysis
+[^Tag]: Informatics, Programming Language Theory
+
 计算机是无法对程序语言的产生人一样的“理解”的，对于计算机一个程序只是一个字符串。因此要在计算机上运行一段程序就需要把程序语言转化为机器语言，这个过程就是“编译”。编译的第一步（通常称为前端）就是对程序语言做词法分析和语法分析 。
 
 ## 词法分析

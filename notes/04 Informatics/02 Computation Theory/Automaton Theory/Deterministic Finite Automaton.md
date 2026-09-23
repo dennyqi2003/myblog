@@ -1,3 +1,9 @@
+[^Date]: 2025.03.17
+[^ERT ]: 9min
+[^Author]: DennyQi
+[^Title]: Deterministic Finite Automaton
+[^Tag]: Informatics, Computation Theory, Automaton Theory
+
 对于一个alphabet $\Sigma$，我们称一个有限长字符序列$w=a_1\cdots a_n,a_i\in \Sigma$为$\Sigma$下的一个word，全体word（也即全体有限长$\Sigma$字符序列）记为$\Sigma^*$。定义$\Sigma$下的一个语言(language)为$\Sigma^*$的一个子集（也即某个$L\subseteq \Sigma^*$）。
 
 长度为0的word记为$\epsilon$，这也是一个word；$\varnothing \subseteq \Sigma^*$，这也是一个language；

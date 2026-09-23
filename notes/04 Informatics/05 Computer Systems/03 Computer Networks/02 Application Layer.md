@@ -1,3 +1,9 @@
+[^Date]: 2025.12.11
+[^ERT ]: 11min
+[^Author]: DennyQi
+[^Title]: 02 Application Layer
+[^Tag]: Informatics, Computer Systems, Computer Networks
+
 在应用层编程只需假设通信的两设备拥有通信能力，而不用考虑具体如何实现通信，通信的具体细节将会交给下方的层级。
 
 精确地说，通信的不是设备，而是设备上的进程。我们把长期运行的进程称为server（服务器），把一般用户开启的时常关闭的进程称为客户(client)。于是，应用层的通信分为两类，一类是客户与客户的Peer-to-Peer通信，一类是client和server的通信。这里我们只讨论后者。

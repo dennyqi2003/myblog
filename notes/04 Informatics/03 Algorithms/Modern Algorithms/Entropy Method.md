@@ -1,3 +1,9 @@
+[^Date]: 2023.05.27
+[^ERT ]: 31min
+[^Author]: DennyQi
+[^Title]: Entropy Method
+[^Tag]: Informatics, Algorithms, Modern Algorithms
+
 ## 信息熵
 
 不同的话语包含的信息量是不一样的。一句短小的话可能包含着很大的信息量，而一句冗长的话可能只含有一点点信息量。因此我们想知道一句话所包含的信息量，但看它的长度肯定是不对的，而是应该看它<u>以最好的方式被压缩以后长度是多少</u>。
@@ -34,7 +40,7 @@ $$
 
 这就证实了我们在给出熵的公理时为什么没有写$H(X,Y)=H(X)+H(Y)$而是给出了$H(X,Y)=H(X)+H(Y \mid X)$。从韦恩图的角度来理解的话，我们把$H(X,Y)$看作集合$X \cup Y$，表示$(X,Y)$包含的信息，那么$H(Y \mid X)$必须表示的是$Y \setminus X$，表示$Y$上剔除所有$X$的信息以后单独留下的信息。换言之，我们需要<u>用第一个变量的信息已知的眼光</u>去看第二个变量，这就是我们为什么采用了和条件概率一样的符号，它用来提醒我们$X$是“作为条件的”已知量。严格地，$H(Y \mid X):=\sum\limits_{x}\Pr[X=x] \cdot H(Y \mid X=x)$，其中$Y \mid X=x$与我们在“条件概率”中讨论的是同一个东西，可以把它展开写成$H(Y \mid X=x)=\sum\limits_{y}\Pr[Y=y \mid X=x]\log_2 \dfrac{1}{\Pr[Y=y \mid X=x]}$。于是就有$H(Y \mid X)=\sum\limits_{x}\Pr[X=x]\sum\limits_{y}\Pr[Y=y\mid X=x]\log_2\dfrac{1}{\Pr[Y=y \mid X=x]}$，它可以看作$E_x[\sum\limits_{y}\Pr[Y=y\mid X=x]\log_2\dfrac{1}{\Pr[Y=y \mid X=x]}]=E_x[H(Y \mid X=x)]$。
 
-从熵的表达式出发，我们来验证$H(X,Y)=H(X)+H(Y \mid X)$的正确性：$H(X,Y)=\sum\limits_{x,y}\Pr[X=x \land Y=y] \log_2 \dfrac{1}{\Pr[X=x \land Y=y]}$ $=-\sum\limits_{x,y}\Pr[X=x \land Y=y] \log_2 \Pr[X=x \land Y=y]$，根据条件期望的定义$\Pr[A \land B] = \Pr[A \mid B] \cdot \Pr[B]$，因此$H(X,Y)=-\sum\limits_{x,y}\Pr[Y=y\mid X=x]\Pr[X=x]\log_2(\Pr[Y=y \mid X=x]\Pr[X=x])$。先枚举$x$，得到$-\sum\limits_{x}\Pr[X=x]\sum\limits_{y}\Pr[Y=y\mid X=x]\log_2(\Pr[Y=y\mid X=x]\Pr[X=x])$ $=-\sum\limits_{x}\Pr[X=x]\left(\sum\limits_{y}\Pr[Y=y\mid X=x]\log_2(\Pr[X=x])+\sum\limits_{y}\Pr[Y=y\mid X=x]\log_2(\Pr[Y=y\mid X=x])\right)$$=-\sum\limits_{x}\Pr[X=x]\left(\log_2(\Pr[X=x])\sum\limits_{y}\Pr[Y=y\mid X=x]+\sum\limits_{y}\Pr[Y=y\mid X=x]\log_2(\Pr[Y=y\mid X=x])\right)$，其中$\sum\limits_{y}\Pr[Y=y\mid X=x]=1$，于是$H(X,Y)=-\sum\limits_{x}\Pr[X=x]\log_2(\Pr[X=x])-\sum\limits_{x}\Pr[X=x]\sum\limits_{y}\Pr[Y=y\mid X=x]\log_2(\Pr[Y=y\mid X=x])$ $=H(X)+\sum\limits_{x}\Pr[X=x]H(Y \mid X=x)=H(X)+H(Y \mid X)$。
+从熵的表达式出发，我们来验证$H(X,Y)=H(X)+H(Y \mid X)$的正确性：$H(X,Y)=\sum\limits_{x,y}\Pr[X=x \land Y=y] \log_2 \dfrac{1}{\Pr[X=x \land Y=y]}$ $=-\sum\limits_{x,y}\Pr[X=x \land Y=y] \log_2 \Pr[X=x \land Y=y]$，根据条件期望的定义$\Pr[A \land B] = \Pr[A \mid B] \cdot \Pr[B]$，因此$H(X,Y)=-\sum\limits_{x,y}\Pr[Y=y\mid X=x]\Pr[X=x]\log_2(\Pr[Y=y \mid X=x]\Pr[X=x])$。先枚举$x$，得到$-\sum\limits_{x}\Pr[X=x]\sum\limits_{y}\Pr[Y=y\mid X=x]\log_2(\Pr[Y=y\mid X=x]\Pr[X=x])$ $=-\sum\limits_{x}\Pr[X=x]\left(\sum\limits_{y}\Pr[Y=y\mid X=x]\log_2(\Pr[X=x])+\sum\limits_{y}\Pr[Y=y\mid X=x]\log_2(\Pr[Y=y\mid X=x])\right)$ $=-\sum\limits_{x}\Pr[X=x]\left(\log_2(\Pr[X=x])\sum\limits_{y}\Pr[Y=y\mid X=x]+\sum\limits_{y}\Pr[Y=y\mid X=x]\log_2(\Pr[Y=y\mid X=x])\right)$，其中$\sum\limits_{y}\Pr[Y=y\mid X=x]=1$，于是$H(X,Y)=-\sum\limits_{x}\Pr[X=x]\log_2(\Pr[X=x])-\sum\limits_{x}\Pr[X=x]\sum\limits_{y}\Pr[Y=y\mid X=x]\log_2(\Pr[Y=y\mid X=x])$ $=H(X)+\sum\limits_{x}\Pr[X=x]H(Y \mid X=x)=H(X)+H(Y \mid X)$。
 
 我们也可以根据定义证得我们通过例子给出的不等式$H(X,Y) \leq H(X)+H(Y)$，当随机变量$X,Y$独立时等号成立，因为它们之间<u>互相不能给出对方的任何信息</u>。
 

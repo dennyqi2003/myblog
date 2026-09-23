@@ -1,3 +1,9 @@
+[^Date]: 2025.01.13
+[^ERT ]: 21min
+[^Author]: DennyQi
+[^Title]: 03 Transport Layer
+[^Tag]: Informatics, Computer Systems, Computer Networks
+
 如果说应用层报文是信，网络层报文是邮车，那么运输层就是负责把信放进邮车的邮递员。运输层不关心报文的具体内容， 也不关心报文的运输方式，而关心报文的发送方式，如何把进程中的报文提取给主机的发送端，如何把主机的接收端收到的报文交给某个正在运行的进程。Internet的运输层有两个，分别是传输控制协议(Transmission Control Protocol, TCP)和用户数据报协议(User Datagram Protocol, UDP)。这两个协议通过采用不同的发送方式提供不同的服务。特别的，TCP协议能够保证报文可靠地送到接收方手中，这是通过与接收方通信并在丢包时重传实现的；UDP协议不保证报文能可靠地转交，因而通常有更高的传输效率。
 
 ## 多路复用与多路分解(Multiplexing & Demultiplexing)

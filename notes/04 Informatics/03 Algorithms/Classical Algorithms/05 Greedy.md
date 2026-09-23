@@ -1,3 +1,9 @@
+[^Date]: 2023.06.16
+[^ERT ]: 26min
+[^Author]: DennyQi
+[^Title]: 05 Greedy
+[^Tag]: Informatics, Algorithms, Classical Algorithms
+
 ## 最小生成树
 
 在无向图中选出$|V|-1$条边，使得生成树的边权和最小，这就是最小生成树问题。

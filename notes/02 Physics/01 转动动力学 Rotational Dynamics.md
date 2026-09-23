@@ -1,3 +1,9 @@
+[^Date]: 2023.04.12
+[^ERT ]: 50min
+[^Author]: DennyQi
+[^Title]: 01 转动动力学 Rotational Dynamics
+[^Tag]: Physics
+
 现在，我们想要研究不止一个质点的运动学。首先要指出，在质点系的运动学时，除了不停应用牛顿定律的组合以外，没有任何新的东西。而这样的组合很多时候是复杂的。我们的工作是找到一些方法，来使得复杂的分析变得简单。
 
 ## 二维空间中的转动
@@ -70,7 +76,7 @@ $MX=\sum\limits_{i}m_ix_i=\sum\limits_{i\in A}m_ix_i+\sum\limits_{i \in B}m_ix_i
 
 设参考系中$x,y$轴的平面绕$z$轴转动，这个运动可以通过单位矢量$\vec{i},\vec{j},\vec{k}$来描述。现在$\vec{i},\vec{j},\vec{k}$是运动着的，我们需要想象其背后有一个不动的地面参考系。换句话说，在地面参考系的前提下，参考系的选择决定$\vec{i},\vec{j},\vec{k}$的运动，而$\vec{i},\vec{j},\vec{k}$前面的系数描述了相对该参考系的运动。
 
-单位矢量的转动可以这样来描述：$\dfrac{d\vec{i}}{dt}=\omega \vec{j},$ $\dfrac{d\vec{j}}{dt}=-\omega \vec{i}$$,\dfrac{d\vec{k}}{dt}=0$（在运算过程中$\omega$是标量，$\vec{\omega}$是矢量）。物体的位置矢量写作$\vec{r}=x\vec{i}+y\vec{j}+z\vec{k}$，其速度为$v=v_x\vec{i}+x\omega\vec{j}+v_y\vec{j}+y(-\omega \vec{i})+v_z\vec{k}$。其中$v_x\vec{i}+v_y\vec{+}v_z\vec{k}$恰好是质点在转动参考系下的速度$\vec{v'}$，而$-\omega y\vec{i}+x\omega \vec{j}=\omega \vec{k} \times(x\vec{i}+y\vec{j})=\vec{\omega} \times \vec{r}$。由此得到结论$\vec{v}=\vec{v'}+\vec{\omega} \times \vec{r}$。即转动参考系下的速度叠加上转动的线速度恰好等于地面参考系下的速度，这是符合常识的。
+单位矢量的转动可以这样来描述：$\dfrac{d\vec{i}}{dt}=\omega \vec{j},$ $\dfrac{d\vec{j}}{dt}=-\omega \vec{i}$ $,\dfrac{d\vec{k}}{dt}=0$（在运算过程中$\omega$是标量，$\vec{\omega}$是矢量）。物体的位置矢量写作$\vec{r}=x\vec{i}+y\vec{j}+z\vec{k}$，其速度为$v=v_x\vec{i}+x\omega\vec{j}+v_y\vec{j}+y(-\omega \vec{i})+v_z\vec{k}$。其中$v_x\vec{i}+v_y\vec{+}v_z\vec{k}$恰好是质点在转动参考系下的速度$\vec{v'}$，而$-\omega y\vec{i}+x\omega \vec{j}=\omega \vec{k} \times(x\vec{i}+y\vec{j})=\vec{\omega} \times \vec{r}$。由此得到结论$\vec{v}=\vec{v'}+\vec{\omega} \times \vec{r}$。即转动参考系下的速度叠加上转动的线速度恰好等于地面参考系下的速度，这是符合常识的。
 
 求二阶导数，我们就可以得到加速度，因此也就得到了转动参考系下力的情况（此时需要考虑到角加速度$\alpha$，依然当作标量）：$\vec{a}=a_x\vec{i}+v_x\omega \vec{j}+v_x\omega \vec{j}+x\alpha \vec{j}+x\omega(-\omega \vec{i})+a_y\vec{j}+v_y(-\omega \vec{i})-v_y\omega\vec{i}-y\alpha \vec{i}-y\omega(\omega \vec{j})+a_z\vec{k}$。其中$a_x\vec{i}+a_y\vec{j}+a_z\vec{k}$是质点在转动参考系下的加速度，$x\alpha \vec{j}-y\alpha\vec{i}=\alpha \vec{k} \times (x\vec{i}+y\vec{j})=\vec{\alpha} \times \vec{r}$，$-\omega^2(x\vec{i}+y\vec{j})=-\omega^2 \vec{r}$，$2\omega(v_x\vec{j}-v_y\vec{i})=2\omega\vec{k}\times(v_x\vec{i}+v_y\vec{j})=2\vec{\omega} \times \vec{v'}$。因此最终我们写出：$\vec{a}=\vec{a'}-\omega^2 \vec{r}+\alpha \times \vec{r}+2\vec{\omega}\times\vec{v'}$。从力的角度看，$m\vec{a}=m\vec{a'}-m\omega^2 \vec{r}+m\vec{\alpha} \times \vec{r}+2m\vec{\omega}\times\vec{v'}$。即，在转动参考系下， 一个物体除了受到其在坐标系内产生的加速度以外，还会受到一个沿半径向外的力，这个力就是离心力。还会因为运动而受到一个始终与运动方向垂直的力，称为科里奥利力。如果角速度在变化，还会受到一个因为角速度变化产生的切向的力。
 

@@ -1,3 +1,9 @@
+[^Date]: 2024.12.31
+[^ERT ]: 35min
+[^Author]: DennyQi
+[^Title]: secretary分析
+[^Tag]: Informatics, Algorithms, Online Algorithms
+
 到目前为止，我们对算法的分析都是基于算法在worst-case上的表现的。我们总会假设有一个adversary在已知我们设计的算法以后总会用一个最坏的输入来让我们的算法表现糟糕。然而我们发现，在某些在线算法问题下这样的分析方法太强了，以至于所有确定性算法甚至随机算法的竞争比都没有常数的竞争比，以至于worst-case分析无法比较不同算法之间的优劣。对此，一个解决方法就是采取一系列弱于worst-case的分析方法，也就是算法的beyond-the-worst-case分析。
 
 ## Selecting the maximum

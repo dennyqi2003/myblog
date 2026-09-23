@@ -1,3 +1,9 @@
+[^Date]: 2022.08.11
+[^ERT ]: 22min
+[^Author]: DennyQi
+[^Title]: 快速傅里叶变换 - OI version
+[^Tag]: Informatics, Algorithms, Classical Algorithms
+
 # 快速傅里叶变换(Fast Fourier Transform, FFT)
 
 ## 多项式乘法与卷积

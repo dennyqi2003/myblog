@@ -1,3 +1,9 @@
+[^Date]: 2023.06.15
+[^ERT ]: 28min
+[^Author]: DennyQi
+[^Title]: 04 Graphs - Shortest Paths
+[^Tag]: Informatics, Algorithms, Classical Algorithms
+
 ## 图的广度优先搜索
 
 在DFS中，一旦发现一个新节点就会立即执行从它开始的递归，这个算法一开始执行就会离源点越来越远，因此称为“深度优先”。这种搜索方式与“栈”后进先出的特性是相同的，我们甚至可以避免递归而用“栈”来实现图的深度优先搜索。

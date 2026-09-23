@@ -1,0 +1,919 @@
+/* ---------------------------------------------------------------------------
+   Tokens — sampled from reference picture/*.png and hexo-theme-next Pisces.
+   Page #f5f5f5, content card #ffffff, sidebar column 240px + 12px offset,
+   leaving the card at 898px wide inside a 1150px container.
+   --------------------------------------------------------------------------- */
+
+:root {
+  --bg: #f5f5f5;
+  --card-bg: #ffffff;
+
+  --text: #222222;
+  --text-body: #4c4c4c;
+  --text-muted: #9a9a9a;
+  --text-faint: #bbbbbb;
+
+  --border: #e5e5e5;
+  --border-strong: #d6d6d6;
+  --rule: #eeeeee;
+
+  --accent: #167ac6;
+  --code-inline-bg: #f2f4f8;
+
+  --sidebar-width: 240px;
+  --sidebar-offset: 12px;
+  --card-width: 898px;
+  --card-padding: 40px;
+
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Hiragino Sans GB',
+    'Microsoft YaHei', 'Noto Sans CJK SC', 'Source Han Sans SC', 'WenQuanYi Micro Hei', sans-serif;
+  --font-mono: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+
+  --radius: 3px;
+
+  /* Motion. One easing family for the whole site: things arrive decelerating
+     (--ease) and change shape smoothly in both directions (--ease-soft). Every
+     duration is short enough that motion never delays reading — the view
+     entrance is the longest thing here at 300ms, and it runs on content that
+     has already been laid out. */
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
+  --t-fast: 140ms;
+  --t-base: 220ms;
+  --t-view: 300ms;
+  --stagger: 18ms;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text-body);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: var(--text);
+  text-decoration: none;
+}
+
+a:hover {
+  color: #000;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* --- motion primitives ---------------------------------------------------- */
+
+/* The one entrance used everywhere: a short rise out of nothing. Applied to a
+   view root it animates the whole page change; applied to a list item it
+   animates that item, delayed by --i so a list settles top-down. */
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--rise, 6px));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* A 1px rule that draws in from the left rather than blinking on. */
+.link-rule {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 1px;
+  transition: background-size var(--t-base) var(--ease-soft),
+    color var(--t-fast) var(--ease);
+}
+
+.link-rule:hover,
+.link-rule:focus-visible {
+  background-size: 100% 1px;
+}
+
+/* --- shell ---------------------------------------------------------------- */
+
+.site {
+  min-height: 100vh;
+}
+
+.topbar {
+  display: none;
+}
+
+.main {
+  align-items: stretch;
+  display: flex;
+  justify-content: space-between;
+  margin: 0 auto;
+  max-width: 1150px;
+  padding: 24px 0 0;
+}
+
+/* The column tracks the reader down the page. `align-self` is what makes that
+   work: `.main` stretches its items, and a sidebar as tall as the article has
+   no room left to slide in, so it has to be sized by its own content first.
+   The max-height is the safety valve — a stuck column taller than the window
+   would keep its bottom off-screen for good, so it scrolls instead.
+   Below the mobile breakpoint the drawer's `position: fixed` takes over. */
+.sidebar {
+  align-self: flex-start;
+  flex: 0 0 var(--sidebar-width);
+  margin-right: var(--sidebar-offset);
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  position: sticky;
+  top: 24px;
+  width: var(--sidebar-width);
+}
+
+.site-brand {
+  text-align: center;
+}
+
+.site-title {
+  color: var(--text);
+  display: block;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.35;
+}
+
+.site-subtitle {
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.6;
+  margin: 6px 0 0;
+}
+
+.site-avatar {
+  margin: 22px auto 0;
+  text-align: center;
+}
+
+.site-avatar img {
+  border: 2px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: block;
+  height: 110px;
+  margin: 0 auto;
+  object-fit: cover;
+  width: 110px;
+}
+
+.site-nav {
+  margin-top: 24px;
+}
+
+.nav-link {
+  border-bottom: 1px solid var(--border);
+  color: #555;
+  display: block;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  padding: 12px 0 12px 4px;
+  position: relative;
+  text-align: left;
+  transition: color var(--t-fast) var(--ease);
+}
+
+/* The label stays put; a rule grows beside it. Shifting the text on hover made
+   the whole column twitch, which is a lot of movement for a pointer that is
+   only passing through. */
+.nav-link::before {
+  background: var(--accent);
+  content: '';
+  height: 0;
+  left: 0;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: height var(--t-base) var(--ease-soft);
+  width: 2px;
+}
+
+.nav-link:first-child {
+  border-top: 1px solid var(--border);
+}
+
+.nav-link:hover {
+  color: var(--text);
+}
+
+.nav-link:hover::before {
+  height: 13px;
+}
+
+.nav-link.active {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.nav-link.active::before {
+  height: 13px;
+}
+
+.site-count {
+  color: var(--text-faint);
+  font-size: 12px;
+  margin: 16px 0 0 4px;
+}
+
+.main-inner {
+  background: var(--card-bg);
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: var(--card-padding);
+}
+
+.drawer-mask {
+  display: none;
+}
+
+.site-footer {
+  border-top: 1px solid var(--rule);
+  color: var(--text-faint);
+  font-size: 12px;
+  margin-top: 56px;
+  padding-top: 16px;
+  text-align: center;
+}
+
+.site-footer p {
+  margin: 0;
+}
+
+/* --- shared view chrome --------------------------------------------------- */
+
+/* `App.vue` keys the router view on the path, so a navigation mounts a fresh
+   element and this runs once per page. It is a CSS animation rather than a Vue
+   transition on purpose: there is no leave phase, so the new page is painted
+   immediately and nothing is ever held back waiting for an animation. */
+.view {
+  animation: rise-in var(--t-view) var(--ease) both;
+  --rise: 5px;
+}
+
+.view-header {
+  margin-bottom: 32px;
+}
+
+.view-title {
+  color: var(--text);
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.35;
+  margin: 0;
+}
+
+.view-subtitle {
+  color: var(--text-muted);
+  font-size: 13px;
+  margin: 6px 0 0;
+}
+
+.view-footnote {
+  color: var(--text-faint);
+  font-size: 12px;
+  margin-top: 32px;
+  text-align: center;
+}
+
+.empty-note {
+  background: #fafafa;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  color: var(--text-muted);
+  font-size: 13px;
+  padding: 18px 20px;
+}
+
+.empty-note p {
+  margin: 0;
+}
+
+.empty-note + .empty-note {
+  margin-top: 12px;
+}
+
+/* --- post list ------------------------------------------------------------ */
+
+.post-item {
+  animation: rise-in var(--t-base) var(--ease) both;
+  animation-delay: calc(var(--i, 0) * var(--stagger));
+  border-bottom: 1px solid var(--rule);
+  padding: 26px 0 24px;
+}
+
+.post-item:first-of-type {
+  border-top: 1px solid var(--rule);
+}
+
+.post-item-title {
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.post-item-title a {
+  color: var(--text);
+}
+
+.post-item-title a:hover {
+  color: var(--accent);
+}
+
+.post-meta {
+  color: var(--text-muted);
+  font-size: 12px;
+  margin-top: 6px;
+}
+
+.post-item-excerpt {
+  color: #666;
+  font-size: 14px;
+  line-height: 1.85;
+  margin: 12px 0 0;
+}
+
+.post-item-more {
+  color: var(--accent);
+  display: inline-block;
+  font-size: 13px;
+  margin-top: 10px;
+}
+
+.post-item-more::after {
+  content: '→';
+  display: inline-block;
+  margin-left: 5px;
+  transition: transform var(--t-fast) var(--ease);
+}
+
+.post-item-more:hover {
+  color: #0f5a94;
+}
+
+.post-item-more:hover::after {
+  transform: translateX(3px);
+}
+
+/* --- pagination ----------------------------------------------------------- */
+
+.pagination {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 32px;
+}
+
+.page-link {
+  color: var(--accent);
+  font-size: 13px;
+}
+
+.page-link:not(.disabled) {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 1px;
+  transition: background-size var(--t-base) var(--ease-soft);
+}
+
+.page-link:not(.disabled):hover,
+.page-link:not(.disabled):focus-visible {
+  background-size: 100% 1px;
+}
+
+.page-link.disabled {
+  color: var(--text-faint);
+}
+
+.page-status {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+/* --- archive -------------------------------------------------------------- */
+
+.archive-year {
+  margin-bottom: 28px;
+}
+
+.archive-year-label {
+  color: var(--text);
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 8px;
+}
+
+.archive-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.archive-item {
+  align-items: baseline;
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  gap: 12px;
+  padding: 9px 0;
+}
+
+.archive-date {
+  color: var(--text-muted);
+  flex: 0 0 62px;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.archive-title {
+  color: #333;
+  flex: 1 1 auto;
+  font-size: 14px;
+  min-width: 0;
+}
+
+.archive-title:hover {
+  color: var(--accent);
+}
+
+.archive-ert {
+  color: var(--text-faint);
+  flex: 0 0 auto;
+  font-size: 12px;
+}
+
+/* --- tags ----------------------------------------------------------------- */
+
+.tags-layout {
+  display: block;
+}
+
+.tags-panel {
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 28px;
+  padding-bottom: 18px;
+}
+
+.tag-tree {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.tag-children {
+  list-style: none;
+  margin: 0;
+  overflow: hidden;
+  padding: 0;
+  transition: height var(--t-base) var(--ease-soft), opacity var(--t-base) var(--ease-soft);
+}
+
+.branch-enter-from,
+.branch-leave-to {
+  opacity: 0;
+}
+
+.tag-row {
+  align-items: center;
+  display: flex;
+  gap: 6px;
+  padding: 3px 0;
+}
+
+.tag-toggle {
+  background: none;
+  border: 0;
+  color: var(--text-faint);
+  cursor: pointer;
+  flex: 0 0 16px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1;
+  padding: 0;
+  text-align: center;
+}
+
+.tag-toggle-empty {
+  cursor: default;
+}
+
+/* + and − are different characters with slightly different widths, so they
+   cross-fade in place rather than sitting side by side for a frame. The height
+   animation carries the meaning; the glyph only has to resolve cleanly. */
+.glyph-enter-active,
+.glyph-leave-active {
+  transition: opacity 90ms var(--ease);
+}
+
+.glyph-enter-from,
+.glyph-leave-to {
+  opacity: 0;
+}
+
+.tag-toggle:hover {
+  color: var(--text);
+}
+
+.tag-label {
+  background: none;
+  border: 0;
+  border-radius: 2px;
+  color: #555;
+  cursor: pointer;
+  font-size: 13px;
+  padding: 2px 4px;
+  text-align: left;
+  transition: background-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+}
+
+.tag-label:hover {
+  background: #f2f2f2;
+  color: var(--text);
+}
+
+.tag-label.active {
+  background: #eaf3fb;
+  color: var(--text);
+  font-weight: 700;
+}
+
+.tag-count {
+  color: var(--text-faint);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  margin-left: auto;
+}
+
+.tag-hits {
+  animation: rise-in var(--t-base) var(--ease) both;
+}
+
+.tags-breadcrumb {
+  align-items: baseline;
+  border-bottom: 1px solid var(--rule);
+  color: var(--text-muted);
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 13px;
+  gap: 6px;
+  margin-bottom: 8px;
+  padding-bottom: 10px;
+}
+
+.crumb {
+  background: none;
+  border: 0;
+  color: var(--accent);
+  cursor: pointer;
+  font-size: 13px;
+  padding: 0;
+}
+
+.crumb-sep {
+  color: var(--text-faint);
+}
+
+.crumb-total {
+  color: var(--text-muted);
+  font-size: 12px;
+  margin-left: auto;
+}
+
+/* --- search --------------------------------------------------------------- */
+
+.search-box {
+  margin-bottom: 18px;
+}
+
+.search-input {
+  background: #fafafa;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 15px;
+  padding: 10px 14px;
+  width: 100%;
+}
+
+.search-input:focus {
+  background: #fff;
+  border-color: var(--accent);
+  outline: none;
+}
+
+/* Fades in once, when the index finishes and there is finally something to
+   show. Deliberately not re-run per keystroke — results that animate while you
+   type are results you cannot read. */
+.search-results {
+  animation: fade-in var(--t-base) var(--ease) both;
+}
+
+.search-status {
+  color: var(--text-muted);
+  font-size: 12px;
+  margin: 0 0 12px;
+}
+
+.search-status.error {
+  color: #c0392b;
+}
+
+.search-progress {
+  background: var(--rule);
+  border-radius: 2px;
+  height: 3px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.search-progress span {
+  background: var(--accent);
+  display: block;
+  height: 100%;
+  transition: width 0.2s ease;
+}
+
+/* --- post page ------------------------------------------------------------ */
+
+.post-header {
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 28px;
+  padding-bottom: 18px;
+}
+
+.post-title {
+  color: var(--text);
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.4;
+  margin: 0;
+  overflow-wrap: break-word;
+}
+
+.post-footer {
+  margin-top: 48px;
+}
+
+.post-tags {
+  align-items: baseline;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.post-tags-label {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.tag-chip {
+  background: #f3f3f3;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  color: #555;
+  font-size: 12px;
+  padding: 2px 8px;
+  transition: background-color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease),
+    color var(--t-fast) var(--ease);
+}
+
+.tag-chip:hover {
+  background: #ebebeb;
+  border-color: var(--border-strong);
+  color: var(--text);
+}
+
+.post-nav {
+  border-top: 1px solid var(--rule);
+  display: flex;
+  gap: 16px;
+  margin-top: 24px;
+  padding-top: 20px;
+}
+
+.post-nav-link {
+  display: block;
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.post-nav-link.older {
+  text-align: right;
+}
+
+.post-nav-link.disabled {
+  color: var(--text-faint);
+}
+
+.post-nav-label {
+  color: var(--text-muted);
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.post-nav-title {
+  color: var(--text);
+  display: block;
+  font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.post-nav-link:hover .post-nav-title {
+  color: var(--accent);
+}
+
+.post-nav-link.disabled .post-nav-title {
+  color: var(--text-faint);
+}
+
+.back-to-top {
+  background: none;
+  border: 0;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: block;
+  font-size: 12px;
+  margin: 28px auto 0;
+  padding: 4px;
+}
+
+.back-to-top:hover {
+  color: var(--text);
+}
+
+/* --- mobile --------------------------------------------------------------- */
+
+@media (max-width: 1240px) {
+  .main {
+    max-width: calc(100% - 32px);
+  }
+}
+
+@media (max-width: 900px) {
+  :root {
+    --card-padding: 24px;
+  }
+
+  .topbar {
+    align-items: center;
+    background: var(--card-bg);
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    gap: 12px;
+    padding: 10px 16px;
+    position: sticky;
+    top: 0;
+    z-index: 30;
+  }
+
+  .topbar-toggle {
+    background: none;
+    border: 0;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 6px 2px;
+  }
+
+  .topbar-toggle span {
+    background: #555;
+    display: block;
+    height: 2px;
+    transform-origin: center;
+    transition: transform var(--t-base) var(--ease-soft), opacity var(--t-fast) var(--ease);
+    width: 18px;
+  }
+
+  /* Three bars become a cross, so the control keeps showing what it will do. */
+  .topbar-toggle[aria-expanded='true'] span:nth-child(1) {
+    transform: translateY(6px) rotate(45deg);
+  }
+
+  .topbar-toggle[aria-expanded='true'] span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .topbar-toggle[aria-expanded='true'] span:nth-child(3) {
+    transform: translateY(-6px) rotate(-45deg);
+  }
+
+  .topbar-title {
+    color: var(--text);
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  .main {
+    display: block;
+    max-width: 100%;
+    padding: 0;
+  }
+
+  .sidebar {
+    background: var(--card-bg);
+    bottom: 0;
+    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.08);
+    left: 0;
+    margin: 0;
+    overflow-y: auto;
+    padding: 24px 20px 40px;
+    position: fixed;
+    top: 0;
+    transform: translateX(-100%);
+    transition: transform var(--t-view) var(--ease-soft);
+    width: 260px;
+    z-index: 40;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .drawer-mask {
+    background: rgba(0, 0, 0, 0.35);
+    bottom: 0;
+    display: block;
+    left: 0;
+    opacity: 0;
+    pointer-events: none;
+    position: fixed;
+    right: 0;
+    top: 0;
+    transition: opacity var(--t-view) var(--ease-soft);
+    z-index: 35;
+  }
+
+  .drawer-mask.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .main-inner {
+    padding: var(--card-padding);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Delays have to go too — zeroing only the durations would leave everything
+     invisible until its stagger slot came round. */
+  *,
+  *::before,
+  *::after {
+    animation-delay: 0s !important;
+    animation-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+    transition-delay: 0s !important;
+    transition-duration: 0.001ms !important;
+  }
+}

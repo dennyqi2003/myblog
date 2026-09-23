@@ -1,12 +1,18 @@
+[^Date]: 2023.05.17
+[^ERT ]: 19min
+[^Author]: DennyQi
+[^Title]: Second-moment Method
+[^Tag]: Informatics, Algorithms, Modern Algorithms
+
 ## 二阶矩，方差，切比雪夫不等式
 
-我们可以验证如果两个随机变量$X,Y$是独立的，那么一定满足$E[X\cdot Y]=E[X] \cdot E[Y]$。只需根据定义把右侧表示出来，$E[X] \cdot E[Y]$ $=\left(\sum\limits_{x}x\Pr[X=x]\right)\left(\sum\limits_{y}y\Pr[Y=y]\right)$$=\sum\limits_{x}\sum\limits_{y}xy\Pr[X=x]\Pr[Y=y]$，根据独立的定义$\Pr[X=x]\cdot \Pr[Y=y]=\Pr[X=x \land Y=y]$，因此写出$\sum\limits_{x}\sum\limits_{y}xy\Pr[X=x \land Y=y]$，我们转而枚举$x\cdot y$，对于每个确定的$x\cdot y$，我们需要把所有$\Pr[X=x \land Y=y]$累加起来，而这得到的就是$\Pr[X\cdot Y=x\cdot y]$（充分必要），这样就写出$\sum\limits_{k}k\Pr[X\cdot Y=k]$，这就是$E[X \cdot Y]$的定义本身了。证毕。而当它们不独立时，容易举出反例说明这是不满足的。
+我们可以验证如果两个随机变量$X,Y$是独立的，那么一定满足$E[X\cdot Y]=E[X] \cdot E[Y]$。只需根据定义把右侧表示出来，$E[X] \cdot E[Y]$ $=\left(\sum\limits_{x}x\Pr[X=x]\right)\left(\sum\limits_{y}y\Pr[Y=y]\right)$ $=\sum\limits_{x}\sum\limits_{y}xy\Pr[X=x]\Pr[Y=y]$，根据独立的定义$\Pr[X=x]\cdot \Pr[Y=y]=\Pr[X=x \land Y=y]$，因此写出$\sum\limits_{x}\sum\limits_{y}xy\Pr[X=x \land Y=y]$，我们转而枚举$x\cdot y$，对于每个确定的$x\cdot y$，我们需要把所有$\Pr[X=x \land Y=y]$累加起来，而这得到的就是$\Pr[X\cdot Y=x\cdot y]$（充分必要），这样就写出$\sum\limits_{k}k\Pr[X\cdot Y=k]$，这就是$E[X \cdot Y]$的定义本身了。证毕。而当它们不独立时，容易举出反例说明这是不满足的。
 
 对于任意的随机变量$X$，就称$E[X^2]$为$X$的二阶矩。注意到$E[X^2]\neq (E[X])^2$，例如在$\{1,99\}$里选一个数，这构成随机变量$X$。而$E[X^2]=\sum\limits_{i=1}^{99}i^2 \Pr(X=i)$ $=\dfrac{\sum\limits_{i=1}^{99}i^2}{99}=\dfrac{9950}{3}$。而$(E[X])^2=\left(\sum\limits_{i=1}^{99}\dfrac{i}{99}\right)^2=2500$。
 
 于是我们定义$X$的方差$Var[X]=E[X^2]-(E[X])^2$。即方差等于二阶矩减去期望的平方。根据期望的线性性，我们可以验证$Var[X]=E[(X-E[X])^2]$与此等价，因为$E[X^2+(E[X])^2-2XE[X]]=E[X^2]+(E[X])^2-2E[X]E[X]$ $=E[X^2]-(E[X])^2$。通过后者，我们容易看到方差反应的是随机变量与期望的偏离程度。比如当随机变量恒为$E[X]$时，方差为0。而如果随机变量有比较大的波动，则$Var[X]$也会较大。
 
-我们可以直接验证$Var[X+Y]=E[(X+Y)^2]-(E[X+Y])^2$，根据期望的线性性展开可得$Var[X+Y]=E[X^2]+E[Y^2]+2E[X\cdot Y]-E[X]^2-$ $E[Y]^2$$-2E[X]E[Y]$ $=Var[X]+Var[Y]+2E[X \cdot Y]-2E[X]E[Y]$。所以我们看到，只有当$X,Y$独立时我们消去后面的项得到$Var[X+Y]=Var[X]+Var[Y]$。这说明当随机变量独立时方差也具有线性性。
+我们可以直接验证$Var[X+Y]=E[(X+Y)^2]-(E[X+Y])^2$，根据期望的线性性展开可得$Var[X+Y]=E[X^2]+E[Y^2]+2E[X\cdot Y]-E[X]^2-$ $E[Y]^2$ $-2E[X]E[Y]$ $=Var[X]+Var[Y]+2E[X \cdot Y]-2E[X]E[Y]$。所以我们看到，只有当$X,Y$独立时我们消去后面的项得到$Var[X+Y]=Var[X]+Var[Y]$。这说明当随机变量独立时方差也具有线性性。
 
 现在，我们希望能够定量地描述“方差反应波动性”这一事实。这就是著名的切比雪夫不等式，它指出$\forall a>0$，$\Pr[|X-E[X]| \geq a] \leq \dfrac{Var[X]}{a^2}$。对于任意fix的一个$a$，方差越大随机变量偏离$E[X]$超过$a$的概率越大。而它其实本质上只是Markov不等式——我们可以直接根据Markov不等式得到$\Pr[|X-E[X]|\geq a]$ $=\Pr[(X-E[X])^2\geq a^2]\leq \dfrac{E[(X-E[X])^2]}{a^2}=\dfrac{Var[X]}{a^2}$。
 

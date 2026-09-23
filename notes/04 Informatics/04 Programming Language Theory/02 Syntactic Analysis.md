@@ -1,3 +1,9 @@
+[^Date]: 2025.10.14
+[^ERT ]: 14min
+[^Author]: DennyQi
+[^Title]: 02 Syntactic Analysis
+[^Tag]: Informatics, Programming Language Theory
+
 ## 语法分析
 
 在词法分析以后，我们希望能够得到表达式和程序语句的抽象语法树。例如对于`(1+x)*y`，我们希望根节点为`*`，左儿子为`+`，右儿子为`y`，`+`的儿子分别是`1`和`x`。

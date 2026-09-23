@@ -1,3 +1,9 @@
+[^Date]: 2023.07.09
+[^ERT ]: 4min
+[^Author]: DennyQi
+[^Title]: HTML语言
+[^Tag]: Informatics, other, HTML
+
 ## HTML基础
 
 超文本标记语言（**H**yper **T**ext **M**arkup **L**anguage，HTML）是用来描述网页的一种语言。HTML 不是一种编程语言，而是一种<u>标记</u>语言。标记语言是一套标记标签，使用标记标签来描述网页。

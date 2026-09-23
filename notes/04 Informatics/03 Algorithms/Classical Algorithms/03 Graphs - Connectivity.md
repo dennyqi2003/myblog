@@ -1,3 +1,9 @@
+[^Date]: 2023.06.15
+[^ERT ]: 23min
+[^Author]: DennyQi
+[^Title]: 03 Graphs - Connectivity
+[^Tag]: Informatics, Algorithms, Classical Algorithms
+
 ## 无向图的深度优先搜索
 
 ### 深度优先搜索的算法过程

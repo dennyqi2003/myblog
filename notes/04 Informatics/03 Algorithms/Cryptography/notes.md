@@ -1,4 +1,10 @@
-$\newcommand{\A}{\mathcal{A}}$
+[^Date]: 2024.12.20
+[^ERT ]: 10min
+[^Author]: DennyQi
+[^Title]: notes
+[^Tag]: Informatics, Algorithms, Cryptography
+
+
 
 Crytography - Digital Signature and Secure Multi-Party Computation
 
@@ -14,7 +20,7 @@ From the above definition, it is clear that only the holder of the private key c
 
 Similarly to private-key cryptography, we can define the security of a digital signature scheme:
 
-Consider the following experiment $SigForge_{\A, \Pi}(n)$: Given input $n$, $\text{Gen}(n)$ generates $(k_p, k_s)$; adversary $\A$ receives $k_p$ and queries the $\text{Sign}$-oracle polynomial times, obtaining pairs $(m, \sigma)$; the adversary eventually outputs a message $m_0$ and a corresponding signature $\sigma_0$ that were not queried before. If $\text{Vrfy}_{p_k}(m_0, \sigma_0) = 1$, the we call the adversary successful. If the probability of any adversary's success is bounded by $\Pr[SigForge_{\A, \Pi}(n) = 1] \leq \text{negl}$, the scheme is considered secure.
+Consider the following experiment $SigForge_{\mathcal{A}, \Pi}(n)$: Given input $n$, $\text{Gen}(n)$ generates $(k_p, k_s)$; adversary $\mathcal{A}$ receives $k_p$ and queries the $\text{Sign}$-oracle polynomial times, obtaining pairs $(m, \sigma)$; the adversary eventually outputs a message $m_0$ and a corresponding signature $\sigma_0$ that were not queried before. If $\text{Vrfy}_{p_k}(m_0, \sigma_0) = 1$, the we call the adversary successful. If the probability of any adversary's success is bounded by $\Pr[SigForge_{\mathcal{A}, \Pi}(n) = 1] \leq \text{negl}$, the scheme is considered secure.
 
 ### The Schnorr Signature Scheme
 

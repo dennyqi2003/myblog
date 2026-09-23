@@ -1,3 +1,9 @@
+[^Date]: 2025.11.07
+[^ERT ]: 13min
+[^Author]: DennyQi
+[^Title]: KMP & AC自动机
+[^Tag]: Informatics, Algorithms, Data Structures
+
 字符串匹配的基本方法就是，逐位移动模式串，检查当前位置是否匹配。似乎只有这样才能够不遗漏地检查所有可能匹配上的情况。容易发现，这样做的复杂度是$O(nm)$的。而事实是，我们可以做到比这更好。
 
 ## KMP

@@ -1,3 +1,9 @@
+[^Date]: 2023.06.15
+[^ERT ]: 28min
+[^Author]: DennyQi
+[^Title]: 01 Algorithms with Numbers
+[^Tag]: Informatics, Algorithms, Classical Algorithms
+
 ## 基本算数
 
 一个整数可以用物体的个数来表示。比如用8个点我们就能表示数字8。但这样的话对于大的数字我们就必须用非常多的点，造成了不方便。因此为了更方便地表示一个数，我们通常要选择一个进制。我们在日常生活中常用的是10进制，在计算机中常用的是2进制，等等。

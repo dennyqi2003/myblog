@@ -1,3 +1,9 @@
+[^Date]: 2023.06.15
+[^ERT ]: 28min
+[^Author]: DennyQi
+[^Title]: NP完全问题
+[^Tag]: Informatics, Computation Theory, Complexity Theory
+
 到现在为止我们讨论的问题都是面对一个问题如何设计出一个高效的算法。现在我们要讨论一个不同的问题，我们可以通过分析证明：一些问题是不可能存在高效的算法的。而证明的方法依然是设计算法。
 
 ## NP-complete问题

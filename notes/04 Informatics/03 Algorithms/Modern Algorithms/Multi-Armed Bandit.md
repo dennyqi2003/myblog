@@ -1,3 +1,9 @@
+[^Date]: 2025.11.08
+[^ERT ]: 20min
+[^Author]: DennyQi
+[^Title]: Multi-Armed Bandit
+[^Tag]: Informatics, Algorithms, Modern Algorithms
+
 ## 问题描述
 
 Bandit是一种常见的赌博机器。一般的赌场里的Bandit只有一个臂，你可以付钱来拉一次臂，机器会按照一个概率分布返回奖励。因为这样的机器常让赌徒输得精光，所以被称为“bandit(强盗)”。
@@ -6,21 +12,21 @@ Bandit是一种常见的赌博机器。一般的赌场里的Bandit只有一个�
 
 关于Multi-Armed Bandit模型，一个经典的问题是：假设你已经付钱拉$T$轮，那么应该采用什么样的策略来取得尽量高的收益。这样的问题属于“在线优化(online optimization)”领域，其核心在于平衡“探索(exploration)”和“使用(commitment)”：由于我们并不事先知道每个臂的概率分布函数，所以可以想象一个好的策略总是应该把每个臂都拉几次，对每个臂的分布有一个估计以后，再集中地去拉收益估计最高的那几个臂。下面我们就基于这一设想，精确地讨论算法设计，分析算法的表现。
 
-$\newcommand{\E}{\mathbb{E}}$我们先定义一些符号。不失一般性，假设 $\mu_{1}\ge\mu_{2}\ge...\ge\mu_{k}$。记 $\Delta_{i}\triangleq\mu_{1}-\mu_{i}$。设算法在第$t$轮拉动的臂的编号为$a_{t}$，对应的奖励为随机变量$X_{t}\sim f_{a_{t}}$。定义当前算法的regret $R(T)\triangleq T\cdot \mu_{1}-\E[\sum\limits_{t=1}^{T}X_{t}]\ge0$，也即不总是选择第一个臂（这是上帝视角下的最优策略）所造成的regret（这里的期望需考虑到$X$关于分布的随机性，以及算法本身的随机性）。算法的regret越小，说明算法表现越好。在分析时，我们关心当$T$远大于$k$时，$R(T)$函数的增长速度。
+我们先定义一些符号。不失一般性，假设 $\mu_{1}\ge\mu_{2}\ge...\ge\mu_{k}$。记 $\Delta_{i}\triangleq\mu_{1}-\mu_{i}$。设算法在第$t$轮拉动的臂的编号为$a_{t}$，对应的奖励为随机变量$X_{t}\sim f_{a_{t}}$。定义当前算法的regret $R(T)\triangleq T\cdot \mu_{1}-\mathbb{E}[\sum\limits_{t=1}^{T}X_{t}]\ge0$，也即不总是选择第一个臂（这是上帝视角下的最优策略）所造成的regret（这里的期望需考虑到$X$关于分布的随机性，以及算法本身的随机性）。算法的regret越小，说明算法表现越好。在分析时，我们关心当$T$远大于$k$时，$R(T)$函数的增长速度。
 
 在分析算法时，下面形式的regret函数更常用：令随机变量$n_{i}(t)\triangleq\sum\limits_{s=1}^{t}\mathbb{1}[a_{s}=i]$，表示前$t$轮中第$i$个臂被拉动的次数。那么有
 $$
 \begin{aligned}
-R(T)&=T\cdot\mu_{1}-\E[\sum_{t=1}^{T}X_{t}]\\
-&=\sum_{t=1}^{T}\left(\mu_1-\sum_{i=1}^{k}\mu_{i}\cdot \E[\mathbb{1}[a_{t}=i]]\right)\\
-&=\sum_{t=1}^{T}\sum_{i=1}^{k}\Delta_{i}\cdot \E[\mathbb{1}[a_{t}=i]]\\
+R(T)&=T\cdot\mu_{1}-\mathbb{E}[\sum_{t=1}^{T}X_{t}]\\
+&=\sum_{t=1}^{T}\left(\mu_1-\sum_{i=1}^{k}\mu_{i}\cdot \mathbb{E}[\mathbb{1}[a_{t}=i]]\right)\\
+&=\sum_{t=1}^{T}\sum_{i=1}^{k}\Delta_{i}\cdot \mathbb{E}[\mathbb{1}[a_{t}=i]]\\
 
-&=\sum_{i=1}^{k}\Delta_{i}\cdot \E[\sum_{t=1}^{T}\mathbb{1}[a_{t}=i]]\\
+&=\sum_{i=1}^{k}\Delta_{i}\cdot \mathbb{E}[\sum_{t=1}^{T}\mathbb{1}[a_{t}=i]]\\
 
-&=\sum_{i=1}^{k}\Delta_{i}\cdot \E[n_{i}(T)]
+&=\sum_{i=1}^{k}\Delta_{i}\cdot \mathbb{E}[n_{i}(T)]
 \end{aligned}
 $$
-记$R_{i}(T)\triangleq\Delta_{i}\cdot \E[n_{i}(T)]$，那么$R(T)=\sum\limits_{i=1}^{k}R_{i}(T)$。其中$R_i(T)$就称为第$i$个臂上的regret。
+记$R_{i}(T)\triangleq\Delta_{i}\cdot \mathbb{E}[n_{i}(T)]$，那么$R(T)=\sum\limits_{i=1}^{k}R_{i}(T)$。其中$R_i(T)$就称为第$i$个臂上的regret。
 
 首先，我们考虑“只探索”算法：为每个臂分配相同的次数来拉。这样做的regret为$R(T)=\sum\limits_{i=1}^{k}\Delta_i\cdot\dfrac{T}{k}$。可见，“只探索”的做法已经可以做到与$T$成线性关系的regret。所以，我们希望寻找$R(T)=o(T)$的算法。
 
@@ -31,15 +37,15 @@ ETC算法首先拉动每个臂$L$次（所以总共进行$k\cdot L$次探索）�
 于是我们可以计算regret函数。ETC的策略是确定性的，所以regret函数中期望这一项的随机性来自$f_i$返回奖励的随机性，第$i$个臂期望被拉的次数取决于$\hat \mu_i$“成为最大”的概率：
 $$
 \begin{aligned}
-R(T)&=\sum_{i=1}^{k}\Delta_{i}\cdot \E[n_{i}(T)]\\&=\sum_{i=1}^{k}\Delta_{i}\cdot\left(L+(T-k L)\Pr[\hat{\mu}_{i}\ge\max\limits_{j\ne i}\hat{\mu}_{j}]\right)\\&=L\sum_{i=1}^{k}\Delta_{i}+\sum_{i=2}^{k}\Delta_{i}\cdot(T-kL)\Pr[\hat{\mu}_{i}\ge\max\limits_{j\ne i}\hat{\mu}_{j}]
+R(T)&=\sum_{i=1}^{k}\Delta_{i}\cdot \mathbb{E}[n_{i}(T)]\\&=\sum_{i=1}^{k}\Delta_{i}\cdot\left(L+(T-k L)\Pr[\hat{\mu}_{i}\ge\max\limits_{j\ne i}\hat{\mu}_{j}]\right)\\&=L\sum_{i=1}^{k}\Delta_{i}+\sum_{i=2}^{k}\Delta_{i}\cdot(T-kL)\Pr[\hat{\mu}_{i}\ge\max\limits_{j\ne i}\hat{\mu}_{j}]
 \end{aligned}
 $$
 下面我们来寻找$R(T)$的上界，也即$\Pr[\hat{\mu}_{i}\geq\max\limits_{j\ne i}\hat{\mu}_{j}]$的上界。因为$\hat{\mu}_{i}\geq\max\limits_{j\ne i}\hat{\mu}_{j}\implies\hat{\mu}_{i}\geq\hat{\mu}_{1}$，因此$\Pr[\hat{\mu}_{i}\geq\max\limits_{j\ne i}\hat{\mu}_{j}]\le \Pr[\hat{\mu}_{i}\geq\hat{\mu}_{1}]$。所以我们只需给出$\Pr[\hat{\mu}_{i}\geq\hat{\mu}_1]$的上界。
 
-在探索阶段（每个臂拉$L$次的阶段），记第$j$次拉臂$i$时的返回奖励值为随机变量$Y_j^{(i)}$。那么$\Pr[\hat{\mu}_{i}\geq\hat{\mu}_1]=\Pr[\sum\limits_{j=1}^{L}(Y_j^{(i)}-Y_j^{(1)})\geq 0]$。令$Z_{j}=Y_j^{(i)}-Y_j^{(1)}\in[-1,1]$，我们有$\E[Z_{j}]=\mu_j-\mu_1=-\Delta_{i}$。令$Z=\sum\limits_{j=1}^{L}Z_{j}$，我们有$\E[Z]=-L\Delta_{i}$。于是，根据Hoeffding不等式：
+在探索阶段（每个臂拉$L$次的阶段），记第$j$次拉臂$i$时的返回奖励值为随机变量$Y_j^{(i)}$。那么$\Pr[\hat{\mu}_{i}\geq\hat{\mu}_1]=\Pr[\sum\limits_{j=1}^{L}(Y_j^{(i)}-Y_j^{(1)})\geq 0]$。令$Z_{j}=Y_j^{(i)}-Y_j^{(1)}\in[-1,1]$，我们有$\mathbb{E}[Z_{j}]=\mu_j-\mu_1=-\Delta_{i}$。令$Z=\sum\limits_{j=1}^{L}Z_{j}$，我们有$\mathbb{E}[Z]=-L\Delta_{i}$。于是，根据Hoeffding不等式：
 $$
 \begin{aligned}
-\Pr[\hat{\mu}_{i}\ge\hat{\mu}_{1}]&=\Pr[Z\ge 0]\\&=\Pr[Z-\E[Z]\ge L\Delta_{i}]\\&\le \exp\left(-\frac{2(L\Delta_{i})^{2}}{\sum_{j=1}^{L}2^{2}}\right)\\&=\exp\left(-\frac{L\Delta_{i}^{2}}{2}\right)
+\Pr[\hat{\mu}_{i}\ge\hat{\mu}_{1}]&=\Pr[Z\ge 0]\\&=\Pr[Z-\mathbb{E}[Z]\ge L\Delta_{i}]\\&\le \exp\left(-\frac{2(L\Delta_{i})^{2}}{\sum_{j=1}^{L}2^{2}}\right)\\&=\exp\left(-\frac{L\Delta_{i}^{2}}{2}\right)
 \end{aligned}
 $$
 
@@ -76,7 +82,7 @@ $$
 
 $$
 \begin{aligned}
-R_{i}(T)&=\Delta_{i}\cdot\E[n_{i}(T)]\\&=\Delta_{i}\sum_{t=1}^{T}\Pr[\hat{\mu}_{i}(t)+c_{i}(t)\ge \max_{j\ne i}(\hat{\mu}_{j}(t)+c_{j}(t))]
+R_{i}(T)&=\Delta_{i}\cdot\mathbb{E}[n_{i}(T)]\\&=\Delta_{i}\sum_{t=1}^{T}\Pr[\hat{\mu}_{i}(t)+c_{i}(t)\ge \max_{j\ne i}(\hat{\mu}_{j}(t)+c_{j}(t))]
 \end{aligned}
 $$
 
@@ -102,7 +108,7 @@ $$
 
 $$
 \begin{aligned}
-&\sum\limits_{t=1}^{T}\Pr[\hat{\mu}_{i}(t)+c_{i}(t)\ge \max\limits_{j\ne i}(\hat{\mu}_{j}(t)+c_{j}(t))\mid \mathcal{A}]\\=  &\E\left[\sum\limits_{t=1}^{T}\mathbb{1}[\hat{\mu}_{i}(t)+c_{i}(t) \ge \max\limits_{j\ne i}(\hat{\mu}_{j}(t)+c_{j}(t))]\mid \mathcal{A}\right]\\ =  &\E[n_i(T)\mid \mathcal{A}]\\< &\dfrac{4\ln(\sqrt{2}T)}{\Delta_{i}^{2}}
+&\sum\limits_{t=1}^{T}\Pr[\hat{\mu}_{i}(t)+c_{i}(t)\ge \max\limits_{j\ne i}(\hat{\mu}_{j}(t)+c_{j}(t))\mid \mathcal{A}]\\=  &\mathbb{E}\left[\sum\limits_{t=1}^{T}\mathbb{1}[\hat{\mu}_{i}(t)+c_{i}(t) \ge \max\limits_{j\ne i}(\hat{\mu}_{j}(t)+c_{j}(t))]\mid \mathcal{A}\right]\\ =  &\mathbb{E}[n_i(T)\mid \mathcal{A}]\\< &\dfrac{4\ln(\sqrt{2}T)}{\Delta_{i}^{2}}
 \end{aligned}
 $$
 
@@ -112,9 +118,9 @@ $$
 
 $$
 \begin{aligned}
-R(T)&=\sum_{i=1}^{k}\Delta_{i}\E[n_{i}(T)]\\
+R(T)&=\sum_{i=1}^{k}\Delta_{i}\mathbb{E}[n_{i}(T)]\\
 
-&=\sum_{i:\Delta_{i}\le\Delta}\Delta_{i}\E[n_{i}(T)]+\sum_{i:\Delta_{i}>\Delta}\Delta_{i}\E[n_{i}(T)]\\
+&=\sum_{i:\Delta_{i}\le\Delta}\Delta_{i}\mathbb{E}[n_{i}(T)]+\sum_{i:\Delta_{i}>\Delta}\Delta_{i}\mathbb{E}[n_{i}(T)]\\
 
 &\le T\Delta+\sum_{i:\Delta_{i}>\Delta}\Delta_{i}(\frac{4\ln(\sqrt{2}T)}{\Delta_{i}^{2}}+k)\\
 

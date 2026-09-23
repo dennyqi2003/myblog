@@ -1,3 +1,9 @@
+[^Date]: 2023.01.04
+[^ERT ]: 2min
+[^Author]: DennyQi
+[^Title]: 模板 Template
+[^Tag]: Informatics, other, C++
+
 如果函数的参数类型不确定，可以使用函数模板
 
 ```C++
