@@ -58,13 +58,15 @@
 }
 
 .markdown-body a {
-  color: var(--accent);
+  border-bottom: 1px solid var(--link-rule);
+  color: var(--link-color);
   text-decoration: none;
 }
 
-/* NexT: hovering a link darkens it; the colour stays the site's own blue. */
+/* NexT: link and rule both darken on hover. */
 .markdown-body a:hover {
-  color: var(--accent-hover);
+  border-bottom-color: var(--link-hover-color);
+  color: var(--link-hover-color);
 }
 
 .markdown-body strong {

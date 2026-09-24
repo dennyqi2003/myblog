@@ -85,8 +85,9 @@ onBeforeUnmount(() => {
 
 function snippetFor(docIndex, terms) {
   const text = texts.value[docIndex] ?? ''
+  const lower = text.toLowerCase()
   const found = terms
-    .map((t) => text.toLowerCase().indexOf(t))
+    .map((t) => lower.indexOf(t))
     .filter((i) => i >= 0)
     .sort((a, b) => a - b)[0]
   if (found == null) return text.slice(0, 150) + (text.length > 150 ? '…' : '')
@@ -100,27 +101,32 @@ const results = computed(() => {
   if (!raw || state.value !== 'ready') return []
   const terms = [...new Set(tokensOf(raw))]
 
+  const needle = raw.toLowerCase()
   const scores = new Map()
+  const add = (docIndex, amount) => scores.set(docIndex, (scores.get(docIndex) ?? 0) + amount)
 
-  if (terms.length) {
-    for (const term of terms) {
-      const list = index.value.get(term)
-      if (!list) continue
-      // A token shared by most of the corpus carries almost no information.
-      const weight = Math.max(1, Math.log(posts.length / list.length))
-      for (const docIndex of list) {
-        scores.set(docIndex, (scores.get(docIndex) ?? 0) + weight)
-      }
-    }
-  } else {
-    // Single-character queries never make it into the index; scan instead.
-    const needle = raw.toLowerCase()
-    for (let i = 0; i < texts.value.length; i++) {
-      if (texts.value[i].toLowerCase().includes(needle)) scores.set(i, 1)
+  // Word tokens, weighted by rarity. A token shared by most of the corpus
+  // carries almost no information.
+  for (const term of terms) {
+    const list = index.value.get(term)
+    if (!list) continue
+    const weight = Math.max(1, Math.log(posts.length / list.length))
+    for (const docIndex of list) {
+      add(docIndex, weight)
+      if (posts[docIndex].title.toLowerCase().includes(term)) add(docIndex, weight)
     }
   }
 
-  const termsForSnippet = terms.length ? terms : [raw.toLowerCase()]
+  // The query as typed, anywhere in the title or the text — this catches
+  // single characters and fragments the word segmenter splits differently.
+  // A title hit outranks any amount of body text.
+  for (let i = 0; i < texts.value.length; i++) {
+    if (posts[i].title.toLowerCase().includes(needle)) add(i, 20)
+    if (texts.value[i].toLowerCase().includes(needle)) add(i, 5)
+  }
+
+  // What gets highlighted: the whole query first, then its words.
+  const marks = [...new Set([needle, ...terms])].sort((a, b) => b.length - a.length)
 
   // search.json is written in the same order as the manifest, so a doc index
   // doubles as a posts index.
@@ -128,7 +134,8 @@ const results = computed(() => {
     .map(([docIndex, score]) => ({
       post: posts[docIndex],
       score,
-      snippet: snippetFor(docIndex, termsForSnippet),
+      snippet: snippetFor(docIndex, marks),
+      marks,
     }))
     .sort((a, b) => b.score - a.score || b.post.date.localeCompare(a.post.date))
     .slice(0, 40)
@@ -178,6 +185,7 @@ const results = computed(() => {
         :post="hit.post"
         :index="i"
         :snippet="hit.snippet"
+        :highlight="hit.marks"
       />
     </div>
   </div>

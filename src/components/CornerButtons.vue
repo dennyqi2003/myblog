@@ -1,17 +1,17 @@
 <script setup>
-// The switches in the bottom-right corner: background picture on/off, and —
-// only while the picture is off — night mode. Both states live on <html>
-// (data-bg, data-theme), which an inline script in index.html sets before
-// first paint; this component flips them and remembers the choice.
+// The switches in the bottom-right corner: background picture on/off (off by
+// default), and — only while the picture is off — night mode. Both states
+// live on <html> (data-bg, data-theme), which an inline script in index.html
+// sets before first paint; this component flips them and remembers the choice.
 import { onMounted, ref } from 'vue'
 import FaIcon from './FaIcon.vue'
 
-const bgOn = ref(true)
+const bgOn = ref(false)
 const dark = ref(false)
 
 onMounted(() => {
   const root = document.documentElement
-  bgOn.value = root.dataset.bg !== 'off'
+  bgOn.value = root.dataset.bg === 'on'
   dark.value = root.dataset.theme === 'dark'
 })
 
@@ -26,8 +26,8 @@ function remember(key, value) {
 function toggleBg() {
   bgOn.value = !bgOn.value
   const root = document.documentElement
-  if (bgOn.value) delete root.dataset.bg
-  else root.dataset.bg = 'off'
+  if (bgOn.value) root.dataset.bg = 'on'
+  else delete root.dataset.bg
   remember('bg', bgOn.value ? 'on' : 'off')
 }
 

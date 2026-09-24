@@ -6,11 +6,12 @@
     <link rel="icon" type="image/png" href="/favicon.png" />
     <title>DennyQi's Blog</title>
     <!-- Background and night mode are decided before first paint, so a reader
-         who turned the picture off never sees it flash in on the next page. -->
+         who turned the picture on (it is off by default) or chose night mode
+         never sees the page flash the other way on the next load. -->
     <script>
       try {
         var root = document.documentElement
-        if (localStorage.getItem('bg') === 'off') root.dataset.bg = 'off'
+        if (localStorage.getItem('bg') === 'on') root.dataset.bg = 'on'
         if (localStorage.getItem('theme') === 'dark') root.dataset.theme = 'dark'
       } catch (e) {}
     </script>

@@ -1,112 +1,95 @@
 <script setup>
+// The category tree works as an accordion: one branch is open at a time, down
+// to the category last clicked. Opening a category closes whatever else was
+// open beside it; clicking an open category closes it. Notes appear inside
+// the tree, under the category they are filed in.
 import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { postsByTag, tagTree } from '../data.js'
-import TagTree from '../components/TagTree.vue'
-import PostListItem from '../components/PostListItem.vue'
+import { posts, postsByTag, tagTree } from '../data.js'
+import TagNode from '../components/TagNode.vue'
 
 const route = useRoute()
 const router = useRouter()
 
 const isValid = (path) => Boolean(path) && postsByTag.has(path)
-const selected = ref(isValid(route.query.t) ? String(route.query.t) : '')
+const openPath = ref(isValid(route.query.t) ? String(route.query.t) : '')
 
-const openPaths = ref(new Set(expandedFor(selected.value)))
-
-/** Every ancestor of the selected tag should be expanded on arrival. */
-function expandedFor(path) {
-  const open = new Set()
-  if (!path) return open
-  let trail = ''
-  for (const part of path.split('/')) {
-    trail = trail ? `${trail}/${part}` : part
-    open.add(trail)
+/** Notes whose tag list ends at a given path, oldest first. */
+const direct = (() => {
+  const map = new Map()
+  for (const post of posts) {
+    const key = post.tags.join('/')
+    if (!key) continue
+    if (!map.has(key)) map.set(key, [])
+    map.get(key).push(post)
   }
-  return open
-}
+  for (const list of map.values()) {
+    list.sort((a, b) => (a.date === b.date ? a.titleOrder - b.titleOrder : a.date.localeCompare(b.date)))
+  }
+  return map
+})()
 
-function select(path) {
-  selected.value = path
+const parentOf = (path) => path.split('/').slice(0, -1).join('/')
+
+function setOpen(path) {
+  openPath.value = path
   router.replace({ query: path ? { t: path } : {} })
-  openPaths.value = new Set([...openPaths.value, ...expandedFor(path)])
 }
 
 function toggle(path) {
-  const next = new Set(openPaths.value)
-  if (next.has(path)) next.delete(path)
-  else next.add(path)
-  openPaths.value = next
+  const isOpen = openPath.value === path || openPath.value.startsWith(`${path}/`)
+  setOpen(isOpen ? parentOf(path) : path)
 }
 
-// Keep the address bar and the tree in step when arriving from a tag chip.
+// Arriving from a category chip on a post opens that branch.
 watch(
   () => route.query.t,
   (value) => {
     const path = isValid(value) ? String(value) : ''
-    if (path === selected.value) return
-    selected.value = path
-    openPaths.value = new Set([...openPaths.value, ...expandedFor(path)])
+    if (path !== openPath.value) openPath.value = path
   },
 )
 
-/** Filed under the selected tag, by title A→Z rather than by date. */
-const matches = computed(() =>
-  selected.value
-    ? [...(postsByTag.get(selected.value) ?? [])].sort((a, b) => a.titleOrder - b.titleOrder)
-    : [],
-)
+/** The open branch, as a trail of clickable steps. */
+const trail = computed(() => {
+  if (!openPath.value) return []
+  const parts = openPath.value.split('/')
+  return parts.map((name, i) => ({ name, path: parts.slice(0, i + 1).join('/') }))
+})
 
-const breadcrumb = computed(() => (selected.value ? selected.value.split('/') : []))
+const openCount = computed(() => postsByTag.get(openPath.value)?.length ?? 0)
 </script>
 
 <template>
   <div class="view post-block">
-    <header class="view-header">
+    <header class="view-header categories-header">
       <h1 class="view-title">Categories</h1>
+      <nav v-if="trail.length" class="category-trail" aria-label="Open category">
+        <button class="trail-step" type="button" @click="setOpen('')">All</button>
+        <template v-for="(step, i) in trail" :key="step.path">
+          <span class="trail-sep" aria-hidden="true">/</span>
+          <button
+            class="trail-step"
+            :class="{ current: i === trail.length - 1 }"
+            type="button"
+            @click="setOpen(step.path)"
+          >
+            {{ step.name }}
+          </button>
+        </template>
+        <span class="trail-count">{{ openCount }} notes</span>
+      </nav>
     </header>
 
-    <div class="tags-layout">
-      <nav class="tags-panel" aria-label="Tag tree">
-        <TagTree
-          :selected="selected"
-          :open-paths="openPaths"
-          @select="select"
-          @toggle="toggle"
-        />
-      </nav>
-
-      <div class="tags-results">
-        <div v-if="!selected" class="empty-note">
-          <p>Select a tag on the left. Counts include every note filed underneath.</p>
-        </div>
-
-        <template v-else>
-          <!-- Keyed on the selection so the panel re-enters whenever the tag
-               changes, which reads as the list being replaced rather than
-               flickering from one set of rows into another. -->
-          <div :key="selected" class="tag-hits">
-            <div class="tags-breadcrumb">
-              <button class="crumb" type="button" @click="select('')">All</button>
-              <template v-for="(part, i) in breadcrumb" :key="part">
-                <span class="crumb-sep">/</span>
-                <button
-                  class="crumb"
-                  type="button"
-                  @click="select(breadcrumb.slice(0, i + 1).join('/'))"
-                >
-                  {{ part }}
-                </button>
-              </template>
-              <span class="crumb-total">{{ matches.length }} notes</span>
-            </div>
-
-            <div v-if="!matches.length" class="empty-note">
-              <p>Nothing filed under this tag yet.</p>
-            </div>
-            <PostListItem v-for="(post, i) in matches" :key="post.hash" :post="post" :index="i" />
-          </div>
-        </template>
-      </div>
-    </div>
+    <ul class="tag-tree tag-tree-root">
+      <TagNode
+        v-for="node in tagTree"
+        :key="node.path"
+        :node="node"
+        :open-path="openPath"
+        :direct="direct"
+        @toggle="toggle"
+      />
+    </ul>
   </div>
 </template>

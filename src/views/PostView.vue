@@ -41,7 +41,7 @@ const tagsWithCount = computed(() => {
 
       <footer class="post-footer">
         <div v-if="tagsWithCount.length" class="post-tags">
-          <span class="post-tags-label">Tagged</span>
+          <span class="post-tags-label">Categories:</span>
           <router-link
             v-for="tag in tagsWithCount"
             :key="tag.path"

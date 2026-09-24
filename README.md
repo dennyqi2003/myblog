@@ -137,10 +137,10 @@ actually contains one.
 The layout copies hexo-theme-next's Pisces scheme: a brand + menu card and a
 sticky sidebar card on the left, the content card on the right. On a post with
 headings the sidebar card shows the outline (current section highlighted, its
-branch unfolded); elsewhere it shows the site overview. A full-screen
-background picture (`public/background.jpg`) sits behind translucent cards and
-can be switched off with the button in the bottom-right corner; the choice is
-remembered in `localStorage`.
+branch unfolded); elsewhere it shows the site overview. The corner buttons
+switch on a full-screen background picture (`public/background.jpg`, off by
+default) behind translucent cards, and — while the picture is off — a night
+mode. Both choices are remembered in `localStorage`.
 
 ## Notes on the build
 

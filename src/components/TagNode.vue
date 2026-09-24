@@ -1,12 +1,27 @@
 <script setup>
-defineProps({
+// One category in the tree. Every category opens: into its sub-categories,
+// and then the notes filed directly under it, oldest first. The dot on the
+// left is filled while closed and hollow while open.
+import { computed } from 'vue'
+import { formatDate } from '../site.js'
+
+defineOptions({ name: 'TagNode' })
+
+const props = defineProps({
   node: { type: Object, required: true },
   depth: { type: Number, default: 0 },
-  selected: { type: String, default: '' },
-  openPaths: { type: Set, required: true },
+  /** Path of the deepest open category; everything above it is open too. */
+  openPath: { type: String, default: '' },
+  /** Tag path -> notes whose tags end exactly there, oldest first. */
+  direct: { type: Map, required: true },
 })
 
-const emit = defineEmits(['select', 'toggle'])
+const emit = defineEmits(['toggle'])
+
+const open = computed(
+  () => props.openPath === props.node.path || props.openPath.startsWith(`${props.node.path}/`),
+)
+const notes = computed(() => props.direct.get(props.node.path) ?? [])
 
 // A branch has no intrinsic height to transition to, so the pixel values are
 // measured here and CSS owns only the easing curve (see .tag-children). The
@@ -34,34 +49,18 @@ function onAfterLeave(el) {
 </script>
 
 <template>
-  <li class="tag-node">
-    <div class="tag-row" :style="{ paddingLeft: `${depth * 14}px` }">
-      <button
-        v-if="node.children.length"
-        class="tag-toggle"
-        type="button"
-        :aria-label="openPaths.has(node.path) ? 'Collapse' : 'Expand'"
-        :aria-expanded="openPaths.has(node.path)"
-        @click.stop="emit('toggle', node.path)"
-      >
-        <Transition name="glyph" mode="out-in">
-          <span :key="openPaths.has(node.path) ? 'open' : 'closed'">
-            {{ openPaths.has(node.path) ? '−' : '+' }}
-          </span>
-        </Transition>
-      </button>
-      <span v-else class="tag-toggle tag-toggle-empty" />
-
-      <button
-        class="tag-label"
-        type="button"
-        :class="{ active: selected === node.path }"
-        @click="emit('select', node.path)"
-      >
-        {{ node.name }}
-      </button>
+  <li class="tag-node" :class="{ open }">
+    <button
+      class="tag-row"
+      type="button"
+      :style="{ paddingLeft: `${depth * 22 + 8}px` }"
+      :aria-expanded="open"
+      @click="emit('toggle', node.path)"
+    >
+      <span class="tag-dot" aria-hidden="true" />
+      <span class="tag-label">{{ node.name }}</span>
       <span class="tag-count">{{ node.count }}</span>
-    </div>
+    </button>
 
     <Transition
       name="branch"
@@ -70,18 +69,31 @@ function onAfterLeave(el) {
       @leave="onLeave"
       @after-leave="onAfterLeave"
     >
-      <ul v-if="node.children.length && openPaths.has(node.path)" class="tag-children">
-        <TagNode
-          v-for="child in node.children"
-          :key="child.path"
-          :node="child"
-          :depth="depth + 1"
-          :selected="selected"
-          :open-paths="openPaths"
-          @select="emit('select', $event)"
-          @toggle="emit('toggle', $event)"
-        />
-      </ul>
+      <div v-if="open" class="tag-children">
+        <ul v-if="node.children.length" class="tag-tree">
+          <TagNode
+            v-for="child in node.children"
+            :key="child.path"
+            :node="child"
+            :depth="depth + 1"
+            :open-path="openPath"
+            :direct="direct"
+            @toggle="emit('toggle', $event)"
+          />
+        </ul>
+        <ul v-if="notes.length" class="tag-posts">
+          <li v-for="post in notes" :key="post.hash">
+            <router-link
+              class="tag-post"
+              :to="`/post/${post.hash}/`"
+              :style="{ paddingLeft: `${(depth + 1) * 22 + 8}px` }"
+            >
+              <span class="tag-post-title">{{ post.title }}</span>
+              <time class="tag-post-date" :datetime="post.date">{{ formatDate(post.date) }}</time>
+            </router-link>
+          </li>
+        </ul>
+      </div>
     </Transition>
   </li>
 </template>
