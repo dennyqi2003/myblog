@@ -29,11 +29,13 @@
   --chip-bg: rgba(0, 0, 0, 0.06);
   --mark-bg: #ffe58a;
 
-  /* Fills that sit inside a card: the back-to-top strip, the hollow category
-     dot, the count pill on hover. Solid by default; see [data-bg='on']. */
+  /* Fills that sit inside a card: the back-to-top strip and the count pill
+     on hover. Solid by default; see [data-bg='on']. */
   --inset-bg: var(--body-bg);
-  --dot-open: var(--card-solid);
   --pill-hover: var(--card-solid);
+
+  /* Category dots: a hollow ring while closed, filled once open. */
+  --dot-color: var(--text);
 
   /* Sidebar outline: NexT's orange for the current section, taken down a
      shade so it does not glare. */
@@ -115,8 +117,9 @@
      solid white patch on a see-through card looks pasted on. */
   --menu-item-bg: rgba(0, 0, 0, 0.07);
   --inset-bg: rgba(0, 0, 0, 0.06);
-  --dot-open: transparent;
   --pill-hover: rgba(0, 0, 0, 0.1);
+  /* Dots follow the navy of the other solid marks in picture mode. */
+  --dot-color: var(--theme-color);
 
   --card-bg: rgba(255, 255, 255, 0.65);
 
@@ -167,6 +170,7 @@
   /* At night the outline is lit white against grey instead of orange. */
   --toc-highlight: #ffffff;
   --toc-link: #8a8a8a;
+  --dot-color: #dddddd;
   --sweep: rgba(255, 255, 255, 0.08);
   --link-color: #cccccc;
   --link-hover-color: #eeeeee;
@@ -1233,10 +1237,11 @@ a.page-number:hover {
   color: var(--text);
 }
 
-/* Filled while closed, hollow while open. */
+/* Hollow while closed, filled once open. The hollow ring is see-through, so
+   it sits right on any card — solid, translucent over the picture, or dark. */
 .tag-dot {
-  background: var(--text);
-  border: 2px solid var(--text);
+  background: transparent;
+  border: 2px solid var(--dot-color);
   border-radius: 50%;
   flex: 0 0 auto;
   height: 10px;
@@ -1245,7 +1250,7 @@ a.page-number:hover {
 }
 
 .tag-node.open > .tag-row .tag-dot {
-  background: var(--dot-open);
+  background: var(--dot-color);
 }
 
 .tag-label {
