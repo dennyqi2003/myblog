@@ -1,10 +1,9 @@
-// Client-only embellishments for rendered post bodies: copy buttons, code
-// folding and lazy mermaid rendering. The generated HTML stays plain so the
-// prerendered markup is meaningful without JavaScript.
+// Client-only embellishments for rendered post bodies: copy buttons and lazy
+// mermaid rendering. Code blocks are always shown in full — no folding. The
+// generated HTML stays plain so the prerendered markup is meaningful without
+// JavaScript.
 
 import { onBeforeUnmount, onMounted, watch, nextTick } from 'vue'
-
-const FOLD_HEIGHT = 400
 
 async function copyText(text) {
   try {
@@ -62,43 +61,6 @@ function attachCopyButtons(root, disposers) {
   }
 }
 
-function attachFold(root, disposers) {
-  for (const pre of root.querySelectorAll('pre.code-block')) {
-    const code = pre.querySelector('code')
-    if (!code) continue
-    // Only fold blocks that are actually long enough to hide something.
-    if (code.scrollHeight <= FOLD_HEIGHT + 40) continue
-
-    pre.classList.add('collapsed')
-    code.style.maxHeight = `${FOLD_HEIGHT}px`
-
-    const wrap = document.createElement('div')
-    wrap.className = 'show-hide-button collapsed'
-
-    const button = document.createElement('button')
-    button.type = 'button'
-    button.textContent = 'Show more'
-
-    const toggle = () => {
-      const collapsed = pre.classList.toggle('collapsed')
-      pre.classList.toggle('expanded', !collapsed)
-      wrap.classList.toggle('collapsed', collapsed)
-      wrap.classList.toggle('expanded', !collapsed)
-      code.style.maxHeight = collapsed ? `${FOLD_HEIGHT}px` : 'none'
-      button.textContent = collapsed ? 'Show more' : 'Show less'
-    }
-
-    button.addEventListener('click', toggle)
-    wrap.appendChild(button)
-    pre.appendChild(wrap)
-
-    disposers.push(() => {
-      button.removeEventListener('click', toggle)
-      code.style.maxHeight = ''
-    })
-  }
-}
-
 let mermaidPromise = null
 function loadMermaid() {
   if (!mermaidPromise) {
@@ -152,7 +114,7 @@ export function useContentEnhance(rootRef, getSource) {
     disposers = []
     const root = rootRef.value
     if (!root) return
-    for (const node of root.querySelectorAll('.copy-code-button, .show-hide-button')) node.remove()
+    for (const node of root.querySelectorAll('.copy-code-button')) node.remove()
   }
 
   async function enhance() {
@@ -161,7 +123,6 @@ export function useContentEnhance(rootRef, getSource) {
     const root = rootRef.value
     if (!root) return
     attachCopyButtons(root, disposers)
-    attachFold(root, disposers)
     await renderMermaidBlocks(root)
   }
 

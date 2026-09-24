@@ -1,14 +1,13 @@
 /* Note body typography. The plugin contract comes from
-   markdown-rendering/source/markdown.tsx. Sizes started from NexT as 见渊's
-   blog renders it (16px on a 2.0 line height) and sit one step above it at
-   17px. Everything else is sized
-   relative to that step — inline code and KaTeX in em, so they follow the body
-   automatically; code blocks and tables one notch below it. */
+   markdown-rendering/source/markdown.tsx. Body text is 16px, as on
+   lilianweng.github.io, on a slightly more open line than her 1.6 because
+   most notes are Chinese. Inline code and KaTeX are sized in em and follow
+   the body; headings, code blocks and tables keep their own sizes. */
 
 .markdown-body {
   color: var(--text-body);
-  font-size: 17px;
-  line-height: 2;
+  font-size: 16px;
+  line-height: 1.75;
   overflow-wrap: break-word;
 }
 
@@ -167,7 +166,7 @@
   position: relative;
 }
 
-/* --- code block chrome (copy button + fold) ------------------------------- */
+/* --- code block chrome (copy button) --------------------------------------- */
 
 .markdown-body pre .copy-code-button {
   background-color: #2f3349;
@@ -208,39 +207,6 @@
 
 .markdown-body pre .copy-code-button:hover {
   opacity: 1;
-}
-
-.markdown-body pre .show-hide-button {
-  border-radius: 10px;
-  inset: 0 0 auto 0;
-  margin: auto;
-  pointer-events: none;
-  position: absolute;
-  width: 100%;
-}
-
-.markdown-body pre.collapsed .show-hide-button {
-  background-image: linear-gradient(to bottom, rgba(26, 27, 38, 0.85), rgba(26, 27, 38, 0.06));
-  bottom: 0;
-  height: auto;
-}
-
-.markdown-body pre .show-hide-button button {
-  background: #464e4e;
-  border: 0;
-  border-radius: 14px;
-  color: #fff;
-  cursor: pointer;
-  font-size: 12px;
-  margin-bottom: 4em;
-  margin-top: 3em;
-  padding: 5px 16px;
-  pointer-events: auto;
-}
-
-.markdown-body pre.expanded .show-hide-button button {
-  margin-top: 0.5em;
-  margin-bottom: 0.5em;
 }
 
 /* --- mermaid -------------------------------------------------------------- */

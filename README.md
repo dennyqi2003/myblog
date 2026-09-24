@@ -130,7 +130,7 @@ matches are scored by inverse document frequency.
 
 ### Client-side extras
 
-Copy buttons on code blocks, a "Show more" fold for blocks taller than 440px,
+Copy buttons on code blocks (always shown in full, never folded),
 and Mermaid diagrams — the diagram renderer is downloaded only if a page
 actually contains one.
 
