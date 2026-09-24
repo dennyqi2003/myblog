@@ -4,9 +4,9 @@ import MarkdownBody from '../components/MarkdownBody.vue'
 </script>
 
 <template>
-  <div class="view">
+  <div class="view post-block">
     <header class="view-header">
-      <h1 class="view-title">FAQ</h1>
+      <h1 class="view-title">About</h1>
       <p class="view-subtitle">How this site is put together.</p>
     </header>
 

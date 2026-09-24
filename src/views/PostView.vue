@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { bodyOf } from '../content.js'
+import { outlineOf } from '../toc.js'
 import { byHash, neighbours, postsByTag } from '../data.js'
 import { formatDate, readingTime } from '../site.js'
 import MarkdownBody from '../components/MarkdownBody.vue'
@@ -9,7 +9,8 @@ import MarkdownBody from '../components/MarkdownBody.vue'
 const route = useRoute()
 
 const post = computed(() => byHash.get(route.params.hash))
-const body = computed(() => (post.value ? bodyOf(post.value.hash) : ''))
+// The body with anchors on its headings — the sidebar outline links to them.
+const body = computed(() => (post.value ? outlineOf(post.value.hash).html : ''))
 const meta = computed(() =>
   post.value
     ? `${post.value.author} · ${formatDate(post.value.date)} · ${readingTime(post.value.ert)}`
@@ -24,14 +25,10 @@ const tagsWithCount = computed(() => {
     return { name: tag, path, count: postsByTag.get(path)?.length ?? 0 }
   })
 })
-
-function backToTop() {
-  window.scrollTo({ top: 0, behavior: 'smooth' })
-}
 </script>
 
 <template>
-  <div class="view post-view">
+  <div class="view post-view post-block">
     <template v-if="post">
       <header class="post-header">
         <h1 class="post-title">{{ post.title }}</h1>
@@ -49,7 +46,7 @@ function backToTop() {
             v-for="tag in tagsWithCount"
             :key="tag.path"
             class="tag-chip"
-            :to="`/tags/?t=${encodeURIComponent(tag.path)}`"
+            :to="`/categories/?t=${encodeURIComponent(tag.path)}`"
           >
             {{ tag.name }}
           </router-link>
@@ -82,8 +79,6 @@ function backToTop() {
             <span class="post-nav-title">—</span>
           </span>
         </nav>
-
-        <button class="back-to-top" type="button" @click="backToTop">Back to top</button>
       </footer>
     </template>
 

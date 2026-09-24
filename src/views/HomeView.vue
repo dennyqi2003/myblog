@@ -1,8 +1,7 @@
 <script setup>
 import { computed } from 'vue'
-import { pagePosts, totalPages, posts } from '../data.js'
+import { pagePosts, totalPages } from '../data.js'
 import PostListItem from '../components/PostListItem.vue'
-import { site } from '../site.js'
 
 const props = defineProps({
   n: { type: String, default: '1' },
@@ -21,16 +20,18 @@ const prevTo = computed(() => (current.value === 2 ? '/' : `/page/${current.valu
 
 <template>
   <div class="view">
-    <header class="view-header">
-      <h1 class="view-title">{{ site.title }}</h1>
-      <p class="view-subtitle">{{ site.subtitle }}</p>
-    </header>
-
-    <div v-if="!items.length" class="empty-note">
+    <!-- Each post is its own card (NexT Gemini .post-block). -->
+    <div v-if="!items.length" class="empty-note post-block">
       <p>No notes yet. Drop a markdown file into <code>notes/</code> and rebuild.</p>
     </div>
 
-    <PostListItem v-for="(post, i) in items" :key="post.hash" :post="post" :index="i" />
+    <PostListItem
+      v-for="(post, i) in items"
+      :key="post.hash"
+      class="post-block"
+      :post="post"
+      :index="i"
+    />
 
     <nav v-if="totalPages > 1" class="pagination">
       <router-link v-if="hasPrev" class="page-link" :to="prevTo">← Newer</router-link>
@@ -43,7 +44,5 @@ const prevTo = computed(() => (current.value === 2 ? '/' : `/page/${current.valu
       </router-link>
       <span v-else class="page-link disabled">Older →</span>
     </nav>
-
-    <p class="view-footnote">{{ posts.length }} notes in total.</p>
   </div>
 </template>

@@ -1,11 +1,14 @@
 /* Note body typography. The plugin contract comes from
-   markdown-rendering/source/markdown.tsx; the spacing follows the geometry
-   measured off reference picture/post.png. */
+   markdown-rendering/source/markdown.tsx. Sizes started from NexT as 见渊's
+   blog renders it (16px on a 2.0 line height) and sit one step above it at
+   17px. Everything else is sized
+   relative to that step — inline code and KaTeX in em, so they follow the body
+   automatically; code blocks and tables one notch below it. */
 
 .markdown-body {
   color: var(--text-body);
-  font-size: 15px;
-  line-height: 1.85;
+  font-size: 17px;
+  line-height: 2;
   overflow-wrap: break-word;
 }
 
@@ -18,7 +21,7 @@
 }
 
 .markdown-body p {
-  margin: 0 0 1.1em;
+  margin: 0 0 1.25em;
 }
 
 .markdown-body h1,
@@ -34,21 +37,24 @@
 }
 
 .markdown-body h1 {
-  font-size: 23px;
+  font-size: 26px;
 }
 
 .markdown-body h2 {
-  font-size: 20px;
+  font-size: 24px;
 }
 
 .markdown-body h3 {
-  font-size: 17px;
+  font-size: 21px;
 }
 
-.markdown-body h4,
+.markdown-body h4 {
+  font-size: 19px;
+}
+
 .markdown-body h5,
 .markdown-body h6 {
-  font-size: 15px;
+  font-size: 17px;
 }
 
 .markdown-body a {
@@ -56,8 +62,9 @@
   text-decoration: none;
 }
 
+/* NexT: hovering a link darkens it; the colour stays the site's own blue. */
 .markdown-body a:hover {
-  text-decoration: underline;
+  color: var(--accent-hover);
 }
 
 .markdown-body strong {
@@ -86,7 +93,7 @@
 
 .markdown-body ul,
 .markdown-body ol {
-  margin: 0 0 1.1em;
+  margin: 0 0 1.25em;
   padding-left: 1.7em;
 }
 
@@ -109,7 +116,7 @@
 
 .markdown-body blockquote {
   border-left: 3px solid var(--border-strong);
-  color: #666;
+  color: var(--text-soft);
   margin: 1.2em 0;
   padding: 2px 0 2px 16px;
 }
@@ -131,7 +138,7 @@
 .markdown-body code {
   background: var(--code-inline-bg);
   border-radius: 3px;
-  color: #c7254e;
+  color: var(--code-inline-color);
   font-family: var(--font-mono);
   font-size: 0.875em;
   padding: 2px 5px;
@@ -148,8 +155,8 @@
   background: none;
   color: inherit;
   display: block;
-  font-size: 13px;
-  line-height: 1.65;
+  font-size: 15px;
+  line-height: 1.7;
   overflow-x: auto;
   padding: 1em 1.1em;
 }
@@ -247,7 +254,7 @@
 }
 
 .markdown-body .mermaid-failed {
-  background: #fafafa;
+  background: var(--fill);
   border: 1px solid var(--rule);
   font-family: var(--font-mono);
   font-size: 12px;
@@ -283,19 +290,19 @@
 .markdown-body th,
 .markdown-body td {
   border: 1px solid var(--border-strong);
-  font-size: 14px;
+  font-size: 16px;
   padding: 7px 12px;
   text-align: left;
 }
 
 .markdown-body th {
-  background: #fafafa;
+  background: var(--fill);
   color: var(--text);
   font-weight: 700;
 }
 
 .markdown-body tr:nth-child(even) td {
-  background: #fcfcfc;
+  background: var(--fill-alt);
 }
 
 /* --- misc raw HTML present in the corpus ---------------------------------- */

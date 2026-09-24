@@ -2,17 +2,20 @@
 import { ref, watch, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { site } from './site.js'
-import { posts } from './data.js'
+import FaIcon from './components/FaIcon.vue'
+import SiteSidebar from './components/SiteSidebar.vue'
+import CornerButtons from './components/CornerButtons.vue'
 
 const route = useRoute()
 const drawerOpen = ref(false)
 
+// NexT's default menu icons: home, th, archive, search, user.
 const nav = [
-  { to: '/', label: 'Post' },
-  { to: '/archive/', label: 'Archive' },
-  { to: '/search/', label: 'Search' },
-  { to: '/tags/', label: 'Tag' },
-  { to: '/faq/', label: 'FAQ' },
+  { to: '/', label: 'Posts', icon: 'home' },
+  { to: '/categories/', label: 'Categories', icon: 'th' },
+  { to: '/archive/', label: 'Archive', icon: 'archive' },
+  { to: '/search/', label: 'Search', icon: 'search' },
+  { to: '/about/', label: 'About', icon: 'user' },
 ]
 
 const current = computed(() => {
@@ -30,6 +33,9 @@ const year = new Date().getFullYear()
 
 <template>
   <div class="site">
+    <div class="site-bg" aria-hidden="true" />
+    <div class="headband" />
+
     <header class="topbar">
       <button
         class="topbar-toggle"
@@ -43,35 +49,38 @@ const year = new Date().getFullYear()
       <router-link class="topbar-title" to="/">{{ site.title }}</router-link>
     </header>
 
-    <div class="main" :class="{ 'drawer-open': drawerOpen }">
-      <aside class="sidebar" :class="{ open: drawerOpen }">
-        <div class="site-brand">
-          <router-link class="site-title" to="/">{{ site.title }}</router-link>
-          <p class="site-subtitle">{{ site.subtitle }}</p>
-        </div>
+    <main class="main" :class="{ 'drawer-open': drawerOpen }">
+      <div class="column" :class="{ open: drawerOpen }">
+        <header class="header">
+          <div class="site-brand-container">
+            <div class="site-meta">
+              <router-link class="brand" to="/">
+                <p class="site-title">{{ site.title }}</p>
+              </router-link>
+              <p class="site-subtitle">{{ site.subtitle }}</p>
+            </div>
+          </div>
 
-        <div class="site-avatar">
-          <img :src="site.avatar" :alt="site.author" width="110" height="110" />
-        </div>
+          <nav class="site-nav">
+            <ul class="menu">
+              <li v-for="item in nav" :key="item.to" class="menu-item">
+                <router-link
+                  :to="item.to"
+                  :class="{ 'menu-item-active': current === item.to }"
+                >
+                  <FaIcon :name="item.icon" />{{ item.label }}
+                </router-link>
+              </li>
+            </ul>
+          </nav>
+        </header>
 
-        <nav class="site-nav">
-          <router-link
-            v-for="item in nav"
-            :key="item.to"
-            :to="item.to"
-            class="nav-link"
-            :class="{ active: current === item.to }"
-          >
-            {{ item.label }}
-          </router-link>
-        </nav>
-
-        <p class="site-count">{{ posts.length }} notes</p>
-      </aside>
+        <SiteSidebar @navigate="drawerOpen = false" />
+      </div>
 
       <div class="drawer-mask" :class="{ open: drawerOpen }" @click="drawerOpen = false" />
 
-      <main class="main-inner">
+      <div class="main-inner">
         <!-- Keyed on the path, not the full path: a new page should mount a new
              element (that is what re-runs the entrance in .view), while picking
              a tag only changes the query and must keep this view — and its
@@ -79,11 +88,13 @@ const year = new Date().getFullYear()
         <router-view v-slot="{ Component }">
           <component :is="Component" :key="route.path" />
         </router-view>
+      </div>
+    </main>
 
-        <footer class="site-footer">
-          <p>&copy; {{ year }} {{ site.author }}</p>
-        </footer>
-      </main>
-    </div>
+    <footer class="site-footer">
+      <p>&copy; {{ year }} {{ site.author }}</p>
+    </footer>
+
+    <CornerButtons />
   </div>
 </template>

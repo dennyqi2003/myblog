@@ -14,7 +14,7 @@ const grouped = computed(() =>
 </script>
 
 <template>
-  <div class="view">
+  <div class="view post-block">
     <header class="view-header">
       <h1 class="view-title">Archive</h1>
       <p class="view-subtitle">{{ posts.length }} notes, newest first.</p>

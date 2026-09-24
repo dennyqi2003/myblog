@@ -1,7 +1,9 @@
 export const site = {
-  title: "DennyQi's Log",
-  subtitle: 'Notes on algorithms, logic, etc.',
+  title: "DennyQi's Blog",
+  subtitle: 'Intelligence is Compression',
   author: 'DennyQi',
+  /** Name under the avatar in the sidebar overview. */
+  displayName: 'Xingzhi',
   avatar: '/avatar.jpg',
   description: 'A personal notebook — algorithms, logic, physics, music and readings.',
   perPage: 10,

@@ -6,10 +6,14 @@ import { prefetchRoute } from './content.js'
 const routes = [
   { path: '/', name: 'home', component: () => import('./views/HomeView.vue') },
   { path: '/page/:n(\\d+)/', name: 'page', component: () => import('./views/HomeView.vue') },
+  {
+    path: '/categories/',
+    name: 'categories',
+    component: () => import('./views/CategoriesView.vue'),
+  },
   { path: '/archive/', name: 'archive', component: () => import('./views/ArchiveView.vue') },
-  { path: '/tags/', name: 'tags', component: () => import('./views/TagsView.vue') },
   { path: '/search/', name: 'search', component: () => import('./views/SearchView.vue') },
-  { path: '/faq/', name: 'faq', component: () => import('./views/FaqView.vue') },
+  { path: '/about/', name: 'about', component: () => import('./views/AboutView.vue') },
   { path: '/post/:hash/', name: 'post', component: () => import('./views/PostView.vue') },
   {
     path: '/:pathMatch(.*)*',
@@ -29,12 +33,12 @@ export function titleFor(route) {
     }
     case 'archive':
       return `Archive · ${base}`
-    case 'tags':
-      return `Tags · ${base}`
+    case 'categories':
+      return `Categories · ${base}`
     case 'search':
       return `Search · ${base}`
-    case 'faq':
-      return `FAQ · ${base}`
+    case 'about':
+      return `About · ${base}`
     case 'page':
       return `Posts — page ${route.params.n} · ${base}`
     case 'not-found':

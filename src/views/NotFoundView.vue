@@ -3,7 +3,7 @@ import { site } from '../site.js'
 </script>
 
 <template>
-  <div class="view">
+  <div class="view post-block">
     <header class="view-header">
       <h1 class="view-title">Not found</h1>
       <p class="view-subtitle">That page does not exist.</p>

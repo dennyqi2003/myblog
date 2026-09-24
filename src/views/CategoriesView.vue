@@ -60,13 +60,9 @@ const breadcrumb = computed(() => (selected.value ? selected.value.split('/') : 
 </script>
 
 <template>
-  <div class="view">
+  <div class="view post-block">
     <header class="view-header">
-      <h1 class="view-title">Tag</h1>
-      <p class="view-subtitle">
-        {{ tagTree.length }} top-level categories.
-        {{ selected ? '' : 'Pick a tag to narrow the list.' }}
-      </p>
+      <h1 class="view-title">Categories</h1>
     </header>
 
     <div class="tags-layout">

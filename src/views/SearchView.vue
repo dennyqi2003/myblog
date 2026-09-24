@@ -136,7 +136,7 @@ const results = computed(() => {
 </script>
 
 <template>
-  <div class="view">
+  <div class="view post-block">
     <header class="view-header">
       <h1 class="view-title">Search</h1>
       <p class="view-subtitle">

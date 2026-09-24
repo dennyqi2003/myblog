@@ -1,5 +1,5 @@
 <!--
-  This file is the FAQ page. Edit it freely — anything you put here is rendered
+  This file is the About page. Edit it freely — anything you put here is rendered
   with the same markdown pipeline as your notes (GFM tables, LaTeX, syntax
   highlighted code, raw HTML).
 
@@ -9,8 +9,8 @@
 
 ### What is this site?
 
-A personal notebook. Everything under [Post](/), [Archive](/archive/) and
-[Tag](/tags/) is generated from a folder of markdown files — one file per note.
+A personal notebook. Everything under [Posts](/), [Archive](/archive/) and
+[Categories](/categories/) is generated from a folder of markdown files — one file per note.
 Publishing is nothing more than adding a `.md` file and rebuilding.
 
 ### How do I search?
@@ -32,7 +32,7 @@ itself:
 [^Tag]: Informatics, Computer Systems, Computer Architecture
 ```
 
-The tags are ordered and drive the [Tag](/tags/) tree — `A, B, C` files a note
+The tags are ordered and drive the [Categories](/categories/) tree — `A, B, C` files a note
 under `A/B/C`. The file name and the folder it sits in are just a way to find
 the file; they carry no meaning to the site.
 

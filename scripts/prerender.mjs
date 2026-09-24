@@ -38,10 +38,10 @@ const pageCount = Math.max(1, Math.ceil(manifest.posts.length / perPage))
 
 const routes = [
   '/',
+  '/categories/',
   '/archive/',
-  '/tags/',
   '/search/',
-  '/faq/',
+  '/about/',
   ...Array.from({ length: Math.max(0, pageCount - 1) }, (_, i) => `/page/${i + 2}/`),
   ...manifest.posts.map((post) => `/post/${post.hash}/`),
 ]

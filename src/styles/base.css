@@ -1,28 +1,54 @@
 /* ---------------------------------------------------------------------------
-   Tokens — sampled from reference picture/*.png and hexo-theme-next Pisces.
-   Page #f5f5f5, content card #ffffff, sidebar column 240px + 12px offset,
-   leaving the card at 898px wide inside a 1150px container.
+   Tokens — hexo-theme-next. Layout from the Pisces scheme (240px sidebar
+   column, 12px gaps, 1160px on wide screens); cards, shadows and the #eee page
+   from Gemini, where every post sits in its own block.
    --------------------------------------------------------------------------- */
 
 :root {
-  --bg: #f5f5f5;
-  --card-bg: #ffffff;
+  --body-bg: #eeeeee;
+  --card-solid: #ffffff;
+  --card-bg: var(--card-solid);
+  --theme-color: #222222;
+  --menu-item-bg: #f5f5f5;
+  --orange: #fc6423;
+
+  --shadow-inner: 0 2px 2px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.06),
+    0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  --shadow: var(--shadow-inner), 0 -1px 0.5px 0 rgba(0, 0, 0, 0.09);
 
   --text: #222222;
-  --text-body: #4c4c4c;
+  --text-body: #555555;
+  --text-soft: #666666;
   --text-muted: #9a9a9a;
   --text-faint: #bbbbbb;
 
   --border: #e5e5e5;
   --border-strong: #d6d6d6;
   --rule: #eeeeee;
+  --link-rule: #999999;
 
   --accent: #167ac6;
+  --accent-hover: #0f5a94;
   --code-inline-bg: #f2f4f8;
+  --code-inline-color: #c7254e;
+
+  /* Quiet fills inside a card: note boxes, inputs, table heads, hovers. */
+  --fill: #fafafa;
+  --fill-alt: #fcfcfc;
+  --fill-hover: #f2f2f2;
+  --fill-selected: #eaf3fb;
+
+  /* NexT .btn (Pisces values). */
+  --btn-bg: transparent;
+  --btn-color: #555555;
+  --btn-border: #555555;
+  --btn-hover-bg: #222222;
+  --btn-hover-color: #ffffff;
+  --btn-hover-border: #222222;
+  --corner-bg: #222222;
 
   --sidebar-width: 240px;
   --sidebar-offset: 12px;
-  --card-width: 898px;
   --card-padding: 40px;
 
   --font-sans:
@@ -43,6 +69,70 @@
   --t-base: 220ms;
   --t-view: 300ms;
   --stagger: 18ms;
+  /* NexT's $transition-ease — used wherever a NexT interaction is ported. */
+  --t-next: 0.2s ease-in-out;
+}
+
+/* With the background picture on, the cards let it show through. The
+   picture itself is .site-bg; html[data-bg='off'] is the solid version. */
+:root:not([data-bg='off']) {
+  --card-bg: rgba(255, 255, 255, 0.65);
+  /* Over a photo the Gemini shadow all but disappears; deepen it. */
+  --shadow-inner: 0 3px 6px 0 rgba(0, 0, 0, 0.22), 0 4px 2px -2px rgba(0, 0, 0, 0.1),
+    0 2px 12px 0 rgba(0, 0, 0, 0.2);
+  --shadow: var(--shadow-inner), 0 -1px 1px 0 rgba(0, 0, 0, 0.12);
+}
+
+/* Night mode — offered only while the picture is off. NexT's dark palette:
+   #282828 page, #333 cards, #ccc text. */
+:root[data-bg='off'][data-theme='dark'] {
+  color-scheme: dark;
+
+  --body-bg: #282828;
+  --card-solid: #333333;
+  --theme-color: #222222;
+  --menu-item-bg: #555555;
+
+  --shadow-inner: 0 2px 2px 0 rgba(0, 0, 0, 0.3), 0 3px 1px -2px rgba(0, 0, 0, 0.15),
+    0 1px 5px 0 rgba(0, 0, 0, 0.3);
+
+  --text: #eeeeee;
+  --text-body: #cccccc;
+  --text-soft: #bbbbbb;
+  --text-muted: #999999;
+  --text-faint: #777777;
+
+  --border: #444444;
+  --border-strong: #555555;
+  --rule: #444444;
+  --link-rule: #777777;
+
+  --accent: #5aa9e6;
+  --accent-hover: #9ccaf0;
+  --code-inline-bg: #3d3f4b;
+  --code-inline-color: #f08aa6;
+
+  --fill: #3a3a3a;
+  --fill-alt: #363636;
+  --fill-hover: #444444;
+  --fill-selected: #2c4254;
+
+  --btn-bg: transparent;
+  --btn-color: #cccccc;
+  --btn-border: #777777;
+  --btn-hover-bg: #666666;
+  --btn-hover-color: #eeeeee;
+  --btn-hover-border: #666666;
+  --corner-bg: #666666;
+}
+
+/* The page chrome follows the switch smoothly rather than snapping. */
+body,
+.header,
+.sidebar-inner,
+.post-block,
+.pagination {
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
 }
 
 *,
@@ -57,13 +147,11 @@ html {
 
 body {
   margin: 0;
-  background: var(--bg);
+  background: var(--body-bg);
   color: var(--text-body);
   font-family: var(--font-sans);
   font-size: 15px;
   line-height: 1.8;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
 a {
@@ -72,7 +160,7 @@ a {
 }
 
 a:hover {
-  color: #000;
+  color: var(--text);
 }
 
 img {
@@ -132,8 +220,32 @@ button {
 
 /* --- shell ---------------------------------------------------------------- */
 
+/* Layout, header, menu and sidebar are ported from hexo-theme-next's Pisces
+   scheme (source/css/_schemes/Pisces, _common/outline/{header,sidebar}). The
+   sidebar cards set NexT's own 16px / line-height 2 so the em-based sizes in
+   those rules come out at the same pixels as the NexT demo. */
+
 .site {
   min-height: 100vh;
+}
+
+/* Full-screen picture behind everything. A fixed layer rather than
+   `background-attachment: fixed`, which iOS ignores. */
+.site-bg {
+  background: url('/background.jpg') center / cover no-repeat;
+  inset: 0;
+  position: fixed;
+  transition: opacity 0.3s ease-in-out;
+  z-index: -1;
+}
+
+html[data-bg='off'] .site-bg {
+  opacity: 0;
+}
+
+.headband {
+  background: var(--theme-color);
+  height: 3px;
 }
 
 .topbar {
@@ -145,126 +257,397 @@ button {
   display: flex;
   justify-content: space-between;
   margin: 0 auto;
-  max-width: 1150px;
-  padding: 24px 0 0;
+  width: calc(100% - 20px);
 }
 
-/* The column tracks the reader down the page. `align-self` is what makes that
-   work: `.main` stretches its items, and a sidebar as tall as the article has
-   no room left to slide in, so it has to be sized by its own content first.
-   The max-height is the safety valve — a stuck column taller than the window
-   would keep its bottom off-screen for good, so it scrolls instead.
-   Below the mobile breakpoint the drawer's `position: fixed` takes over. */
-.sidebar {
-  align-self: flex-start;
+.column {
   flex: 0 0 var(--sidebar-width);
-  margin-right: var(--sidebar-offset);
-  max-height: calc(100vh - 48px);
-  overflow-y: auto;
-  position: sticky;
-  top: 24px;
   width: var(--sidebar-width);
 }
 
-.site-brand {
+/* --- header card: brand + menu --- */
+
+.header {
+  background: var(--card-bg);
+  box-shadow: var(--shadow-inner);
+}
+
+.site-brand-container {
+  background: var(--theme-color);
+  display: flex;
+  flex-shrink: 0;
+  padding: 0 10px;
+}
+
+.site-meta {
+  flex-grow: 1;
+  line-height: 2;
+  padding: 34px 0 30px;
   text-align: center;
+}
+
+.brand {
+  border-bottom: 0;
+  color: #fff;
+  display: inline-block;
+  padding: 0;
+}
+
+.brand:hover {
+  color: #fff;
 }
 
 .site-title {
-  color: var(--text);
-  display: block;
   font-size: 22px;
   font-weight: 700;
-  letter-spacing: -0.01em;
-  line-height: 1.35;
+  line-height: 1.5;
+  margin: 0;
 }
 
 .site-subtitle {
-  color: var(--text-muted);
-  font-size: 12px;
-  line-height: 1.6;
-  margin: 6px 0 0;
+  color: #ddd;
+  font-size: 13px;
+  margin: 10px 10px 0;
 }
 
-.site-avatar {
-  margin: 22px auto 0;
+.menu {
+  line-height: 2;
+  list-style: none;
+  margin: 0;
+  padding: 16px 0;
+}
+
+.menu-item {
+  display: block;
+  margin: 0;
+}
+
+.menu-item a {
+  align-items: center;
+  border-bottom: 0;
+  color: var(--text-body);
+  display: flex;
+  font-size: 13px;
+  padding: 5px 20px;
+  position: relative;
+  transition: background-color var(--t-next);
+}
+
+.menu-item a:hover,
+.menu-item a.menu-item-active {
+  background: var(--menu-item-bg);
+  color: var(--text-body);
+}
+
+/* fa-fw */
+.menu-item .fa-icon {
+  height: 1em;
+  margin-right: 8px;
+  width: 1.25em;
+}
+
+/* --- sidebar card --- */
+
+.sidebar {
+  position: sticky;
+  top: var(--sidebar-offset);
+}
+
+.sidebar-inner {
+  background: var(--card-bg);
+  color: var(--text-body);
+  display: flex;
+  flex-direction: column;
+  font-size: 16px;
+  justify-content: center;
+  line-height: 2;
+  box-shadow: var(--shadow);
+  margin-top: var(--sidebar-offset);
+  max-height: calc(100vh - 2 * var(--sidebar-offset));
+  padding: 18px 10px;
   text-align: center;
 }
 
-.site-avatar img {
-  border: 2px solid #fff;
-  border-radius: 50%;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  display: block;
-  height: 110px;
-  margin: 0 auto;
-  object-fit: cover;
-  width: 110px;
+.sidebar-inner a {
+  border-bottom: 1px solid var(--link-rule);
+  color: var(--text-body);
 }
 
-.site-nav {
-  margin-top: 24px;
+.sidebar-inner a:hover {
+  border-bottom-color: var(--text);
+  color: var(--text);
 }
 
-.nav-link {
-  border-bottom: 1px solid var(--border);
-  color: #555;
-  display: block;
-  font-size: 14px;
-  letter-spacing: 0.02em;
-  padding: 12px 0 12px 4px;
-  position: relative;
-  text-align: left;
-  transition: color var(--t-fast) var(--ease);
-}
-
-/* The label stays put; a rule grows beside it. Shifting the text on hover made
-   the whole column twitch, which is a lot of movement for a pointer that is
-   only passing through. */
-.nav-link::before {
-  background: var(--accent);
-  content: '';
+/* Tabs: collapsed to nothing unless the page has an outline. */
+.sidebar-nav {
+  font-size: 0.875em;
   height: 0;
-  left: 0;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  transition: height var(--t-base) var(--ease-soft);
-  width: 2px;
+  list-style: none;
+  margin: 0;
+  overflow: hidden;
+  padding-left: 0;
+  pointer-events: none;
+  transition: height var(--t-next), visibility var(--t-next);
+  visibility: hidden;
 }
 
-.nav-link:first-child {
-  border-top: 1px solid var(--border);
+.sidebar-nav-active .sidebar-nav {
+  height: calc(2em + 1px);
+  pointer-events: unset;
+  visibility: unset;
 }
 
-.nav-link:hover {
-  color: var(--text);
+.sidebar-nav li {
+  border-bottom: 1px solid transparent;
+  color: var(--text-body);
+  cursor: pointer;
+  display: inline-block;
+  transition: border-bottom-color var(--t-next), color var(--t-next);
 }
 
-.nav-link:hover::before {
-  height: 13px;
+.sidebar-nav li.sidebar-nav-overview {
+  margin-left: 10px;
 }
 
-.nav-link.active {
-  color: var(--text);
+.sidebar-nav li:hover {
+  color: var(--orange);
+}
+
+.sidebar-toc-active .sidebar-nav-toc,
+.sidebar-overview-active .sidebar-nav-overview {
+  border-bottom-color: var(--orange);
+  color: var(--orange);
+  transition-delay: 0.2s;
+}
+
+/* The two panels share one grid cell and cross-fade. */
+.sidebar-panel-container {
+  align-items: start;
+  display: grid;
+  flex: 1;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding-top: 0;
+  transition: padding-top var(--t-next);
+}
+
+.sidebar-nav-active .sidebar-panel-container {
+  padding-top: 20px;
+}
+
+.sidebar-panel {
+  animation: deactivate-sidebar-panel 0.2s ease-in-out;
+  grid-area: 1 / 1;
+  height: 0;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+  transform: translateY(0);
+  transition: opacity var(--t-next), transform var(--t-next), visibility var(--t-next);
+  transition-delay: 0s;
+  visibility: hidden;
+}
+
+.sidebar-nav-active .sidebar-panel,
+.sidebar-overview-active .sidebar-panel.post-toc-wrap {
+  transform: translateY(-20px);
+}
+
+.sidebar-overview-active:not(.sidebar-nav-active) .sidebar-panel.post-toc-wrap {
+  transition-delay: 0s, 0.2s, 0s;
+}
+
+.sidebar-overview-active .sidebar-panel.site-overview-wrap,
+.sidebar-toc-active .sidebar-panel.post-toc-wrap {
+  animation-name: activate-sidebar-panel;
+  height: auto;
+  opacity: 1;
+  pointer-events: unset;
+  transform: translateY(0);
+  transition-delay: 0.2s, 0.2s, 0s;
+  visibility: unset;
+}
+
+.sidebar-panel.site-overview-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: flex-start;
+}
+
+@keyframes deactivate-sidebar-panel {
+  from {
+    height: var(--inactive-panel-height, 0);
+  }
+  to {
+    height: var(--active-panel-height, 0);
+  }
+}
+
+@keyframes activate-sidebar-panel {
+  from {
+    height: var(--inactive-panel-height, auto);
+  }
+  to {
+    height: var(--active-panel-height, auto);
+  }
+}
+
+/* Outline. Only the current branch is unfolded; each open list animates to
+   the --height the sidebar computes for it. */
+.post-toc {
+  font-size: 0.875em;
+}
+
+.post-toc ol {
+  list-style: none;
+  margin: 0;
+  padding: 0 2px 0 10px;
+  text-align: left;
+}
+
+.post-toc ol > :last-child {
+  margin-bottom: 5px;
+}
+
+.post-toc ol > ol {
+  padding-left: 0;
+}
+
+.post-toc ol a {
+  transition: all var(--t-next);
+}
+
+.post-toc .nav-item {
+  line-height: 1.8;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.post-toc .nav .nav-child {
+  --height: 0;
+  height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: height var(--t-next), opacity var(--t-next), visibility var(--t-next);
+  visibility: hidden;
+}
+
+.post-toc .nav .active > .nav-child {
+  height: var(--height, auto);
+  opacity: 1;
+  visibility: unset;
+}
+
+.post-toc .nav .active > a {
+  border-bottom-color: var(--orange);
+  color: var(--orange);
+}
+
+.post-toc .nav .active-current > a,
+.post-toc .nav .active-current > a:hover {
+  color: var(--orange);
+}
+
+/* Maths in a heading keeps its KaTeX rendering in the outline. */
+.post-toc .katex {
+  font-size: 1em;
+}
+
+/* Overview */
+.site-author-image {
+  border: 1px solid var(--rule);
+  border-radius: 50%;
+  display: inline-block;
+  height: auto;
+  max-width: 96px;
+  padding: 2px;
+  vertical-align: middle;
+}
+
+.site-author-name {
+  color: var(--text-body);
+  font-weight: 600;
+  margin: 0;
+}
+
+.site-state {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  line-height: 1.4;
+}
+
+.site-state-item {
+  padding: 0 10px;
+}
+
+.site-state-item a {
+  border-bottom: 0;
+  display: block;
+}
+
+.site-state-item-count {
+  display: block;
+  font-size: 16px;
   font-weight: 600;
 }
 
-.nav-link.active::before {
-  height: 13px;
+.site-state-item-name {
+  color: var(--text-muted);
+  font-size: 13px;
 }
 
-.site-count {
-  color: var(--text-faint);
+/* Back to top, docked at the foot of the sidebar card with the reading
+   percentage (NexT back2top.sidebar + scrollpercent). */
+.back-to-top {
+  background: var(--body-bg);
   font-size: 12px;
-  margin: 16px 0 0 4px;
+  margin: -4px -10px -18px;
+  opacity: 0;
+  transition: bottom var(--t-next), margin-top var(--t-next);
 }
+
+.back-to-top.back-to-top-on {
+  cursor: pointer;
+  margin-top: 16px;
+  opacity: 0.6;
+}
+
+.back-to-top.back-to-top-on:hover {
+  opacity: 0.8;
+}
+
+.back-to-top .fa-icon {
+  height: 1em;
+  vertical-align: -0.125em;
+  width: 24px;
+}
+
+.back-to-top span {
+  margin-right: 8px;
+}
+
+/* --- content card and footer --- */
 
 .main-inner {
-  background: var(--card-bg);
-  flex: 1 1 auto;
   min-width: 0;
+  width: calc(100% - var(--sidebar-width) - var(--sidebar-offset));
+}
+
+/* NexT Gemini: the content column is a stack of cards, one per post (and one
+   for the pager), rather than a single sheet divided by rules. */
+.post-block {
+  background: var(--card-bg);
+  box-shadow: var(--shadow-inner);
   padding: var(--card-padding);
+}
+
+.post-block + .post-block,
+.post-block + .pagination {
+  box-shadow: var(--shadow);
+  margin-top: var(--sidebar-offset);
 }
 
 .drawer-mask {
@@ -272,16 +655,67 @@ button {
 }
 
 .site-footer {
-  border-top: 1px solid var(--rule);
-  color: var(--text-faint);
-  font-size: 12px;
-  margin-top: 56px;
-  padding-top: 16px;
+  color: var(--text-muted);
+  font-size: 14px;
+  margin: 0 auto;
+  padding: 20px 0 20px calc(var(--sidebar-width) + var(--sidebar-offset));
   text-align: center;
+  width: calc(100% - 20px);
 }
 
 .site-footer p {
   margin: 0;
+}
+
+/* The corner switches (background picture, night mode), styled like NexT's
+   floating back-to-top button and stacked bottom-up. */
+.corner-buttons {
+  bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: fixed;
+  right: 30px;
+  z-index: 30;
+}
+
+.corner-button {
+  align-items: center;
+  background: var(--corner-bg);
+  border: 0;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  height: 26px;
+  justify-content: center;
+  opacity: 0.6;
+  padding: 0;
+  transition: opacity var(--t-next);
+  width: 26px;
+}
+
+.corner-button:hover {
+  opacity: 0.8;
+}
+
+.corner-button .fa-icon {
+  height: 14px;
+  width: 14px;
+}
+
+html[data-bg='off'] .corner-button[aria-label='Toggle background image'] .fa-icon {
+  opacity: 0.5;
+}
+
+.corner-enter-active,
+.corner-leave-active {
+  transition: opacity var(--t-next), transform var(--t-next);
+}
+
+.corner-enter-from,
+.corner-leave-to {
+  opacity: 0;
+  transform: translateY(6px);
 }
 
 /* --- shared view chrome --------------------------------------------------- */
@@ -321,7 +755,7 @@ button {
 }
 
 .empty-note {
-  background: #fafafa;
+  background: var(--fill);
   border: 1px solid var(--rule);
   border-radius: var(--radius);
   color: var(--text-muted);
@@ -350,8 +784,21 @@ button {
   border-top: 1px solid var(--rule);
 }
 
+/* On the home page each item is a card of its own, so the rules go — and,
+   as in NexT, the title, meta line and button are centred over the excerpt. */
+.post-item.post-block {
+  border: 0;
+  padding: var(--card-padding);
+}
+
+.post-item.post-block .post-item-title,
+.post-item.post-block .post-meta,
+.post-item.post-block .post-button {
+  text-align: center;
+}
+
 .post-item-title {
-  font-size: 19px;
+  font-size: 24px;
   font-weight: 700;
   line-height: 1.45;
   margin: 0;
@@ -359,10 +806,30 @@ button {
 
 .post-item-title a {
   color: var(--text);
+  display: inline-block;
+  max-width: 100%;
+  position: relative;
+}
+
+/* NexT .post-title-link: a 2px rule that grows out from the middle. */
+.post-item-title a::before {
+  background: currentColor;
+  bottom: 0;
+  content: '';
+  height: 2px;
+  left: 0;
+  position: absolute;
+  transform: scaleX(0);
+  transition: transform var(--t-next);
+  width: 100%;
 }
 
 .post-item-title a:hover {
-  color: var(--accent);
+  color: var(--text);
+}
+
+.post-item-title a:hover::before {
+  transform: scaleX(1);
 }
 
 .post-meta {
@@ -372,41 +839,44 @@ button {
 }
 
 .post-item-excerpt {
-  color: #666;
-  font-size: 14px;
-  line-height: 1.85;
+  color: var(--text-soft);
+  font-size: 17px;
+  line-height: 2;
   margin: 12px 0 0;
 }
 
-.post-item-more {
-  color: var(--accent);
+/* NexT .post-button .btn: outlined, fills black on hover. */
+.post-button {
+  margin-top: 20px;
+}
+
+.btn {
+  background: var(--btn-bg);
+  border: 2px solid var(--btn-border);
+  border-radius: 2px;
+  color: var(--btn-color);
   display: inline-block;
-  font-size: 13px;
-  margin-top: 10px;
+  font-size: 14px;
+  line-height: 2;
+  padding: 0 20px;
+  transition: background-color var(--t-next);
 }
 
-.post-item-more::after {
-  content: '→';
-  display: inline-block;
-  margin-left: 5px;
-  transition: transform var(--t-fast) var(--ease);
-}
-
-.post-item-more:hover {
-  color: #0f5a94;
-}
-
-.post-item-more:hover::after {
-  transform: translateX(3px);
+.btn:hover {
+  background: var(--btn-hover-bg);
+  border-color: var(--btn-hover-border);
+  color: var(--btn-hover-color);
 }
 
 /* --- pagination ----------------------------------------------------------- */
 
 .pagination {
   align-items: center;
+  background: var(--card-bg);
+  box-shadow: var(--shadow-inner);
   display: flex;
   justify-content: space-between;
-  margin-top: 32px;
+  padding: 10px 20px;
 }
 
 .page-link {
@@ -471,7 +941,7 @@ button {
 }
 
 .archive-title {
-  color: #333;
+  color: var(--text);
   flex: 1 1 auto;
   font-size: 14px;
   min-width: 0;
@@ -563,28 +1033,29 @@ button {
   background: none;
   border: 0;
   border-radius: 2px;
-  color: #555;
+  color: var(--text-body);
   cursor: pointer;
-  font-size: 13px;
+  font-size: 15px;
+  font-weight: 600;
   padding: 2px 4px;
   text-align: left;
   transition: background-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
 }
 
 .tag-label:hover {
-  background: #f2f2f2;
+  background: var(--fill-hover);
   color: var(--text);
 }
 
 .tag-label.active {
-  background: #eaf3fb;
+  background: var(--fill-selected);
   color: var(--text);
   font-weight: 700;
 }
 
 .tag-count {
-  color: var(--text-faint);
-  font-size: 11px;
+  color: var(--text-muted);
+  font-size: 12px;
   font-variant-numeric: tabular-nums;
   margin-left: auto;
 }
@@ -631,7 +1102,7 @@ button {
 }
 
 .search-input {
-  background: #fafafa;
+  background: var(--fill);
   border: 1px solid var(--border-strong);
   border-radius: var(--radius);
   color: var(--text);
@@ -642,7 +1113,7 @@ button {
 }
 
 .search-input:focus {
-  background: #fff;
+  background: var(--card-solid);
   border-color: var(--accent);
   outline: none;
 }
@@ -685,11 +1156,12 @@ button {
   border-bottom: 1px solid var(--rule);
   margin-bottom: 28px;
   padding-bottom: 18px;
+  text-align: center;
 }
 
 .post-title {
   color: var(--text);
-  font-size: 26px;
+  font-size: 30px;
   font-weight: 700;
   line-height: 1.4;
   margin: 0;
@@ -713,10 +1185,10 @@ button {
 }
 
 .tag-chip {
-  background: #f3f3f3;
+  background: var(--fill);
   border: 1px solid var(--border);
   border-radius: 2px;
-  color: #555;
+  color: var(--text-body);
   font-size: 12px;
   padding: 2px 8px;
   transition: background-color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease),
@@ -724,7 +1196,7 @@ button {
 }
 
 .tag-chip:hover {
-  background: #ebebeb;
+  background: var(--fill-hover);
   border-color: var(--border-strong);
   color: var(--text);
 }
@@ -776,32 +1248,29 @@ button {
   color: var(--text-faint);
 }
 
-.back-to-top {
-  background: none;
-  border: 0;
-  color: var(--text-muted);
-  cursor: pointer;
-  display: block;
-  font-size: 12px;
-  margin: 28px auto 0;
-  padding: 4px;
-}
+/* --- responsive (NexT breakpoints) ----------------------------------------- */
 
-.back-to-top:hover {
-  color: var(--text);
-}
-
-/* --- mobile --------------------------------------------------------------- */
-
-@media (max-width: 1240px) {
-  .main {
-    max-width: calc(100% - 32px);
+@media (min-width: 1200px) {
+  .main,
+  .site-footer {
+    width: 1160px;
   }
 }
 
-@media (max-width: 900px) {
+@media (min-width: 1600px) {
+  .main,
+  .site-footer {
+    width: 73%;
+  }
+}
+
+@media (max-width: 991px) {
   :root {
-    --card-padding: 24px;
+    --card-padding: 20px;
+  }
+
+  .headband {
+    display: none;
   }
 
   .topbar {
@@ -827,7 +1296,7 @@ button {
   }
 
   .topbar-toggle span {
-    background: #555;
+    background: var(--text-body);
     display: block;
     height: 2px;
     transform-origin: center;
@@ -856,18 +1325,16 @@ button {
 
   .main {
     display: block;
-    max-width: 100%;
-    padding: 0;
+    width: auto;
   }
 
-  .sidebar {
-    background: var(--card-bg);
+  /* Both sidebar cards — menu and outline — slide in together as a drawer. */
+  .column {
+    background: var(--body-bg);
     bottom: 0;
     box-shadow: 2px 0 12px rgba(0, 0, 0, 0.08);
     left: 0;
-    margin: 0;
     overflow-y: auto;
-    padding: 24px 20px 40px;
     position: fixed;
     top: 0;
     transform: translateX(-100%);
@@ -876,8 +1343,25 @@ button {
     z-index: 40;
   }
 
-  .sidebar.open {
+  .column.open {
     transform: translateX(0);
+  }
+
+  .header,
+  .sidebar-inner {
+    background: var(--card-solid);
+  }
+
+  .sidebar {
+    position: static;
+  }
+
+  .sidebar-inner {
+    max-height: none;
+  }
+
+  .sidebar-panel-container {
+    overflow: visible;
   }
 
   .drawer-mask {
@@ -899,8 +1383,19 @@ button {
     pointer-events: auto;
   }
 
+  /* Gemini keeps a sliver of page around the cards on small screens. */
   .main-inner {
-    padding: var(--card-padding);
+    padding: 10px;
+    width: 100%;
+  }
+
+  .site-footer {
+    padding-left: 0;
+    width: auto;
+  }
+
+  .corner-buttons {
+    right: 20px;
   }
 }
 

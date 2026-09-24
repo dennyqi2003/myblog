@@ -29,6 +29,8 @@ const stagger = computed(() => Math.min(props.index, 8))
       <span>{{ meta }}</span>
     </div>
     <p v-if="excerpt" class="post-item-excerpt">{{ excerpt }}</p>
-    <router-link class="post-item-more" :to="`/post/${post.hash}/`">Read more</router-link>
+    <div class="post-button">
+      <router-link class="btn" :to="`/post/${post.hash}/`">Read more &raquo;</router-link>
+    </div>
   </article>
 </template>

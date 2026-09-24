@@ -1,4 +1,4 @@
-# DennyQi's Log
+# DennyQi's Blog
 
 A static blog built from the `notes/` folder. Vue 3 + Vite, pre-rendered to plain
 HTML at build time — no server, no runtime framework, no database. Publishing a
@@ -89,7 +89,7 @@ public/search.json           client-side search index
 dist/assets/                 client bundle
    │  scripts/prerender.mjs   (SSR bundle → HTML per route → throw away the bundle)
    ▼
-dist/                        index.html · archive/ · tags/ · search/ · faq/
+dist/                        index.html · categories/ · archive/ · search/ · about/
                              page/N/ · post/<hash>/ · 404.html
 ```
 
@@ -102,6 +102,8 @@ dist/                        index.html · archive/ · tags/ · search/ · faq/
 | `src/data.js` | Manifest → post lists, tag tree, pagination, neighbours |
 | `src/router.js` | Routes; `titleFor()` sets `<title>` without loading post bodies |
 | `src/views/` | One component per section of the sidebar |
+| `src/toc.js` | Heading anchors + the sidebar outline, derived from the rendered body |
+| `src/components/SiteSidebar.vue` | Outline / overview card, scroll tracking, back-to-top |
 | `src/styles/` | Layout tokens, note typography, syntax theme |
 
 ### Markdown
@@ -131,6 +133,14 @@ matches are scored by inverse document frequency.
 Copy buttons on code blocks, a "Show more" fold for blocks taller than 440px,
 and Mermaid diagrams — the diagram renderer is downloaded only if a page
 actually contains one.
+
+The layout copies hexo-theme-next's Pisces scheme: a brand + menu card and a
+sticky sidebar card on the left, the content card on the right. On a post with
+headings the sidebar card shows the outline (current section highlighted, its
+branch unfolded); elsewhere it shows the site overview. A full-screen
+background picture (`public/background.jpg`) sits behind translucent cards and
+can be switched off with the button in the bottom-right corner; the choice is
+remembered in `localStorage`.
 
 ## Notes on the build
 
