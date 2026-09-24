@@ -70,6 +70,11 @@
 
   --sidebar-width: 240px;
   --sidebar-offset: 12px;
+  /* Article column as on lilianweng.github.io: 720px of text plus the 24px
+     card padding either side. */
+  --content-width: 768px;
+  /* Sidebar + gap + article, centred as one block. */
+  --layout-width: calc(var(--sidebar-width) + var(--sidebar-offset) + var(--content-width));
   /* Card padding follows lilianweng.github.io's post entries. */
   --card-padding: 24px;
 
@@ -333,7 +338,8 @@ html[data-bg='on'] .site-bg {
   display: flex;
   justify-content: space-between;
   margin: 0 auto;
-  width: calc(100% - 20px);
+  max-width: calc(100% - 20px);
+  width: var(--layout-width);
 }
 
 .column {
@@ -801,9 +807,10 @@ a.site-brand-container:hover {
   color: var(--text-muted);
   font-size: 14px;
   margin: 0 auto;
+  max-width: calc(100% - 20px);
   padding: 20px 0 20px calc(var(--sidebar-width) + var(--sidebar-offset));
   text-align: center;
-  width: calc(100% - 20px);
+  width: var(--layout-width);
 }
 
 .site-footer p {
@@ -1492,20 +1499,6 @@ a.page-number:hover {
 
 /* --- responsive (NexT breakpoints) ----------------------------------------- */
 
-@media (min-width: 1200px) {
-  .main,
-  .site-footer {
-    width: 1160px;
-  }
-}
-
-@media (min-width: 1600px) {
-  .main,
-  .site-footer {
-    width: 73%;
-  }
-}
-
 @media (max-width: 991px) {
   :root {
     --card-padding: 20px;
@@ -1567,6 +1560,7 @@ a.page-number:hover {
 
   .main {
     display: block;
+    max-width: none;
     width: auto;
   }
 
@@ -1632,6 +1626,7 @@ a.page-number:hover {
   }
 
   .site-footer {
+    max-width: none;
     padding-left: 0;
     width: auto;
   }
