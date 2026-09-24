@@ -5,7 +5,13 @@ import { prefetchRoute } from './content.js'
 
 const routes = [
   { path: '/', name: 'home', component: () => import('./views/HomeView.vue') },
-  { path: '/page/:n(\\d+)/', name: 'page', component: () => import('./views/HomeView.vue') },
+  // props: the page number reaches HomeView as its `n` prop.
+  {
+    path: '/page/:n(\\d+)/',
+    name: 'page',
+    component: () => import('./views/HomeView.vue'),
+    props: true,
+  },
   {
     path: '/categories/',
     name: 'categories',

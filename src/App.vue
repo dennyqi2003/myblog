@@ -23,10 +23,6 @@ const current = computed(() => {
   return route.path
 })
 
-// Off a post the whole left column stays put while the page scrolls; on a
-// post the brand card scrolls away so the outline has the height.
-const pinned = computed(() => route.name !== 'post')
-
 // Any navigation closes the mobile drawer.
 watch(() => route.fullPath, () => {
   drawerOpen.value = false
@@ -54,7 +50,7 @@ const year = new Date().getFullYear()
     </header>
 
     <main class="main" :class="{ 'drawer-open': drawerOpen }">
-      <div class="column" :class="{ open: drawerOpen, pinned }">
+      <div class="column" :class="{ open: drawerOpen }">
         <header class="header">
           <!-- The whole black box is the link home, not just the title. -->
           <router-link class="site-brand-container brand" to="/">

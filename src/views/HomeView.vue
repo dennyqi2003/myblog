@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { pagePosts, totalPages } from '../data.js'
 import PostListItem from '../components/PostListItem.vue'
+import PageNav from '../components/PageNav.vue'
 
 const props = defineProps({
   n: { type: String, default: '1' },
@@ -13,9 +14,7 @@ const current = computed(() => {
 })
 
 const items = computed(() => pagePosts(current.value))
-const hasPrev = computed(() => current.value > 1)
-const hasNext = computed(() => current.value < totalPages)
-const prevTo = computed(() => (current.value === 2 ? '/' : `/page/${current.value - 1}/`))
+const pageRoute = (n) => (n === 1 ? '/' : `/page/${n}/`)
 </script>
 
 <template>
@@ -33,16 +32,6 @@ const prevTo = computed(() => (current.value === 2 ? '/' : `/page/${current.valu
       :index="i"
     />
 
-    <nav v-if="totalPages > 1" class="pagination">
-      <router-link v-if="hasPrev" class="page-link sweep" :to="prevTo">← Newer</router-link>
-      <span v-else class="page-link disabled">← Newer</span>
-
-      <span class="page-status">{{ current }} / {{ totalPages }}</span>
-
-      <router-link v-if="hasNext" class="page-link sweep" :to="`/page/${current + 1}/`">
-        Older →
-      </router-link>
-      <span v-else class="page-link disabled">Older →</span>
-    </nav>
+    <PageNav v-if="totalPages > 1" :current="current" :total="totalPages" :to="pageRoute" />
   </div>
 </template>

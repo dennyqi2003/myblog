@@ -52,30 +52,38 @@ const tagsWithCount = computed(() => {
           </router-link>
         </div>
 
+        <!-- Chronological, left to right: the post before this one, then the
+             post after it. -->
         <nav class="post-nav">
           <router-link
-            v-if="links.newer"
-            class="post-nav-link newer sweep"
-            :to="`/post/${links.newer.hash}/`"
+            v-if="links.older"
+            class="post-nav-link prev sweep"
+            :to="`/post/${links.older.hash}/`"
           >
-            <span class="post-nav-label">Newer</span>
-            <span class="post-nav-title">{{ links.newer.title }}</span>
+            <span class="post-nav-label">Previous</span>
+            <span class="post-nav-title">{{ links.older.title }}</span>
+            <time class="post-nav-date" :datetime="links.older.date">
+              {{ formatDate(links.older.date) }}
+            </time>
           </router-link>
-          <span v-else class="post-nav-link newer disabled">
-            <span class="post-nav-label">Newer</span>
+          <span v-else class="post-nav-link prev disabled">
+            <span class="post-nav-label">Previous</span>
             <span class="post-nav-title">—</span>
           </span>
 
           <router-link
-            v-if="links.older"
-            class="post-nav-link older sweep"
-            :to="`/post/${links.older.hash}/`"
+            v-if="links.newer"
+            class="post-nav-link next sweep"
+            :to="`/post/${links.newer.hash}/`"
           >
-            <span class="post-nav-label">Older</span>
-            <span class="post-nav-title">{{ links.older.title }}</span>
+            <span class="post-nav-label">Next</span>
+            <span class="post-nav-title">{{ links.newer.title }}</span>
+            <time class="post-nav-date" :datetime="links.newer.date">
+              {{ formatDate(links.newer.date) }}
+            </time>
           </router-link>
-          <span v-else class="post-nav-link older disabled">
-            <span class="post-nav-label">Older</span>
+          <span v-else class="post-nav-link next disabled">
+            <span class="post-nav-label">Next</span>
             <span class="post-nav-title">—</span>
           </span>
         </nav>

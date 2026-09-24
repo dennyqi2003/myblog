@@ -249,35 +249,15 @@ button {
   background-size: 100% 1px;
 }
 
-/* Link rows (archive, previous/next, pager): a soft block sweeps in from the
-   side the row reads from and the text darkens. Rows set their own radius. */
+/* Link rows (archive, previous/next): on hover a flat, soft block fades in
+   behind the row and the text darkens. Rows set their own radius. */
 .sweep {
-  isolation: isolate;
-  position: relative;
+  transition: background-color var(--t-next);
 }
 
-.sweep::before {
-  background: linear-gradient(90deg, var(--sweep), transparent);
-  border-radius: inherit;
-  content: '';
-  inset: 0;
-  opacity: 0;
-  position: absolute;
-  transform: scaleX(0.4);
-  transform-origin: left;
-  transition: opacity 0.3s ease-out, transform 0.35s ease-out;
-  z-index: -1;
-}
-
-.sweep.older::before {
-  background: linear-gradient(270deg, var(--sweep), transparent);
-  transform-origin: right;
-}
-
-.sweep:hover::before,
-.sweep:focus-visible::before {
-  opacity: 1;
-  transform: scaleX(1);
+.sweep:hover,
+.sweep:focus-visible {
+  background: var(--sweep);
 }
 
 /* --- shell ---------------------------------------------------------------- */
@@ -333,16 +313,34 @@ html[data-bg='on'] .site-bg {
   width: var(--sidebar-width);
 }
 
-/* Off a post, the whole column (brand, menu, overview) stays in view. */
+/* The whole left column (brand, menu, sidebar card) stays in view on every
+   page. It is capped at the window height; when an outline is longer than
+   the room left, it scrolls inside its card rather than off the screen. */
 @media (min-width: 992px) {
-  .column.pinned {
+  .column {
     align-self: flex-start;
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - 3px - var(--sidebar-offset));
     position: sticky;
     top: 3px; /* just below the headband */
   }
 
-  .column.pinned .sidebar {
+  .column .header {
+    flex: 0 0 auto;
+  }
+
+  .column .sidebar {
+    display: flex;
+    flex: 0 1 auto;
+    flex-direction: column;
+    min-height: 0;
     position: static;
+  }
+
+  .column .sidebar-inner {
+    max-height: none;
+    min-height: 0;
   }
 }
 
@@ -968,29 +966,58 @@ html:not([data-bg='on']) .corner-button[aria-label='Toggle background image'] .f
 
 /* --- pagination ----------------------------------------------------------- */
 
+/* Numbered pager in its own card (NexT Gemini). Page numbers are quiet body
+   text; hover lays a soft block behind them and the current page is filled
+   with the theme colour — the same vocabulary as the category chips. */
 .pagination {
   align-items: center;
   background: var(--card-bg);
   box-shadow: var(--shadow-inner);
   display: flex;
-  justify-content: space-between;
-  padding: 10px 20px;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  padding: 12px 20px;
 }
 
-.page-link {
+.page-number,
+.pagination .space {
+  align-items: center;
   border-radius: 6px;
+  display: inline-flex;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+  height: 32px;
+  justify-content: center;
+  min-width: 32px;
+  padding: 0 8px;
+}
+
+.page-number {
   color: var(--text-body);
-  font-size: 13px;
-  padding: 4px 12px;
+  transition: background-color var(--t-next), color var(--t-next);
 }
 
-.page-link.disabled {
+a.page-number:hover {
+  background: var(--fill-hover);
+  color: var(--text);
+}
+
+.page-number.current {
+  background: var(--theme-color);
+  color: #fff;
+  font-weight: 600;
+}
+
+.page-number .fa-icon {
+  height: 14px;
+  width: 10px;
+}
+
+.pagination .space {
   color: var(--text-faint);
-}
-
-.page-status {
-  color: var(--text-muted);
-  font-size: 12px;
+  min-width: 20px;
+  padding: 0;
 }
 
 /* --- archive -------------------------------------------------------------- */
@@ -1360,7 +1387,7 @@ html:not([data-bg='on']) .corner-button[aria-label='Toggle background image'] .f
   padding: 10px 14px;
 }
 
-.post-nav-link.older {
+.post-nav-link.next {
   text-align: right;
 }
 
@@ -1392,6 +1419,13 @@ html:not([data-bg='on']) .corner-button[aria-label='Toggle background image'] .f
 
 .post-nav-link.disabled .post-nav-title {
   color: var(--text-faint);
+}
+
+.post-nav-date {
+  color: var(--text-muted);
+  display: block;
+  font-size: 12px;
+  line-height: 1.6;
 }
 
 /* --- responsive (NexT breakpoints) ----------------------------------------- */
