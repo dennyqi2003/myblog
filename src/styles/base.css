@@ -75,8 +75,18 @@
   /* Article column as on lilianweng.github.io: 720px of text plus the 24px
      card padding either side. */
   --content-width: 768px;
-  /* Sidebar + gap + article, centred as one block. */
+  /* Sidebar + gap + article. */
   --layout-width: calc(var(--sidebar-width) + var(--sidebar-offset) + var(--content-width));
+  /* The article is what the eye settles on, so on a wide window it is the
+     article — not the sidebar + article pair — that sits on the centre line,
+     with the sidebar hanging off its left edge. On a narrower window, where
+     that would push the sidebar against the edge, the pair is centred instead
+     (margins up to 60px each side); the two meet without a jump. */
+  --layout-left: max(
+    10px,
+    calc(50% - var(--content-width) / 2 - var(--sidebar-offset) - var(--sidebar-width)),
+    min(calc((100% - var(--layout-width)) / 2), 60px)
+  );
   /* Card padding follows lilianweng.github.io's post entries. */
   --card-padding: 24px;
 
@@ -341,7 +351,7 @@ html[data-bg='on'] .site-bg {
   align-items: stretch;
   display: flex;
   justify-content: space-between;
-  margin: 0 auto;
+  margin: 0 0 0 var(--layout-left);
   max-width: calc(100% - 20px);
   width: var(--layout-width);
 }
@@ -810,7 +820,7 @@ a.site-brand-container:hover {
 .site-footer {
   color: var(--text-muted);
   font-size: 14px;
-  margin: 0 auto;
+  margin: 0 0 0 var(--layout-left);
   max-width: calc(100% - 20px);
   padding: 20px 0 20px calc(var(--sidebar-width) + var(--sidebar-offset));
   text-align: center;
@@ -1565,6 +1575,7 @@ a.page-number:hover {
 
   .main {
     display: block;
+    margin: 0;
     max-width: none;
     width: auto;
   }
@@ -1631,6 +1642,7 @@ a.page-number:hover {
   }
 
   .site-footer {
+    margin: 0;
     max-width: none;
     padding-left: 0;
     width: auto;
