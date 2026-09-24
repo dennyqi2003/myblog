@@ -55,7 +55,7 @@ const tagsWithCount = computed(() => {
         <nav class="post-nav">
           <router-link
             v-if="links.newer"
-            class="post-nav-link newer"
+            class="post-nav-link newer sweep"
             :to="`/post/${links.newer.hash}/`"
           >
             <span class="post-nav-label">Newer</span>
@@ -68,7 +68,7 @@ const tagsWithCount = computed(() => {
 
           <router-link
             v-if="links.older"
-            class="post-nav-link older"
+            class="post-nav-link older sweep"
             :to="`/post/${links.older.hash}/`"
           >
             <span class="post-nav-label">Older</span>

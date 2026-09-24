@@ -12,7 +12,13 @@ const ICONS = {
   user: [448, 'M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512l388.6 0c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304l-91.4 0z'],
   'arrow-up': [384, 'M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2 160 448c0 17.7 14.3 32 32 32s32-14.3 32-32l0-306.7L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z'],
   moon: [384, 'M223.5 32C100 32 0 132.3 0 256S100 480 223.5 480c60.6 0 115.5-24.2 155.8-63.4c5-4.9 6.3-12.5 3.1-18.7s-10.1-9.7-17-8.5c-9.8 1.7-19.8 2.6-30.1 2.6c-96.9 0-175.5-78.8-175.5-176c0-65.8 36-123.1 89.3-153.3c6.1-3.5 9.2-10.5 7.7-17.3s-7.3-11.9-14.3-12.5c-6.3-.5-12.6-.8-19-.8z'],
-  sun: [512, 'M361.5 1.2c5 2.1 8.6 6.6 9.6 11.9L391 121l107.9 19.8c5.3 1 9.8 4.6 11.9 9.6s1.5 10.7-1.6 15.2L446.9 256l62.3 90.3c3.1 4.5 3.7 10.2 1.6 15.2s-6.6 8.6-11.9 9.6L391 391 371.1 498.9c-1 5.3-4.6 9.8-9.6 11.9s-10.7 1.5-15.2-1.6L256 446.9l-90.3 62.3c-4.5 3.1-10.2 3.7-15.2 1.6s-8.6-6.6-9.6-11.9L121 391 13.1 371.1c-5.3-1-9.8-4.6-11.9-9.6s-1.5-10.7 1.6-15.2L65.1 256 2.8 165.7c-3.1-4.5-3.7-10.2-1.6-15.2s6.6-8.6 11.9-9.6L121 121 140.9 13.1c1-5.3 4.6-9.8 9.6-11.9s10.7-1.5 15.2 1.6L256 65.1 346.3 2.8c4.5-3.1 10.2-3.7 15.2-1.6zM160 256a96 96 0 1 1 192 0 96 96 0 1 1 -192 0zm224 0a128 128 0 1 0 -256 0 128 128 0 1 0 256 0z'],
+  // Line-drawn rather than Font Awesome's solid sun, whose thick wedge rays
+  // read as a settings cog at this size: a small disc with eight thin rays.
+  sun: {
+    viewBox: '0 0 24 24',
+    stroke: true,
+    d: 'M16.5 12a4.5 4.5 0 1 1-9 0a4.5 4.5 0 1 1 9 0zM12 1.75v2.5M12 19.75v2.5M4.75 4.75l1.77 1.77M17.48 17.48l1.77 1.77M1.75 12h2.5M19.75 12h2.5M4.75 19.25l1.77-1.77M17.48 6.52l1.77-1.77',
+  },
   image: [512, 'M0 96C0 60.7 28.7 32 64 32l384 0c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96zM323.8 202.5c-4.5-6.6-11.9-10.5-19.8-10.5s-15.4 3.9-19.8 10.5l-87 127.6L170.7 297c-4.6-5.7-11.5-9-18.7-9s-14.2 3.3-18.7 9l-64 80c-5.8 7.2-6.9 17.1-2.9 25.4s12.4 13.6 21.6 13.6l96 0 32 0 208 0c8.9 0 17.1-4.9 21.2-12.8s3.6-17.4-1.4-24.7l-120-176zM112 192a48 48 0 1 0 0-96 48 48 0 1 0 0 96z'],
 }
 
@@ -20,18 +26,27 @@ const props = defineProps({
   name: { type: String, required: true },
 })
 
-const icon = computed(() => ICONS[props.name])
+/** Normalised to { viewBox, d, stroke }: FA glyphs are filled on a 512-high
+ *  grid; line icons carry their own viewBox and are stroked. */
+const icon = computed(() => {
+  const entry = ICONS[props.name]
+  if (!entry) return null
+  if (!Array.isArray(entry)) return entry
+  return { viewBox: `0 0 ${entry[0]} 512`, d: entry[1], stroke: false }
+})
 </script>
 
 <template>
   <!-- fa-fw: every glyph sits in the same 1.25em box so labels line up. -->
-  <svg
-    v-if="icon"
-    class="fa-icon"
-    :viewBox="`0 0 ${icon[0]} 512`"
-    aria-hidden="true"
-    focusable="false"
-  >
-    <path fill="currentColor" :d="icon[1]" />
+  <svg v-if="icon" class="fa-icon" :viewBox="icon.viewBox" aria-hidden="true" focusable="false">
+    <path
+      v-if="icon.stroke"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="round"
+      :d="icon.d"
+    />
+    <path v-else fill="currentColor" :d="icon.d" />
   </svg>
 </template>

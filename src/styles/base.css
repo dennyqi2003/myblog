@@ -29,6 +29,13 @@
   --chip-bg: rgba(0, 0, 0, 0.06);
   --mark-bg: #ffe58a;
 
+  /* Sidebar outline: NexT's orange for the current section. */
+  --toc-highlight: var(--orange);
+  --toc-link: var(--text-body);
+
+  /* The block that sweeps in behind a link row on hover. */
+  --sweep: rgba(0, 0, 0, 0.07);
+
   /* Article links, as NexT draws them: body colour over a grey rule, both
      darkening on hover. */
   --link-color: #555555;
@@ -124,6 +131,10 @@
   --link-rule: #777777;
   --chip-bg: rgba(255, 255, 255, 0.08);
   --mark-bg: rgba(250, 200, 60, 0.35);
+  /* At night the outline is lit white against grey instead of orange. */
+  --toc-highlight: #ffffff;
+  --toc-link: #8a8a8a;
+  --sweep: rgba(255, 255, 255, 0.08);
   --link-color: #cccccc;
   --link-hover-color: #eeeeee;
 
@@ -238,6 +249,37 @@ button {
   background-size: 100% 1px;
 }
 
+/* Link rows (archive, previous/next, pager): a soft block sweeps in from the
+   side the row reads from and the text darkens. Rows set their own radius. */
+.sweep {
+  isolation: isolate;
+  position: relative;
+}
+
+.sweep::before {
+  background: linear-gradient(90deg, var(--sweep), transparent);
+  border-radius: inherit;
+  content: '';
+  inset: 0;
+  opacity: 0;
+  position: absolute;
+  transform: scaleX(0.4);
+  transform-origin: left;
+  transition: opacity 0.3s ease-out, transform 0.35s ease-out;
+  z-index: -1;
+}
+
+.sweep.older::before {
+  background: linear-gradient(270deg, var(--sweep), transparent);
+  transform-origin: right;
+}
+
+.sweep:hover::before,
+.sweep:focus-visible::before {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
 /* --- shell ---------------------------------------------------------------- */
 
 /* Layout, header, menu and sidebar are ported from hexo-theme-next's Pisces
@@ -269,6 +311,9 @@ html[data-bg='on'] .site-bg {
 .headband {
   background: var(--theme-color);
   height: 3px;
+  position: sticky;
+  top: 0;
+  z-index: 20;
 }
 
 .topbar {
@@ -293,7 +338,7 @@ html[data-bg='on'] .site-bg {
   .column.pinned {
     align-self: flex-start;
     position: sticky;
-    top: 0;
+    top: 3px; /* just below the headband */
   }
 
   .column.pinned .sidebar {
@@ -441,13 +486,13 @@ a.site-brand-container:hover {
 }
 
 .sidebar-nav li:hover {
-  color: var(--orange);
+  color: var(--toc-highlight);
 }
 
 .sidebar-toc-active .sidebar-nav-toc,
 .sidebar-overview-active .sidebar-nav-overview {
-  border-bottom-color: var(--orange);
-  color: var(--orange);
+  border-bottom-color: var(--toc-highlight);
+  color: var(--toc-highlight);
   transition-delay: 0.2s;
 }
 
@@ -571,14 +616,18 @@ a.site-brand-container:hover {
   visibility: unset;
 }
 
+.post-toc .nav a {
+  color: var(--toc-link);
+}
+
 .post-toc .nav .active > a {
-  border-bottom-color: var(--orange);
-  color: var(--orange);
+  border-bottom-color: var(--toc-highlight);
+  color: var(--toc-highlight);
 }
 
 .post-toc .nav .active-current > a,
 .post-toc .nav .active-current > a:hover {
-  color: var(--orange);
+  color: var(--toc-highlight);
 }
 
 /* Maths in a heading keeps its KaTeX rendering in the outline. */
@@ -597,10 +646,28 @@ a.site-brand-container:hover {
   vertical-align: middle;
 }
 
+.sidebar-inner a.site-author {
+  border-bottom: 0;
+  display: block;
+}
+
+.site-author-image {
+  transition: box-shadow var(--t-next);
+}
+
+.site-author:hover .site-author-image {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
+}
+
 .site-author-name {
   color: var(--text-body);
   font-weight: 600;
   margin: 0;
+  transition: color var(--t-next);
+}
+
+.site-author:hover .site-author-name {
+  color: var(--text);
 }
 
 .site-state {
@@ -911,21 +978,10 @@ html:not([data-bg='on']) .corner-button[aria-label='Toggle background image'] .f
 }
 
 .page-link {
-  color: var(--accent);
+  border-radius: 6px;
+  color: var(--text-body);
   font-size: 13px;
-}
-
-.page-link:not(.disabled) {
-  background-image: linear-gradient(currentColor, currentColor);
-  background-position: 0 100%;
-  background-repeat: no-repeat;
-  background-size: 0% 1px;
-  transition: background-size var(--t-base) var(--ease-soft);
-}
-
-.page-link:not(.disabled):hover,
-.page-link:not(.disabled):focus-visible {
-  background-size: 100% 1px;
+  padding: 4px 12px;
 }
 
 .page-link.disabled {
@@ -957,11 +1013,15 @@ html:not([data-bg='on']) .corner-button[aria-label='Toggle background image'] .f
 }
 
 .archive-item {
-  align-items: baseline;
   border-bottom: 1px solid var(--rule);
+}
+
+.archive-link {
+  align-items: baseline;
+  border-radius: 6px;
   display: flex;
   gap: 12px;
-  padding: 9px 0;
+  padding: 9px 10px;
 }
 
 .archive-date {
@@ -972,14 +1032,15 @@ html:not([data-bg='on']) .corner-button[aria-label='Toggle background image'] .f
 }
 
 .archive-title {
-  color: var(--text);
+  color: var(--text-body);
   flex: 1 1 auto;
-  font-size: 14px;
+  font-size: 15px;
   min-width: 0;
+  transition: color var(--t-next);
 }
 
-.archive-title:hover {
-  color: var(--accent);
+.archive-link:hover .archive-title {
+  color: var(--text);
 }
 
 .archive-ert {
@@ -1181,7 +1242,7 @@ html:not([data-bg='on']) .corner-button[aria-label='Toggle background image'] .f
 
 .search-input:focus {
   background: var(--card-solid);
-  border-color: var(--accent);
+  border-color: var(--text-muted);
   outline: none;
 }
 
@@ -1211,7 +1272,7 @@ html:not([data-bg='on']) .corner-button[aria-label='Toggle background image'] .f
 }
 
 .search-progress span {
-  background: var(--accent);
+  background: var(--text-body);
   display: block;
   height: 100%;
   transition: width 0.2s ease;
@@ -1292,9 +1353,11 @@ html:not([data-bg='on']) .corner-button[aria-label='Toggle background image'] .f
 }
 
 .post-nav-link {
+  border-radius: 6px;
   display: block;
   flex: 1 1 0;
   min-width: 0;
+  padding: 10px 14px;
 }
 
 .post-nav-link.older {
@@ -1314,16 +1377,17 @@ html:not([data-bg='on']) .corner-button[aria-label='Toggle background image'] .f
 }
 
 .post-nav-title {
-  color: var(--text);
+  color: var(--text-body);
   display: block;
-  font-size: 14px;
+  font-size: 15px;
+  transition: color var(--t-next);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .post-nav-link:hover .post-nav-title {
-  color: var(--accent);
+  color: var(--text);
 }
 
 .post-nav-link.disabled .post-nav-title {

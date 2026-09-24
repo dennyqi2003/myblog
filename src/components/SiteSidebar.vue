@@ -197,7 +197,7 @@ onBeforeUnmount(() => {
         </div>
 
         <div ref="overviewPanel" class="site-overview-wrap sidebar-panel">
-          <div class="site-author">
+          <a class="site-author" :href="site.homepage" target="_blank" rel="noopener">
             <img
               class="site-author-image"
               :src="site.avatar"
@@ -206,7 +206,7 @@ onBeforeUnmount(() => {
               height="96"
             />
             <p class="site-author-name">{{ site.displayName }}</p>
-          </div>
+          </a>
 
           <nav class="site-state">
             <div class="site-state-item site-state-posts">

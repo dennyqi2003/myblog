@@ -24,11 +24,13 @@ const grouped = computed(() =>
       <h2 class="archive-year-label">{{ group.year }}</h2>
       <ul class="archive-list">
         <li v-for="post in group.items" :key="post.hash" class="archive-item">
-          <span class="archive-date">{{ formatMonthDay(post.date) }}</span>
-          <router-link class="archive-title" :to="`/post/${post.hash}/`">
-            {{ post.title }}
+          <!-- The whole row is the link, so the hover block covers exactly
+               what can be clicked. -->
+          <router-link class="archive-link sweep" :to="`/post/${post.hash}/`">
+            <span class="archive-date">{{ formatMonthDay(post.date) }}</span>
+            <span class="archive-title">{{ post.title }}</span>
+            <span class="archive-ert">{{ readingTime(post.ert) }}</span>
           </router-link>
-          <span class="archive-ert">{{ readingTime(post.ert) }}</span>
         </li>
       </ul>
     </section>

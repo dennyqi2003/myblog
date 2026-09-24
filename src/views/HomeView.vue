@@ -34,12 +34,12 @@ const prevTo = computed(() => (current.value === 2 ? '/' : `/page/${current.valu
     />
 
     <nav v-if="totalPages > 1" class="pagination">
-      <router-link v-if="hasPrev" class="page-link" :to="prevTo">← Newer</router-link>
+      <router-link v-if="hasPrev" class="page-link sweep" :to="prevTo">← Newer</router-link>
       <span v-else class="page-link disabled">← Newer</span>
 
       <span class="page-status">{{ current }} / {{ totalPages }}</span>
 
-      <router-link v-if="hasNext" class="page-link" :to="`/page/${current + 1}/`">
+      <router-link v-if="hasNext" class="page-link sweep" :to="`/page/${current + 1}/`">
         Older →
       </router-link>
       <span v-else class="page-link disabled">Older →</span>
