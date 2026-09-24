@@ -29,6 +29,12 @@
   --chip-bg: rgba(0, 0, 0, 0.06);
   --mark-bg: #ffe58a;
 
+  /* Fills that sit inside a card: the back-to-top strip, the hollow category
+     dot, the count pill on hover. Solid by default; see [data-bg='on']. */
+  --inset-bg: var(--body-bg);
+  --dot-open: var(--card-solid);
+  --pill-hover: var(--card-solid);
+
   /* Sidebar outline: NexT's orange for the current section. */
   --toc-highlight: var(--orange);
   --toc-link: var(--text-body);
@@ -98,6 +104,12 @@
   --fill: rgba(255, 255, 255, 0.5);
   --fill-alt: rgba(255, 255, 255, 0.3);
   --fill-hover: rgba(0, 0, 0, 0.06);
+  /* Over the picture, selected / inset areas go greyer, never whiter: a
+     solid white patch on a see-through card looks pasted on. */
+  --menu-item-bg: rgba(0, 0, 0, 0.07);
+  --inset-bg: rgba(0, 0, 0, 0.06);
+  --dot-open: transparent;
+  --pill-hover: rgba(0, 0, 0, 0.1);
 
   --card-bg: rgba(255, 255, 255, 0.65);
   /* Over a photo the Gemini shadow all but disappears; deepen it. */
@@ -698,7 +710,7 @@ a.site-brand-container:hover {
 /* Back to top, docked at the foot of the sidebar card with the reading
    percentage (NexT back2top.sidebar + scrollpercent). */
 .back-to-top {
-  background: var(--body-bg);
+  background: var(--inset-bg);
   font-size: 12px;
   margin: -4px -10px -18px;
   opacity: 0;
@@ -1176,7 +1188,7 @@ a.page-number:hover {
 }
 
 .tag-node.open > .tag-row .tag-dot {
-  background: var(--card-solid);
+  background: var(--dot-open);
 }
 
 .tag-label {
@@ -1202,7 +1214,7 @@ a.page-number:hover {
 }
 
 .tag-row:hover .tag-count {
-  background: var(--card-solid);
+  background: var(--pill-hover);
 }
 
 /* Notes filed under an open category, oldest first: title over date. */
