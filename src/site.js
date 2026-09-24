@@ -5,7 +5,7 @@ export const site = {
   /** Name under the avatar in the sidebar overview. */
   displayName: 'Xingzhi',
   /** Where the avatar and name in the sidebar overview link to. */
-  homepage: 'https://dennyqi2003.github.io/',
+  homepage: 'https://dennyqi.com/',
   avatar: '/avatar.jpg',
   description: 'A personal notebook — algorithms, logic, physics, music and readings.',
   perPage: 10,

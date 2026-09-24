@@ -35,8 +35,9 @@
   --dot-open: var(--card-solid);
   --pill-hover: var(--card-solid);
 
-  /* Sidebar outline: NexT's orange for the current section. */
-  --toc-highlight: var(--orange);
+  /* Sidebar outline: NexT's orange for the current section, taken down a
+     shade so it does not glare. */
+  --toc-highlight: #d9561e;
   --toc-link: var(--text-body);
 
   /* The block that sweeps in behind a link row on hover. */
@@ -77,6 +78,8 @@
   --font-mono: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
 
   --radius: 3px;
+  /* Cards (brand + menu, sidebar, posts, pager): just off square. */
+  --card-radius: 6px;
 
   /* Motion. One easing family for the whole site: things arrive decelerating
      (--ease) and change shape smoothly in both directions (--ease-soft). Every
@@ -112,6 +115,20 @@
   --pill-hover: rgba(0, 0, 0, 0.1);
 
   --card-bg: rgba(255, 255, 255, 0.65);
+
+  /* The picture is a blue dusk sky, so the solid dark areas (brand box,
+     headband, current page, button and chip hovers, corner switches) take a
+     deep navy from it instead of black. */
+  --theme-color: #1d2b4f;
+  --btn-hover-bg: #1d2b4f;
+  --btn-hover-border: #1d2b4f;
+  --corner-bg: #1d2b4f;
+
+  /* Light grey vanishes on a see-through card over blue; small print uses a
+     slate blue-grey that stays readable. */
+  --text-muted: #4f5d75;
+  --text-faint: #6f7c93;
+
   /* Over a photo the Gemini shadow all but disappears; deepen it. */
   --shadow-inner: 0 3px 6px 0 rgba(0, 0, 0, 0.22), 0 4px 2px -2px rgba(0, 0, 0, 0.1),
     0 2px 12px 0 rgba(0, 0, 0, 0.2);
@@ -360,7 +377,10 @@ html[data-bg='on'] .site-bg {
 
 .header {
   background: var(--card-bg);
+  border-radius: var(--card-radius);
   box-shadow: var(--shadow-inner);
+  /* Clips the black brand box to the rounded top corners. */
+  overflow: hidden;
 }
 
 .site-brand-container {
@@ -441,6 +461,7 @@ a.site-brand-container:hover {
 
 .sidebar-inner {
   background: var(--card-bg);
+  border-radius: var(--card-radius);
   color: var(--text-body);
   display: flex;
   flex-direction: column;
@@ -730,6 +751,7 @@ a.site-brand-container:hover {
    percentage (NexT back2top.sidebar + scrollpercent). */
 .back-to-top {
   background: var(--inset-bg);
+  border-radius: 0 0 var(--card-radius) var(--card-radius);
   font-size: 12px;
   margin: -4px -10px -18px;
   opacity: 0;
@@ -767,6 +789,7 @@ a.site-brand-container:hover {
    for the pager), rather than a single sheet divided by rules. */
 .post-block {
   background: var(--card-bg);
+  border-radius: var(--card-radius);
   box-shadow: var(--shadow-inner);
   padding: var(--card-padding);
 }
@@ -794,6 +817,12 @@ a.site-brand-container:hover {
   margin: 0;
 }
 
+/* In picture mode the footer sits on the photo itself, not on a card. */
+html[data-bg='on'] .site-footer {
+  color: rgba(255, 255, 255, 0.85);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+}
+
 /* The corner switches (background picture, night mode), styled like NexT's
    floating back-to-top button and stacked bottom-up. */
 .corner-buttons {
@@ -810,6 +839,7 @@ a.site-brand-container:hover {
   align-items: center;
   background: var(--corner-bg);
   border: 0;
+  border-radius: 4px;
   color: #fff;
   cursor: pointer;
   display: flex;
@@ -1003,6 +1033,7 @@ html:not([data-bg='on']) .corner-button[aria-label='Toggle background image'] .f
 .pagination {
   align-items: center;
   background: var(--card-bg);
+  border-radius: var(--card-radius);
   box-shadow: var(--shadow-inner);
   display: flex;
   flex-wrap: wrap;
