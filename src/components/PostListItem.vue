@@ -43,7 +43,9 @@ const stagger = computed(() => Math.min(props.index, 8))
 <template>
   <article class="post-item" :style="{ '--i': stagger }">
     <h2 class="post-item-title">
-      <router-link :to="`/post/${post.hash}/`" v-html="titleHtml" />
+      <!-- v-html sits on a plain element: on a component (router-link) the
+           server renderer drops it, and prerendered titles come out empty. -->
+      <router-link :to="`/post/${post.hash}/`"><span v-html="titleHtml" /></router-link>
     </h2>
     <div class="post-meta">
       <span>{{ meta }}</span>
