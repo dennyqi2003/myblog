@@ -77,16 +77,11 @@
   --content-width: 768px;
   /* Sidebar + gap + article. */
   --layout-width: calc(var(--sidebar-width) + var(--sidebar-offset) + var(--content-width));
-  /* The article is what the eye settles on, so on a wide window it is the
-     article — not the sidebar + article pair — that sits on the centre line,
-     with the sidebar hanging off its left edge. On a narrower window, where
-     that would push the sidebar against the edge, the pair is centred instead
-     (margins up to 60px each side); the two meet without a jump. */
-  --layout-left: max(
-    10px,
-    calc(50% - var(--content-width) / 2 - var(--sidebar-offset) - var(--sidebar-width)),
-    min(calc((100% - var(--layout-width)) / 2), 60px)
-  );
+  /* Sidebar + article are centred as one block. To nudge the whole block,
+     change --layout-shift: negative moves it left, positive moves it right
+     (e.g. -40px). It never comes closer than 10px to the left edge. */
+  --layout-shift: -17px;
+  --layout-left: max(10px, calc((100% - var(--layout-width)) / 2 + var(--layout-shift)));
   /* Card padding follows lilianweng.github.io's post entries. */
   --card-padding: 24px;
 
