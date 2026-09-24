@@ -9,7 +9,7 @@
 // keep that entry in the middle.
 import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { posts } from '../data.js'
+import { byHash, posts } from '../data.js'
 import { site } from '../site.js'
 import { outlineOf } from '../toc.js'
 import FaIcon from './FaIcon.vue'
@@ -23,6 +23,9 @@ const outline = computed(() =>
   route.name === 'post' ? outlineOf(route.params.hash) : { items: [], flat: [] },
 )
 const hasToc = computed(() => outline.value.flat.length > 0)
+const postTitle = computed(() =>
+  route.name === 'post' ? (byHash.get(route.params.hash)?.title ?? '') : '',
+)
 
 // --- tabs ---------------------------------------------------------------------
 
@@ -38,8 +41,11 @@ const panelVars = reactive({})
  *  heights they animate between are measured just before the swap. */
 function activate(name) {
   if (panel.value === name) return
+  // The outline's animated height, plus the post title above it (8px margin).
+  const title = tocPanel.value?.querySelector('.post-toc-title')
+  const titleHeight = title ? title.offsetHeight + 8 : 0
   const heights = {
-    toc: topHeight.value || tocPanel.value?.scrollHeight || 0,
+    toc: topHeight.value ? topHeight.value + titleHeight : tocPanel.value?.scrollHeight || 0,
     overview: overviewPanel.value?.scrollHeight || 0,
   }
   panelVars['--inactive-panel-height'] = `${heights[panel.value]}px`
@@ -142,6 +148,13 @@ function backToTop() {
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
+/** The post title heading the outline: back to the top of the article. */
+function toTitle() {
+  backToTop()
+  history.replaceState(history.state, '', route.path)
+  emit('navigate')
+}
+
 // --- lifecycle ----------------------------------------------------------------
 
 watch(
@@ -185,6 +198,9 @@ onBeforeUnmount(() => {
       <div ref="container" class="sidebar-panel-container" :style="panelVars">
         <div ref="tocPanel" class="post-toc-wrap sidebar-panel">
           <div v-if="hasToc" class="post-toc">
+            <a class="post-toc-title" :href="route.path" @click.prevent="toTitle">
+              {{ postTitle }}
+            </a>
             <TocList
               :items="outline.items"
               :active="active"

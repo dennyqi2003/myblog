@@ -640,6 +640,25 @@ a.site-brand-container:hover {
   color: var(--toc-highlight);
 }
 
+/* The post title heads the outline; clicking it returns to the top. */
+.sidebar-inner a.post-toc-title {
+  border-bottom: 1px solid var(--rule);
+  color: var(--text);
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.5;
+  margin: 0 2px 8px 10px;
+  padding-bottom: 8px;
+  text-align: left;
+  transition: color var(--t-next);
+}
+
+.sidebar-inner a.post-toc-title:hover {
+  border-bottom-color: var(--rule);
+  color: var(--toc-highlight);
+}
+
 /* Maths in a heading keeps its KaTeX rendering in the outline. */
 .post-toc .katex {
   font-size: 1em;
