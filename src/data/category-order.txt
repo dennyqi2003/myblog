@@ -14,66 +14,53 @@
 #
 # Rebuild (npm run build) after editing.
 
-Informatics
-  Algorithms
-    Approximation Algorithms
-    Beyond-the-worst-case Analysis
-    Classical Algorithms
-    Cryptography
-    Data Structures
-    Game Theory
-    Modern Algorithms
-    Online Algorithms
-  C++
-  Computation Theory
-    Automaton Theory
-    Complexity Theory
-    Lambda Calculus
-    Turing Machine
-  Computer Systems
-    Computer Architecture
-    Computer Networks
-    Operating Systems
-  HTML
-  Information Theory
-  Machine Learning
-    Deep Learning
-    Large Language Models
-    Machine Learning Foundations
-    Reinforcement Learning
-  Programming Language Theory
-  Quantum Computing
-Languages
-  日本語
-    日语歌词
-  粤语
-    粤语歌词
-  Deutsch
-  English
-Mathematics
-  Abstract Algebra
-  Calculus
-  Category Theory
-  Combinatorics
-  Geometry
-  Linear Algebra
-  Mathematical Logic
-  Measure Theory
-  Optimization
-  Probability Theory
-  Set Theory
-  Topology
-Music
-  和声进行
-  Harmonics
-  Masterpiece
 Philosophy
 Physics
   Quantum Mechanics
-Readings
-  短篇
-  古诗词
-  古文
-  基督教
-  书摘
-  现代诗
+Mathematics
+  Mathematical Logic
+  Set Theory
+  Real Analysis
+    Real Number System
+    Measure Theory
+    Calculus of Single-Variable
+    Calculus of Multi-variable
+  Linear Algebra
+  Topology
+  Probability Theory
+  Abstract Algebra
+  Category Theory
+  Optimization
+  Combinatorics
+Informatics
+  Information Theory
+  Computation Theory
+    Computibility Theory
+      Turing Machine
+      Lambda Calculus
+    Complexity Theory
+    Automaton Theory
+  Algorithms
+    Classical Algorithms
+    Modern Algorithms
+      Approximation Algorithms
+      Beyond-the-worst-case Analysis
+      Online Algorithms
+  Programming Language Theory
+  Computer Systems
+    Computer Architecture
+    Operating Systems
+    Computer Networks
+  Cryptography
+  Game Theory
+  Quantum Computing
+  AI
+    Machine Learning Foundations
+    Deep Learning
+    Reinforcement Learning
+    Large Language Models
+    Harness Engineering
+Music
+  Tonal Music
+    Tonal Harmany
+  Atonal Music
