@@ -30,13 +30,20 @@ export const HIDDEN_TAGS = new Set(['tmp', 'old', 'old1', 'old2', 'Category', 'o
 // ---------------------------------------------------------------------------
 
 /**
- * Every note opens with the same five lines, then a blank line, then the body:
+ * Every note opens with a header of `[^Key]: value` lines, then a blank line,
+ * then the body. Five keys are required:
  *
  *   [^Date]: 2025.12.16
  *   [^ERT ]: 11min
  *   [^Author]: DennyQi
  *   [^Title]: 01 Representing and Manipulating Information
  *   [^Tag]: Informatics, Computer Systems, Computer Architecture
+ *
+ * and three are optional, usually placed after them:
+ *
+ *   [^Summary]: One line of markdown, $\LaTeX$ allowed — the list excerpt.
+ *   [^Visible]: 0        (0 hides the note everywhere; default 1)
+ *   [^Order]: 3          (sort key among notes of the same category)
  *
  * The file name and the folders above it carry no meaning.
  *
@@ -45,16 +52,21 @@ export const HIDDEN_TAGS = new Set(['tmp', 'old', 'old1', 'old2', 'Category', 'o
  * the page — but `[^ERT ]` has a space inside its label, so remark does not
  * recognise that one as a definition and folds the line into the content of
  * the *Date* definition above it. Nothing downstream can then tell the two
- * apart, so the tree is the wrong place to read from. Line order is the one
- * thing that is stable, and it is what this does.
+ * apart, so the tree is the wrong place to read from.
  */
 export const META_KEYS = ['Date', 'ERT', 'Author', 'Title', 'Tag']
+export const OPTIONAL_KEYS = ['Summary', 'Visible', 'Order']
+
+// `[^ERT ]` and `[^ERT]` both name the key ERT; keys are case-insensitive.
+const KNOWN_KEYS = new Map([...META_KEYS, ...OPTIONAL_KEYS].map((k) => [k.toLowerCase(), k]))
 
 /**
- * Splits a note into `{ meta, body }`, or returns null when the header is not
- * the five expected lines. `body` is normalised to \n and has the header and
- * the blank line after it removed, so callers never have to think about the
- * metadata again.
+ * Splits a note into `{ meta, body }`, or returns null when a required key is
+ * missing. The header is the run of known `[^Key]: value` lines at the top, in
+ * any order; the first line that is not one ends it (so a body footnote such
+ * as `[^1]: …` is never mistaken for metadata). `body` is normalised to \n and
+ * has the header and the blank lines after it removed, so callers never have
+ * to think about the metadata again.
  *
  * @param {string} source
  */
@@ -62,14 +74,16 @@ export function splitNote(source) {
   const lines = source.replace(/\r\n?/g, '\n').split('\n')
   const meta = {}
 
-  for (let i = 0; i < META_KEYS.length; i++) {
-    const m = lines[i]?.match(/^\[\^([^\]]*)\]\s*:\s*(.*)$/)
-    // `[^ERT ]` and `[^ERT]` both name the key ERT.
-    if (!m || m[1].trim().toLowerCase() !== META_KEYS[i].toLowerCase()) return null
-    meta[META_KEYS[i]] = m[2].trim()
+  let i = 0
+  for (; i < lines.length; i++) {
+    const m = lines[i].match(/^\[\^([^\]]*)\]\s*:\s*(.*)$/)
+    const key = m && KNOWN_KEYS.get(m[1].trim().toLowerCase())
+    if (!key) break
+    meta[key] = m[2].trim()
   }
+  if (!META_KEYS.every((key) => key in meta)) return null
 
-  const rest = lines.slice(META_KEYS.length)
+  const rest = lines.slice(i)
   while (rest.length && rest[0].trim() === '') rest.shift()
 
   return { meta, body: rest.join('\n') }
@@ -77,7 +91,9 @@ export function splitNote(source) {
 
 /**
  * @param {string} source
- * @returns {{tags: string[], date: string, ert: number, author: string, title: string, body: string}|null}
+ * @returns {{tags: string[], date: string, ert: number, author: string, title: string,
+ *            summary: string, visible: boolean, order: number|null, orderInvalid: boolean,
+ *            body: string}|null}
  */
 export function parseNote(source) {
   const split = splitNote(source)
@@ -90,6 +106,13 @@ export function parseNote(source) {
 
   const ertMatch = meta.ERT.match(/(\d+(?:\.\d+)?)/)
 
+  // Visible: only an explicit 0 (or false / no) hides a note.
+  const visible = !/^(0|false|no)$/i.test(meta.Visible ?? '')
+
+  // Order: an integer; anything else is ignored (and reported by the build).
+  const orderText = meta.Order ?? ''
+  const order = /^[+-]?\d+$/.test(orderText) ? Number(orderText) : null
+
   return {
     date: `${dateMatch[1]}-${dateMatch[2].padStart(2, '0')}-${dateMatch[3].padStart(2, '0')}`,
     ert: ertMatch ? Math.round(Number(ertMatch[1])) : 0,
@@ -99,6 +122,10 @@ export function parseNote(source) {
     tags: meta.Tag.split(',')
       .map((s) => s.trim())
       .filter(Boolean),
+    summary: meta.Summary ?? '',
+    visible,
+    order,
+    orderInvalid: orderText !== '' && order === null,
     body,
   }
 }
@@ -353,38 +380,13 @@ export function toPlainText(source, { limit = Infinity } = {}) {
     .trim()
 }
 
-/** First paragraph of the note — what the Post list shows under the title. */
-export function firstParagraph(source, limit = 170) {
-  const tree = parser.parse(source.replace(/\r\n?/g, '\n'))
-  const body = tree.children.find(
-    (node) => node.type === 'paragraph' || node.type === 'heading' || node.type === 'list',
-  )
-  if (!body) return ''
-  const text = toPlainTextFromNode(body, parser)
-  return text.length > limit ? text.slice(0, limit).trimEnd() + '…' : text
-}
-
-function toPlainTextFromNode(node, _parser) {
-  const fake = { type: 'root', children: [node] }
-  let out = ''
-  const walk = (n) => {
-    switch (n.type) {
-      case 'text':
-      case 'inlineCode':
-      case 'code':
-        out += n.value
-        break
-      case 'html':
-        out += stripTags(n.value)
-        break
-      case 'inlineMath':
-      case 'math':
-      case 'image':
-        break
-      default:
-        for (const child of n.children ?? []) walk(child)
-    }
-  }
-  walk(fake)
-  return out.replace(/\s+/g, ' ').trim()
+/**
+ * The opening of the note as plain text — what the list shows when a note has
+ * no [^Summary]. It runs across paragraphs and headings, and is long enough
+ * to fill the two-line excerpt at any column width; the page clamps it and
+ * adds the ellipsis.
+ */
+export function openingText(source, limit = 300) {
+  const text = toPlainText(source, { limit })
+  return text.length > limit ? text.slice(0, limit) : text
 }

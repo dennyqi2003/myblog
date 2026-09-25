@@ -53,6 +53,44 @@ then one blank line, then the body:
   under `A/B/C` in the tag tree. `tmp`, `old`, `old1`, `old2`, `Category` and
   `other` are treated as workflow markers and hidden from the tree.
 
+Three more lines are optional, usually placed after those five (the header is
+every `[^Key]: value` line at the top, in any order):
+
+```
+[^Summary]: The note in one line — **markdown** and $\LaTeX$ work here.
+[^Visible]: 0
+[^Order]: 3
+```
+
+- **`[^Summary]`** — the excerpt on the post list, rendered like the body
+  (markdown and maths) and shown in full however long it is. Without it (or
+  when it is empty) the list shows the opening text of the note, cut off after
+  two lines with "…".
+- **`[^Visible]`** — `0` hides the note completely: it is left out of the post
+  list, archive, categories and search, and gets no page. Omit it, or set `1`,
+  to publish. The build lists hidden notes in its report.
+- **`[^Order]`** — an integer. Within one category, notes with an `[^Order]`
+  come first, smallest first; notes without one follow, by title. Ties are
+  broken by title too.
+
+### Category order
+
+The order of categories on the Categories page comes from
+`src/data/category-order.txt` — an indented outline of category names, two
+spaces per level, listed in the order you want:
+
+```
+Mathematics
+  Calculus
+  Linear Algebra
+Physics
+```
+
+Only the order of lines matters; nothing in the file is displayed. Categories
+the file does not mention come after the listed ones, alphabetically. The build
+warns about names it lists that no note uses (usually a typo) and names listed
+twice.
+
 The **file name and folder carry no metadata** — they are only a way for you to
 find the file. Renaming or moving a note does change its URL, though: the post
 id is a hash of the note's path relative to `notes/`.
@@ -61,7 +99,7 @@ A file whose header is missing or malformed is skipped with a warning during the
 build rather than breaking it. Posts are listed newest first; `src/site.js` sets
 the title, subtitle, author, avatar and page size.
 
-Those five lines never reach the page. Markdown reads `[^X]: …` as a footnote
+The header lines never reach the page. Markdown reads `[^X]: …` as a footnote
 definition, which renders as nothing — and even so the build strips the header
 before rendering, so nothing depends on that. The header is also removed before
 the excerpt is taken and before the note is indexed for search.

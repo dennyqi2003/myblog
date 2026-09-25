@@ -1010,8 +1010,21 @@ html:not([data-bg='on']) .corner-button[aria-label='Toggle background image'] .f
   margin: 12px 0 0;
 }
 
-/* On the home page the excerpt is a two-line teaser, as on Lil'Log. */
-.post-item.post-block .post-item-excerpt {
+/* A [^Summary] is the author's own words: shown whole, never clamped. */
+.post-item-summary > :first-child {
+  margin-top: 0;
+}
+
+.post-item-summary > :last-child {
+  margin-bottom: 0;
+}
+
+.post-item-summary p {
+  margin: 0 0 0.6em;
+}
+
+/* Without one, the opening text is a two-line teaser, as on Lil'Log. */
+.post-item.post-block .post-item-excerpt:not(.post-item-summary) {
   -webkit-box-orient: vertical;
   display: -webkit-box;
   -webkit-line-clamp: 2;

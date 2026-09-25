@@ -17,6 +17,9 @@ const meta = computed(
 )
 
 const excerpt = computed(() => props.snippet || props.post.excerpt)
+/** The author's [^Summary], already rendered (markdown + maths) at build
+ *  time. Shown in full; a search snippet takes precedence over it. */
+const summaryHtml = computed(() => (props.snippet ? '' : props.post.summaryHtml))
 
 const escapeHtml = (text) =>
   text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
@@ -50,7 +53,8 @@ const stagger = computed(() => Math.min(props.index, 8))
     <div class="post-meta">
       <span>{{ meta }}</span>
     </div>
-    <p v-if="excerpt" class="post-item-excerpt" v-html="excerptHtml" />
+    <div v-if="summaryHtml" class="post-item-excerpt post-item-summary" v-html="summaryHtml" />
+    <p v-else-if="excerpt" class="post-item-excerpt" v-html="excerptHtml" />
     <div class="post-button">
       <router-link class="btn" :to="`/post/${post.hash}/`">Read more &raquo;</router-link>
     </div>

@@ -7,7 +7,7 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import {
   HIDDEN_TAGS,
-  firstParagraph,
+  openingText,
   parseNote,
   renderMarkdown,
   resolveHash,
@@ -20,6 +20,7 @@ const IMAGES = path.join(NOTES, 'image')
 const GENERATED = path.join(root, 'src', 'generated')
 const CONTENT = path.join(GENERATED, 'content')
 const PUBLIC_IMAGE = path.join(root, 'public', 'image')
+const CATEGORY_ORDER = path.join(root, 'src', 'data', 'category-order.txt')
 
 const kb = (n) => `${(n / 1024).toFixed(1)} KB`
 const mb = (n) => `${(n / 1024 / 1024).toFixed(2)} MB`
@@ -48,6 +49,7 @@ const warnings = []
 const notePaths = findNotes(NOTES).sort()
 const taken = new Set()
 const posts = []
+const hiddenNotes = []
 
 // ---------------------------------------------------------------------------
 // 2. Read and parse
@@ -60,6 +62,14 @@ for (const relPath of notePaths) {
     warnings.push(`metadata header missing or malformed, skipped: ${relPath}`)
     continue
   }
+  // [^Visible]: 0 — a note still being written. It is left out of
+  // everything: list, archive, categories, search, and the pages themselves.
+  if (!meta.visible) {
+    hiddenNotes.push(relPath)
+    continue
+  }
+  if (meta.orderInvalid) warnings.push(`[^Order] is not an integer, ignored: ${relPath}`)
+
   // Tags used as workflow markers are dropped from the tag list but do not
   // hide the note: drafts under tmp/ and old/ stay published, as before.
   const tags = meta.tags.filter((t) => !HIDDEN_TAGS.has(t))
@@ -73,6 +83,8 @@ for (const relPath of notePaths) {
     author: meta.author,
     tags,
     hiddenTagCount: meta.tags.length - tags.length,
+    summary: meta.summary,
+    order: meta.order,
     // Metadata-free, so nothing downstream has to strip it again.
     body: meta.body,
   })
@@ -105,7 +117,13 @@ for (const post of posts) {
     ert: post.ert,
     author: post.author,
     tags: post.tags,
-    excerpt: firstParagraph(post.body),
+    // The list excerpt: the author's [^Summary], rendered like the body
+    // (markdown + maths) and shown in full; otherwise the opening text of the
+    // note, which the list clamps to two lines.
+    summaryHtml: post.summary ? renderMarkdown(post.summary) : '',
+    excerpt: openingText(post.body),
+    // [^Order]: sort key within a category; null when not given.
+    order: post.order,
     file: post.file,
   })
 }
@@ -144,8 +162,44 @@ for (const post of manifest) {
   }
 }
 
+// Sibling order comes from src/data/category-order.txt: an indented outline
+// of category names, listed in the order they should appear. Categories it
+// does not mention follow the listed ones, alphabetically.
+function readCategoryOrder(file) {
+  const rank = new Map()
+  if (!fs.existsSync(file)) return rank
+  const stack = []
+  let position = 0
+  for (const raw of fs.readFileSync(file, 'utf8').replace(/\r\n?/g, '\n').split('\n')) {
+    const name = raw.trim()
+    if (!name || name.startsWith('#')) continue
+    const indent = raw.match(/^[ \t]*/)[0].replace(/\t/g, '  ').length
+    while (stack.length && stack[stack.length - 1].indent >= indent) stack.pop()
+    const trail = stack.length ? `${stack[stack.length - 1].path}/${name}` : name
+    // The first mention wins; a repeat is almost certainly a leftover.
+    if (rank.has(trail)) warnings.push(`category-order.txt lists a category twice: ${trail}`)
+    else rank.set(trail, position++)
+    stack.push({ indent, path: trail })
+  }
+  return rank
+}
+
+const categoryRank = readCategoryOrder(CATEGORY_ORDER)
+for (const listed of categoryRank.keys()) {
+  if (!byPath.has(listed)) warnings.push(`category-order.txt lists a category no note uses: ${listed}`)
+}
+
+const bySetting = (a, b) => {
+  const ra = categoryRank.get(a.path)
+  const rb = categoryRank.get(b.path)
+  if (ra !== undefined && rb !== undefined) return ra - rb
+  if (ra !== undefined) return -1
+  if (rb !== undefined) return 1
+  return a.name.localeCompare(b.name, 'zh')
+}
+
 const trim = (nodes) => {
-  nodes.sort((a, b) => b.count - a.count || a.name.localeCompare(b.name, 'zh'))
+  nodes.sort(bySetting)
   for (const n of nodes) trim(n.children)
   return nodes
 }
@@ -215,6 +269,10 @@ if (missing.length) {
   console.log(`  ! ${missing.length} image reference(s) point at files not in notes/image/:`)
   for (const m of missing.slice(0, 8)) console.log(`      ${m}`)
   if (missing.length > 8) console.log(`      … and ${missing.length - 8} more`)
+}
+if (hiddenNotes.length) {
+  console.log(`  hidden            ${hiddenNotes.length} note(s) with [^Visible]: 0`)
+  for (const h of hiddenNotes) console.log(`      ${h}`)
 }
 for (const w of warnings) console.log(`  ! ${w}`)
 console.log('')

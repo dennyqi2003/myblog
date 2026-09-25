@@ -1,0 +1,79 @@
+# Category order — how the Categories page (and nothing else) sorts the tree.
+#
+# One category per line, indented two spaces per level under its parent,
+# listed top to bottom in the order you want them shown. Only the order of
+# lines matters; nothing here is displayed. Categories that are not listed
+# come after the listed ones, alphabetically, so a new category shows up even
+# before you add it here. Lines starting with # are comments.
+#
+# Example:
+#   Mathematics
+#     Calculus
+#     Linear Algebra
+#   Physics
+#
+# Rebuild (npm run build) after editing.
+
+Informatics
+  Algorithms
+    Approximation Algorithms
+    Beyond-the-worst-case Analysis
+    Classical Algorithms
+    Cryptography
+    Data Structures
+    Game Theory
+    Modern Algorithms
+    Online Algorithms
+  C++
+  Computation Theory
+    Automaton Theory
+    Complexity Theory
+    Lambda Calculus
+    Turing Machine
+  Computer Systems
+    Computer Architecture
+    Computer Networks
+    Operating Systems
+  HTML
+  Information Theory
+  Machine Learning
+    Deep Learning
+    Large Language Models
+    Machine Learning Foundations
+    Reinforcement Learning
+  Programming Language Theory
+  Quantum Computing
+Languages
+  日本語
+    日语歌词
+  粤语
+    粤语歌词
+  Deutsch
+  English
+Mathematics
+  Abstract Algebra
+  Calculus
+  Category Theory
+  Combinatorics
+  Geometry
+  Linear Algebra
+  Mathematical Logic
+  Measure Theory
+  Optimization
+  Probability Theory
+  Set Theory
+  Topology
+Music
+  和声进行
+  Harmonics
+  Masterpiece
+Philosophy
+Physics
+  Quantum Mechanics
+Readings
+  短篇
+  古诗词
+  古文
+  基督教
+  书摘
+  现代诗

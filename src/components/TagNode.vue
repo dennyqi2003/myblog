@@ -1,7 +1,7 @@
 <script setup>
 // One category in the tree. Every category opens: into its sub-categories,
-// and then the notes filed directly under it, oldest first. The dot on the
-// left is filled while closed and hollow while open.
+// and then the notes filed directly under it ([^Order], then title). The dot
+// on the left is a hollow ring while closed and filled while open.
 import { computed } from 'vue'
 import { formatDate } from '../site.js'
 
@@ -12,7 +12,7 @@ const props = defineProps({
   depth: { type: Number, default: 0 },
   /** Path of the deepest open category; everything above it is open too. */
   openPath: { type: String, default: '' },
-  /** Tag path -> notes whose tags end exactly there, oldest first. */
+  /** Tag path -> notes whose tags end exactly there, in display order. */
   direct: { type: Map, required: true },
 })
 

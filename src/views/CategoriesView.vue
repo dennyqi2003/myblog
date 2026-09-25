@@ -14,7 +14,8 @@ const router = useRouter()
 const isValid = (path) => Boolean(path) && postsByTag.has(path)
 const openPath = ref(isValid(route.query.t) ? String(route.query.t) : '')
 
-/** Notes whose tag list ends at a given path, oldest first. */
+/** Notes whose tag list ends at a given path: by [^Order] ascending, then
+ *  the notes without one, all ties broken by title (A→Z). */
 const direct = (() => {
   const map = new Map()
   for (const post of posts) {
@@ -23,8 +24,9 @@ const direct = (() => {
     if (!map.has(key)) map.set(key, [])
     map.get(key).push(post)
   }
+  const rank = (post) => (post.order ?? Number.POSITIVE_INFINITY)
   for (const list of map.values()) {
-    list.sort((a, b) => (a.date === b.date ? a.titleOrder - b.titleOrder : a.date.localeCompare(b.date)))
+    list.sort((a, b) => rank(a) - rank(b) || a.titleOrder - b.titleOrder)
   }
   return map
 })()
