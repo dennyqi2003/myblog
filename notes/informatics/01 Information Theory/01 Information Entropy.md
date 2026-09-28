@@ -61,7 +61,7 @@ $$
 
 ## 联合熵(Joint Entropy)
 
-两个随机变量的联合分布可以导出“联合熵”。这是很自然的，因为熵是一个仅仅关于分布的函数，只需要一系列离散的概率密度就可以定义。设$X,Y$有联合分布的密度函数$p(x,y)$，那么定义$X,Y$的联合熵为$H(X,Y)=-\sum\limits_{x \in \mathcal{X}}\sum\limits_{y \in \mathcal{Y}}p(x,y)\log p(x,y)$。从期望的角度，$H(X,Y)=-\E[\log p(X,Y)]$。事实上，我们可以把$(X,Y)$看作一个整体（一个随机向量），那么$X,Y$联合分布的概率密度实际就是这单个随机向量的概率分布，它衡量这个随机向量（另一个新的随机变量）的不确定性。从对称性容易看出，$H(X,Y)=H(Y,X)$。
+两个随机变量的联合分布可以导出“联合熵”。这是很自然的，因为熵是一个仅仅关于分布的函数，只需要一系列离散的概率密度就可以定义。设$X,Y$有联合分布的密度函数$p(x,y)$，那么定义$X,Y$的联合熵为$H(X,Y)=-\sum\limits_{x \in \mathcal{X}}\sum\limits_{y \in \mathcal{Y}}p(x,y)\log p(x,y)$。从期望的角度，$H(X,Y)=-\mathbb{E}[\log p(X,Y)]$。事实上，我们可以把$(X,Y)$看作一个整体（一个随机向量），那么$X,Y$联合分布的概率密度实际就是这单个随机向量的概率分布，它衡量这个随机向量（另一个新的随机变量）的不确定性。从对称性容易看出，$H(X,Y)=H(Y,X)$。
 
 容易验证，如果$X=Y$，那么$p(x,y)>0$当且仅当$x=y$，$p(x,x)=p(x)$，代入定义式可得$H(X,X)=-\sum\limits_{x \in \mathcal{X}}\sum\limits_{y \in \mathcal{X}}p(x,y)\log p(x,y)=-\sum\limits_{x \in \mathcal{X}}p(x,x)\log p(x,x)$ $-\sum\limits_{x\in\mathcal{X}}p(x)\log p(x)=H(X)$。所以，两个相同的随机变量的联合熵就等于单个随机变量的熵。从信息量的角度，增加一个相同的随机变量并没有增加信息量。
 
@@ -69,13 +69,13 @@ $$
 
 如果$X,Y$独立，那么$p(x,y)=p(x)p(y)$。那么$H(X,Y)=-\sum\limits_{x \in \mathcal{X}}\sum\limits_{y \in \mathcal{Y}}p(x)p(y)[\log p(x)+\log p(y)]$ $=-\sum\limits_{x \in \mathcal{X}}p(x)\log p(x)\sum\limits_{y \in \mathcal{Y}}p(y)-\sum\limits_{x \in \mathcal{X}}p(x)\sum\limits_{y \in \mathcal{Y}}p(y)\log p(y)$ $=H(X)+H(Y)$。两个独立的随机变量的熵恰好是它们熵的和。$X,Y$中并没有互相重叠的信息。
 
-联合熵可以继续推广到多元：定义$H(X_1,\cdots,X_n)=-\sum p(x_1,\cdots,x_n)\log p(x_1,\cdots,x_n)$ $=-\E[\log p(X_1,\cdots,X_n)]$。
+联合熵可以继续推广到多元：定义$H(X_1,\cdots,X_n)=-\sum p(x_1,\cdots,x_n)\log p(x_1,\cdots,x_n)$ $=-\mathbb{E}[\log p(X_1,\cdots,X_n)]$。
 
 ## 条件熵(Conditional Entropy)
 
-由随机变量的条件分布可以导出条件熵。对于两个离散随机变量$X,Y$，$p(Y\mid X=x)$依然是一个概率分布，由此定义$H(Y\mid X=x)=-\sum\limits_{y\in \mathcal{Y}}p(y\mid X=x)\log p(y\mid X=x)$。从期望的角度，可以写作$-\E[\log p(y\mid X=x)]$。基于$H(Y\mid X=x)$，定义$X,Y$的条件熵$H(Y \mid X)=\sum\limits_{x \in \mathcal{X}}p(x)H(Y\mid X=x)$。它表示已知$X$时$Y$的不确定性，而“已知$X$”是期望意义下的已知。展开$H(Y\mid X=x)$这一项，得到$H(Y\mid X)=-\sum\limits_{x \in \mathcal{X}}\sum\limits_{y \in\mathcal{Y}}p(x)p(y\mid x)\log p(y\mid x)$。而$p(x)p(y\mid x)=p(x,y)$，因此得到条件熵的一般表达式$H(Y\mid X)=-\sum\limits_{x \in \mathcal{X}}\sum\limits_{y \in\mathcal{Y}}p(x,y)\log p(y\mid x)$ $=-\E[\log p(Y\mid X)]$。
+由随机变量的条件分布可以导出条件熵。对于两个离散随机变量$X,Y$，$p(Y\mid X=x)$依然是一个概率分布，由此定义$H(Y\mid X=x)=-\sum\limits_{y\in \mathcal{Y}}p(y\mid X=x)\log p(y\mid X=x)$。从期望的角度，可以写作$-\mathbb{E}[\log p(y\mid X=x)]$。基于$H(Y\mid X=x)$，定义$X,Y$的条件熵$H(Y \mid X)=\sum\limits_{x \in \mathcal{X}}p(x)H(Y\mid X=x)$。它表示已知$X$时$Y$的不确定性，而“已知$X$”是期望意义下的已知。展开$H(Y\mid X=x)$这一项，得到$H(Y\mid X)=-\sum\limits_{x \in \mathcal{X}}\sum\limits_{y \in\mathcal{Y}}p(x)p(y\mid x)\log p(y\mid x)$。而$p(x)p(y\mid x)=p(x,y)$，因此得到条件熵的一般表达式$H(Y\mid X)=-\sum\limits_{x \in \mathcal{X}}\sum\limits_{y \in\mathcal{Y}}p(x,y)\log p(y\mid x)$ $=-\mathbb{E}[\log p(Y\mid X)]$。
 
-注意，$H(X\mid Y)$一般不等于$H(Y \mid X)$。但可以证明：$H(X\mid Y)+H(Y)=H(Y\mid X)+H(X)=H(X,Y)$。这称为熵的计算的链式法则。这可以从概率的链式法则$p(x,y)=p(x\mid y)p(y)$直接导出：从期望的角度，$H(X,Y)=-\E[\log p(X,Y)]=-\E[\log p(X\mid Y)+\log p(Y)]$ $=H(X\mid Y)+H(Y)$。另一个是对称的。推广到$n$元情形：$H(X_1,\cdots,X_n)=\sum\limits_{i=1}^{n}H(X_i\mid X_{i-1},\cdots,X_1)$。
+注意，$H(X\mid Y)$一般不等于$H(Y \mid X)$。但可以证明：$H(X\mid Y)+H(Y)=H(Y\mid X)+H(X)=H(X,Y)$。这称为熵的计算的链式法则。这可以从概率的链式法则$p(x,y)=p(x\mid y)p(y)$直接导出：从期望的角度，$H(X,Y)=-\mathbb{E}[\log p(X,Y)]=-\mathbb{E}[\log p(X\mid Y)+\log p(Y)]$ $=H(X\mid Y)+H(Y)$。另一个是对称的。推广到$n$元情形：$H(X_1,\cdots,X_n)=\sum\limits_{i=1}^{n}H(X_i\mid X_{i-1},\cdots,X_1)$。
 
 同样的，根据条件概率的定义容易验证$p(x,y\mid z)=p(x\mid z)\cdot p(y\mid x,z)$。用同样的方法可以证明$H(X,Y\mid Z)=H(X\mid Z)+H(Y\mid X,Z)$。
 
@@ -113,7 +113,7 @@ $X,Y$的熵、联合熵、互信息始终满足$H(X,Y)=H(X)+H(Y)-I(X;Y)$。这�
 
 把$H(X\mid Y)\leq H(X)$中的$X,Y$看作随机向量推广到多元，可以验证不等式依然成立。那么基于熵的链式法则$H(X_1,\cdots,X_n)=\sum\limits_{i=1}^{n}H(X_i\mid X_1,\cdots,X_{i-1})$，可以得到以下不等式，称为The Independence Bound: $H(X_1,\cdots,X_n)\leq\sum\limits_{i=1}^{n}H(X_i)$。这直观上表明$n$个随机变量联合熵总是不超过各自熵的和。这种系统间的相互影响（重叠的信息）而造成的。如果$n$个变量全都互相独立，那么恰好取到等号。这个不等式可以看作信息不等式的一个推论。信息图中真正本质的不等关系只有信息不等式一个（而它的本质是Jensen不等式）。
 
-> 同样的，基于$D(p||q)=\E_p\left[\log \dfrac{p(x)}{q(x)}\right]$，可以定义条件相对熵(Conditional Relative Entropy) $D(p(y\mid x)||q(y\mid x))=\E_{p(x,y)}\left[\log \dfrac{p(Y\mid X)}{q(Y\mid X)}\right]$ $=\sum\limits_{x}\sum\limits_{y}p(x,y)\log \dfrac{p(y\mid x)}{q(y\mid x)}$。
+> 同样的，基于$D(p||q)=\mathbb{E}_p\left[\log \dfrac{p(x)}{q(x)}\right]$，可以定义条件相对熵(Conditional Relative Entropy) $D(p(y\mid x)||q(y\mid x))=\mathbb{E}_{p(x,y)}\left[\log \dfrac{p(Y\mid X)}{q(Y\mid X)}\right]$ $=\sum\limits_{x}\sum\limits_{y}p(x,y)\log \dfrac{p(y\mid x)}{q(y\mid x)}$。
 >
 > 对于$D(p(x,y)||q(x,y))$，会出现$\log \dfrac{p(x,y)}{q(x,y)}$一项，根据条件概率可以展开为$\log \dfrac{p(x)p(y\mid x)}{q(x)q(y\mid x)}=\log \dfrac{p(x)}{q(x)}+\log \dfrac{p(y\mid x)}{q(y\mid x)}$。因此$D(p(x,y)||q(x,y))=D(p(x)||q(x))+D(p(y\mid x)||q(y\mid x))$。这是相对熵的链式法则。
 

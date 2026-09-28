@@ -25,7 +25,7 @@
 设$X_i\sim \text{Ber}(p_i)$独立同分布，令$X=\sum\limits_{i=1}^{n}X_i$，那么对于$\delta>0$，$\left\{\begin{matrix} 
   \Pr[X\geq (1+\delta)\mu]\leq\left(\dfrac{e^{\delta}}{(1+\delta)^{(1+\delta)}}\right)^\mu\\  
   \Pr[X\leq (1-\delta)\mu]\leq\left(\dfrac{e^{-\delta}}{(1-\delta)^{(1-\delta)}}\right)^\mu 
-\end{matrix}\right.$，其中$\mu=\E[X]=np_i$。
+\end{matrix}\right.$，其中$\mu=\mathbb{E}[X]=np_i$。
 
 > 当$0<\delta<1$时，通过简单的求导分析可以得到$\dfrac{e^{\delta}}{(1+\delta)^{(1+\delta)}}\leq e^{-\frac{\delta^2}{3}}$，$\dfrac{e^{-\delta}}{(1-\delta)^{(1-\delta)}}\leq e^{-\frac{\delta^2}{2}}$。所以我们可以得到弱一点但更常用的Chernoff Bound：对于$0<\delta<1$，$\left\{\begin{matrix} 
 >   \Pr[X\geq (1+\delta)\mu]\leq e^{-\frac{1}{3}\delta^2\mu}\\  
