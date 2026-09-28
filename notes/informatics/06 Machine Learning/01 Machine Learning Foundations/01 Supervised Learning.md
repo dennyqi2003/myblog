@@ -39,11 +39,11 @@ $Proof.$ $\forall x\in \mathscr{X}$，定义$x$在训练集$D$中出现的频率
 
 如何评价一个函数$f:\mathscr{X}\to\mathscr{Y}$是不是好的呢？直观上看，我们希望函数$f$的预测准确率尽量高，也即$f$要尽可能和ground truth贴近（注意是ground truth而不是训练集）。为此，我们首先需要一个比较$\mathscr{Y}$中任意两个元素的“接近程度”的指标，这可以建模为一个$\mathscr{Y}\times \mathscr{Y}\to \mathbb{R}^{\geq 0}$的函数$\ell$，称为损失函数(loss function)。损失函数越大，说明这两个标签越不接近。
 
-有了loss function以后，我们自然可以这样建模来评估ground truth上$f$的表现：考察从ground truth中i.i.d采样的$x\in \mathscr{X}$的正确标签$y$和预测的标签$f(x)$的loss的期望。定义：$$L(f):=\mathbb{E}_{(X,Y)\sim \mathbb{P}}[\ell(f(X),Y)]$$$L(f)$称为$f$的population risk或expected loss。
+有了loss function以后，我们自然可以这样建模来评估ground truth上$f$的表现：考察从ground truth中i.i.d采样的$x\in \mathscr{X}$的正确标签$y$和预测的标签$f(x)$的loss的期望。定义：$$L(f):=\mathbb{E}_{(X,Y)\sim \mathbb{P}}[\ell(f(X),Y)]$$ $L(f)$称为$f$的population risk或expected loss。
 
-函数集$\mathscr{F}$上最小的population risk是$\inf\limits_{g \in \mathscr{F}}L(g)$，定义：$$E(f):=L(f)-\inf\limits_{g \in \mathscr{H}}L(f)$$$E(f)$称为$f$的excess risk。
+函数集$\mathscr{F}$上最小的population risk是$\inf\limits_{g \in \mathscr{F}}L(g)$，定义：$$E(f):=L(f)-\inf\limits_{g \in \mathscr{H}}L(f)$$ $E(f)$称为$f$的excess risk。
 
-然而，在实际训练$f$的过程中，我们只在事先采样好的训练集$D$上评估$f$。训练时我们实际用来评估的是：$$\hat L_n(f):=\dfrac{1}{n}\sum\limits_{i=1}^{n}\ell(f(x_i),y_i),\quad (x_i,y_i)\in D$$$\hat L_n(f)$称为$f$在训练集$D$上的empirical risk或training loss。训练的目的就是找到最小化empirical risk的函数$\hat f^*$，也即$\hat f^*=\arg\inf\limits_{f\in\mathscr{F}}\hat L_n(f)$。
+然而，在实际训练$f$的过程中，我们只在事先采样好的训练集$D$上评估$f$。训练时我们实际用来评估的是：$$\hat L_n(f):=\dfrac{1}{n}\sum\limits_{i=1}^{n}\ell(f(x_i),y_i),\quad (x_i,y_i)\in D$$ $\hat L_n(f)$称为$f$在训练集$D$上的empirical risk或training loss。训练的目的就是找到最小化empirical risk的函数$\hat f^*$，也即$\hat f^*=\arg\inf\limits_{f\in\mathscr{F}}\hat L_n(f)$。
 
 注意，因为训练样本本身也是独立同分布的从ground truth采样的，所以empirical risk的期望就是population risk：$$\mathbb{E}_{(x_i,y_i)\stackrel{\text{i.i.d.}}{\sim}\mathbb{P}}[\hat L_n(f)]=\mathbb{E}_{(x_i,y_i)\stackrel{\text{i.i.d.}}{\sim}\mathbb{P}}\left[\dfrac{1}{n}\sum\limits_{i=1}^{n}\ell(f(x_i),y_i)\right]=\mathbb{E}_{(X,Y)\sim \mathbb{P}}[\ell(f(X),Y)]$$也即，empirical risk的估计与ground truth相比是没有bias的。
 ## Regression
@@ -68,7 +68,7 @@ $Proof.$ $\forall x\in \mathscr{X}$，定义$x$在训练集$D$中出现的频率
 
 在逻辑回归中，我们希望$f$把$x_i$映射到某个实数$p_i\in [0,1]$，令$p_i$表示<u>模型预测的</u>$y_i=1$的概率。当$p_i$接近$1$时，我们把它分类为$1$；当$p_i$接近$0$时，我们把它分类为$0$。当实际做分类时，我们可以选定一个分界线，比如$0.5$。当$f(x_i)>0.5$时，我们就返回1；当$f(x_i)<0.5$就返回0。经验表明，选取$f(X_i)=\dfrac{1}{1+e^{-x_i^\top \beta}}$是好的。其中，$g(z)=\dfrac{1}{1+e^{-z}}$称为sigmoid函数，它形如一个$S$形分布在$[0,1]$值域上。可以看到，要求$f(x_i)$大于某个值本质上就是在要求$X_i^\top \beta$大于某个值，因此实际上我们还是在做一个感知机，因为我们的模型本质上只是在选取一个分离平面。然而有了$f$以后，我们就有了一个简洁的定义代价函数的方法：假如$y_i$的真实值为$y_i^*$，那么由于我们把$p_i$看作了概率，“预测正确的概率”就可以写作$p_i^{y_i^*}(1-p_i)^{1-y_i^*}$，因为当$y_i^*=0$时它就取$1-p_i$，$y_i^*=1$时它就取$p_i$。代入sigmoid函数，$p_i=\dfrac{e^{x_i^\top \beta}}{1+e^{x_i^\top\beta}}$，得到$p_i^{y_i^*}(1-p_i)^{1-y_i^*}=\dfrac{e^{y_i^*x_i^\top \beta}}{1+e^{x_i^\top \beta}}$。可见整体全部预测正确的概率，也即逻辑回归的似然函数$L(\beta)=\prod\limits_{i=1}^{n}\dfrac{e^{y_i^*x_i^\top\beta}}{1+e^{x_i^\top \beta}}$。其对数形式是$\ell(\beta)=\sum\limits_{i=1}^{n}\left[y_i^*x_i^\top \beta-\log(1+e^{x_i^\top \beta})\right]$。相应的，预测错误的概率就可以表示为$1-\ell(\beta)$。
 
-因此我们令代价函数：$J(\beta)=-\ell(\beta)$。这是关于$\beta$是一个凸函数！我们依然可以用梯度下降来求最小值。$\dfrac{\part J}{\part \beta_j}=-\sum\limits_{i=1}^{n}\left[y_i^*-\dfrac{e^{x_i^\top \beta}}{1+e^{x_i^\top \beta}}\right]x_{ij}=-\sum\limits_{i=1}^{n}(y_i^*-p_i)x_{ij}$，因此批量梯度下降的迭代公式就是$\beta'=\beta+\alpha\sum\limits_{i=1}^{n}(y_i^*-p_i)x_i$，相应地随机梯度下降的迭代公式是$\beta'=\beta+\alpha(y_i^*-p_i)x_i$。可见，梯度下降的步长正比于误差$(y_i^*-p_i)$，这一形式与线性回归是完全相同的，依然是一种“从错误中学习(learn from mistakes)”。
+因此我们令代价函数：$J(\beta)=-\ell(\beta)$。这是关于$\beta$是一个凸函数！我们依然可以用梯度下降来求最小值。$\dfrac{\partial J}{\partial \beta_j}=-\sum\limits_{i=1}^{n}\left[y_i^*-\dfrac{e^{x_i^\top \beta}}{1+e^{x_i^\top \beta}}\right]x_{ij}=-\sum\limits_{i=1}^{n}(y_i^*-p_i)x_{ij}$，因此批量梯度下降的迭代公式就是$\beta'=\beta+\alpha\sum\limits_{i=1}^{n}(y_i^*-p_i)x_i$，相应地随机梯度下降的迭代公式是$\beta'=\beta+\alpha(y_i^*-p_i)x_i$。可见，梯度下降的步长正比于误差$(y_i^*-p_i)$，这一形式与线性回归是完全相同的，依然是一种“从错误中学习(learn from mistakes)”。
 
 > 这一相似性不是巧合，如果我们将$f(x_i)=p_i=\dfrac{1}{1+e^{-x_i^\top\beta}}$变形为$x_i^\top\beta=\ln \dfrac{p_i}{1-p_i}$。其中，$\ln\dfrac{p_i}{1-p_i}$称为logit函数，是$[0,1]$到$\R$的单射。逻辑回归本质上是对$x_i$的一种<u>线性拟合</u>，使得实数可以对应某个概率，并使得这个概率尽可能地接近带有监督的样本$y_i$。而由于sigmoid函数中代入的是线性项$x_i^\top \beta$，这只不过是选取了一个分离平面罢了。如果将$x_i^\top\beta$替换为非线性的函数$\phi(x_i)$，那么分离面就可以拓展为曲面，而这就不能称为逻辑回归了，此时的代价函数可能不再是凸的，在求解$\beta$时可能会遇到诸多困难。
 

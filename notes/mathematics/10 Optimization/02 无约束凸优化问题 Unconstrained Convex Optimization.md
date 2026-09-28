@@ -57,7 +57,7 @@
 我们看到近端梯度下降最关键的就是要能合适的选取$h(x)$使得极端梯度算子是可以计算的。对于复杂的$h(x)$，我们是很难求出极端梯度算子的。这里举一个可以应用近端梯度下降的例子，称为LASSO(Least Absolute Shrinkage and Selection
 Operator)，在这里$f(\beta)=\|y-X\beta\|_2^2+\lambda\|\beta\|_1$。我们注意到1-范数是不可微的，因此选取$h(\beta)=\lambda\|\beta\|_1$，在求$\text{prox}_h(\gamma)$我们发现每一维是独立的，对于第$i$个坐标分类，可以分类讨论求得$\text{prox}_h(\gamma)^i$的取值当$\gamma_i>\lambda$时为$\gamma_i-\lambda$，当$\gamma_i<-\lambda$时为$\gamma_i+\lambda$，其余为0。我们用符号$\mathcal{S}_\lambda(\gamma_i)$来表示这个函数，称为软阈值算子(Soft Thresholding Operator)。应用软阈值算子的近端梯度下降算法求出LASSO的最小值的算法称为ISTA(Iterative Soft-Thresholding Algorithm)。
 
-下面要分析近端梯度下降算法的收敛情况。注意到$h$是不可微的，为此我们要引入次梯度(Subgradient)的概念，如果对于每个$x$都存在一个向量$v_x$成立$f(y)\geq f(x)+\lang v_x,y-x \rang$，就称$v_x$是$f$的次梯度，记为$v \in \part f(x)$。对于凸函数，我们看到次梯度就扮演着一阶条件中梯度的角色。最后我们分析得到对于$f(x)=g(x)+h(x)$，如果$g$是$L$-smooth且令$\eta \leq \dfrac{1}{L}$，那么$f(x_T)-f(x^*)\leq\dfrac{\|x_0-x^*\|^2}{2T\eta}$。如果$g$是$\mu$-强凸的，那么有$\|x_{k+1}-x^*\|^2 \leq (1-\mu\eta)\|x_k-x^*\|^2$。（如果无法求出$L$，我们可以用线搜索得到与梯度下降一样的收敛结果）。
+下面要分析近端梯度下降算法的收敛情况。注意到$h$是不可微的，为此我们要引入次梯度(Subgradient)的概念，如果对于每个$x$都存在一个向量$v_x$成立$f(y)\geq f(x)+\lang v_x,y-x \rang$，就称$v_x$是$f$的次梯度，记为$v \in \partial f(x)$。对于凸函数，我们看到次梯度就扮演着一阶条件中梯度的角色。最后我们分析得到对于$f(x)=g(x)+h(x)$，如果$g$是$L$-smooth且令$\eta \leq \dfrac{1}{L}$，那么$f(x_T)-f(x^*)\leq\dfrac{\|x_0-x^*\|^2}{2T\eta}$。如果$g$是$\mu$-强凸的，那么有$\|x_{k+1}-x^*\|^2 \leq (1-\mu\eta)\|x_k-x^*\|^2$。（如果无法求出$L$，我们可以用线搜索得到与梯度下降一样的收敛结果）。
 
 
 
