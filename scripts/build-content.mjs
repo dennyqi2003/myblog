@@ -2,6 +2,7 @@
 // Vue app consumes. Runs before `vite build`, so rolling out new notes is just
 // `git pull && npm run build`.
 
+import { execFileSync } from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -45,6 +46,45 @@ function findNotes(dir, prefix = '') {
   return found
 }
 
+// ---------------------------------------------------------------------------
+// Last-modified fallback
+// ---------------------------------------------------------------------------
+
+/**
+ * notes-relative path -> date of the last commit that touched it (YYYY-MM-DD),
+ * from one `git log` over notes/. Used when a note has no [^Modified]. Git is
+ * the source because file mtimes do not survive a clone or pull: on the
+ * server every file would look modified at the moment it was pulled.
+ */
+function lastCommitDates() {
+  const dates = new Map()
+  try {
+    const out = execFileSync(
+      'git',
+      ['-c', 'core.quotepath=off', 'log', '--format=@%cs', '--name-only', '--', 'notes'],
+      { cwd: root, encoding: 'utf8', maxBuffer: 1 << 28, stdio: ['ignore', 'pipe', 'ignore'] },
+    )
+    let date = ''
+    for (const line of out.split('\n')) {
+      if (line.startsWith('@')) date = line.slice(1)
+      // Newest commits come first, so the first sighting of a file wins.
+      else if (line.startsWith('notes/') && !dates.has(line)) dates.set(line.slice('notes/'.length), date)
+    }
+  } catch {
+    /* not a git checkout — every note falls back to its file time */
+  }
+  return dates
+}
+
+/** A file's own modification time as a local YYYY-MM-DD. */
+function fileDate(file) {
+  const t = fs.statSync(file).mtime
+  const pad = (n) => String(n).padStart(2, '0')
+  return `${t.getFullYear()}-${pad(t.getMonth() + 1)}-${pad(t.getDate())}`
+}
+
+const committedOn = lastCommitDates()
+
 const warnings = []
 const notePaths = findNotes(NOTES).sort()
 const taken = new Set()
@@ -80,7 +120,9 @@ for (const relPath of notePaths) {
     file: relPath,
     title: meta.title,
     date: meta.date,
-    modified: meta.modified,
+    // [^Modified] if given; otherwise the note's last commit, or — for a
+    // note not yet committed — the file's own modification time.
+    modified: meta.modified || committedOn.get(relPath) || fileDate(path.join(NOTES, relPath)),
     tags,
     hiddenTagCount: meta.tags.length - tags.length,
     summary: meta.summary,
@@ -114,7 +156,7 @@ for (const post of posts) {
     hash: post.hash,
     title: post.title,
     date: post.date,
-    // [^Modified]: last-modified date, '' when not given.
+    // Last-modified date: [^Modified], else last commit, else file time.
     modified: post.modified,
     tags: post.tags,
     // The list excerpt: the author's [^Summary], rendered like the body

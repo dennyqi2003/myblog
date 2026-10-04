@@ -63,7 +63,11 @@ every `[^Key]: value` line at the top, in any order):
 
 - **`[^Modified]`** — when the note was last changed, same formats as
   `[^Date]`. Shown as "· Modified …" after the posted date on the post list and
-  the post page (left out when it is the same day as `[^Date]`).
+  the post page (left out when it is the same day as `[^Date]`). Without it,
+  the date of the note's last git commit is used — not the file's mtime, which
+  a clone or `git pull` resets on the server. A note not committed yet falls
+  back to its file time. (A shallow clone on the server would give every note
+  the same date; use a full clone.)
 - **`[^Summary]`** — the excerpt on the post list, rendered like the body
   (markdown and maths) and shown in full however long it is. Without it (or
   when it is empty) the list shows the opening text of the note, cut off after
