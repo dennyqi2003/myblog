@@ -3,7 +3,7 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { outlineOf } from '../toc.js'
 import { byHash, neighbours, postsByTag } from '../data.js'
-import { formatDate, readingTime } from '../site.js'
+import { formatDate, postMeta } from '../site.js'
 import MarkdownBody from '../components/MarkdownBody.vue'
 
 const route = useRoute()
@@ -11,11 +11,7 @@ const route = useRoute()
 const post = computed(() => byHash.get(route.params.hash))
 // The body with anchors on its headings — the sidebar outline links to them.
 const body = computed(() => (post.value ? outlineOf(post.value.hash).html : ''))
-const meta = computed(() =>
-  post.value
-    ? `${post.value.author} · ${formatDate(post.value.date)} · ${readingTime(post.value.ert)}`
-    : '',
-)
+const meta = computed(() => (post.value ? postMeta(post.value) : ''))
 const links = computed(() => (post.value ? neighbours(post.value.hash) : { newer: null, older: null }))
 
 const tagsWithCount = computed(() => {

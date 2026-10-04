@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 import { posts, years } from '../data.js'
-import { formatMonthDay, readingTime } from '../site.js'
+import { formatMonthDay } from '../site.js'
 
 const grouped = computed(() =>
   years.map(([year, list]) => ({
@@ -29,7 +29,6 @@ const grouped = computed(() =>
           <router-link class="archive-link sweep" :to="`/post/${post.hash}/`">
             <span class="archive-date">{{ formatMonthDay(post.date) }}</span>
             <span class="archive-title">{{ post.title }}</span>
-            <span class="archive-ert">{{ readingTime(post.ert) }}</span>
           </router-link>
         </li>
       </ul>

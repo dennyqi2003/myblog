@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue'
-import { formatDate, readingTime } from '../site.js'
+import { postMeta } from '../site.js'
 
 const props = defineProps({
   post: { type: Object, required: true },
@@ -12,9 +12,7 @@ const props = defineProps({
   highlight: { type: Array, default: () => [] },
 })
 
-const meta = computed(
-  () => `${props.post.author} · ${formatDate(props.post.date)} · ${readingTime(props.post.ert)}`,
-)
+const meta = computed(() => postMeta(props.post))
 
 const excerpt = computed(() => props.snippet || props.post.excerpt)
 /** The author's [^Summary], already rendered (markdown + maths) at build

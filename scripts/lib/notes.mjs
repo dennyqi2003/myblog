@@ -31,19 +31,21 @@ export const HIDDEN_TAGS = new Set(['tmp', 'old', 'old1', 'old2', 'Category', 'o
 
 /**
  * Every note opens with a header of `[^Key]: value` lines, then a blank line,
- * then the body. Five keys are required:
+ * then the body. Three keys are required:
  *
  *   [^Date]: 2025.12.16
- *   [^ERT ]: 11min
- *   [^Author]: DennyQi
  *   [^Title]: 01 Representing and Manipulating Information
  *   [^Tag]: Informatics, Computer Systems, Computer Architecture
  *
- * and three are optional, usually placed after them:
+ * and the rest are optional, usually placed after them:
  *
+ *   [^Modified]: 2026.10.04  (last modified; shown next to the date)
  *   [^Summary]: One line of markdown, $\LaTeX$ allowed — the list excerpt.
  *   [^Visible]: 0        (0 hides the note everywhere; default 1)
  *   [^Order]: 3          (sort key among notes of the same category)
+ *
+ * Older notes may still carry [^Author] and [^ERT ]; they are accepted and
+ * ignored, so those notes keep parsing.
  *
  * The file name and the folders above it carry no meaning.
  *
@@ -54,8 +56,8 @@ export const HIDDEN_TAGS = new Set(['tmp', 'old', 'old1', 'old2', 'Category', 'o
  * the *Date* definition above it. Nothing downstream can then tell the two
  * apart, so the tree is the wrong place to read from.
  */
-export const META_KEYS = ['Date', 'ERT', 'Author', 'Title', 'Tag']
-export const OPTIONAL_KEYS = ['Summary', 'Visible', 'Order']
+export const META_KEYS = ['Date', 'Title', 'Tag']
+export const OPTIONAL_KEYS = ['Modified', 'Summary', 'Visible', 'Order', 'Author', 'ERT']
 
 // `[^ERT ]` and `[^ERT]` both name the key ERT; keys are case-insensitive.
 const KNOWN_KEYS = new Map([...META_KEYS, ...OPTIONAL_KEYS].map((k) => [k.toLowerCase(), k]))
@@ -89,9 +91,15 @@ export function splitNote(source) {
   return { meta, body: rest.join('\n') }
 }
 
+/** `2025.12.16`, `2025-12-16` or `2025/12/16` -> `2025-12-16`; null if none. */
+function isoDate(text) {
+  const m = text.match(/(\d{4})[.\-/](\d{1,2})[.\-/](\d{1,2})/)
+  return m ? `${m[1]}-${m[2].padStart(2, '0')}-${m[3].padStart(2, '0')}` : null
+}
+
 /**
  * @param {string} source
- * @returns {{tags: string[], date: string, ert: number, author: string, title: string,
+ * @returns {{tags: string[], date: string, modified: string, modifiedInvalid: boolean, title: string,
  *            summary: string, visible: boolean, order: number|null, orderInvalid: boolean,
  *            body: string}|null}
  */
@@ -100,11 +108,13 @@ export function parseNote(source) {
   if (!split) return null
   const { meta, body } = split
 
-  const dateMatch = meta.Date.match(/(\d{4})[.\-/](\d{1,2})[.\-/](\d{1,2})/)
-  if (!dateMatch) return null
+  const date = isoDate(meta.Date)
+  if (!date) return null
   if (!meta.Title) return null
 
-  const ertMatch = meta.ERT.match(/(\d+(?:\.\d+)?)/)
+  // [^Modified]: same formats as [^Date]; unparseable values are reported.
+  const modifiedText = meta.Modified ?? ''
+  const modified = modifiedText ? isoDate(modifiedText) : ''
 
   // Visible: only an explicit 0 (or false / no) hides a note.
   const visible = !/^(0|false|no)$/i.test(meta.Visible ?? '')
@@ -114,9 +124,9 @@ export function parseNote(source) {
   const order = /^[+-]?\d+$/.test(orderText) ? Number(orderText) : null
 
   return {
-    date: `${dateMatch[1]}-${dateMatch[2].padStart(2, '0')}-${dateMatch[3].padStart(2, '0')}`,
-    ert: ertMatch ? Math.round(Number(ertMatch[1])) : 0,
-    author: meta.Author,
+    date,
+    modified: modified ?? '',
+    modifiedInvalid: modifiedText !== '' && !modified,
     title: meta.Title,
     // Order is the author's and is what the tag tree is built from.
     tags: meta.Tag.split(',')

@@ -21,13 +21,12 @@ from the index, so search for prose rather than for symbols.
 
 ### How are notes organised?
 
-Each note opens with five metadata lines, then a blank line, then the writing
+Each note opens with a few metadata lines, then a blank line, then the writing
 itself:
 
 ```
 [^Date]: 2025.12.16
-[^ERT ]: 11min
-[^Author]: DennyQi
+[^Modified]: 2026.10.04
 [^Title]: 01 Representing and Manipulating Information
 [^Tag]: Informatics, Computer Systems, Computer Architecture
 ```

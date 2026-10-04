@@ -37,6 +37,11 @@ export function formatMonthDay(iso) {
   return `${MONTHS[m - 1].slice(0, 3)} ${d}`
 }
 
-export function readingTime(minutes) {
-  return `${minutes} min read`
+/** The meta line under a title: when it was posted and, if [^Modified] is
+ *  set to a different day, when it was last changed. */
+export function postMeta(post) {
+  const posted = `Posted ${formatDate(post.date)}`
+  return post.modified && post.modified !== post.date
+    ? `${posted} · Modified ${formatDate(post.modified)}`
+    : posted
 }

@@ -33,35 +33,35 @@ npm run preview   # serve the built dist/ on http://127.0.0.1:4173
 ## Adding a note
 
 Drop a `.md` file anywhere under `notes/` — at the top level or in a
-subdirectory, it makes no difference. The file opens with five metadata lines,
+subdirectory, it makes no difference. The file opens with three metadata lines,
 then one blank line, then the body:
 
 ```
 [^Date]: 2025.12.16
-[^ERT ]: 11min
-[^Author]: DennyQi
 [^Title]: 01 Representing and Manipulating Information
 [^Tag]: Informatics, Computer Systems, Computer Architecture
 ```
 
-- **`[^Date]`** — `YYYY.MM.DD` (also accepts `-` or `/` as the separator).
-- **`[^ERT ]`** — estimated reading time, any number; `10min`, `10`, `~10 min`
-  all work. The space before `]` is part of the template; `[^ERT]` is accepted too.
-- **`[^Author]`** — shown on the post card and on the post page.
+- **`[^Date]`** — `YYYY.MM.DD` (also accepts `-` or `/` as the separator);
+  shown as "Posted …".
 - **`[^Title]`** — the title, shown everywhere and used for sorting.
 - **`[^Tag]`** — comma-separated, **order matters**: `A, B, C` files the note
   under `A/B/C` in the tag tree. `tmp`, `old`, `old1`, `old2`, `Category` and
   `other` are treated as workflow markers and hidden from the tree.
 
-Three more lines are optional, usually placed after those five (the header is
+More lines are optional, usually placed after those three (the header is
 every `[^Key]: value` line at the top, in any order):
 
 ```
+[^Modified]: 2026.10.04
 [^Summary]: The note in one line — **markdown** and $\LaTeX$ work here.
 [^Visible]: 0
 [^Order]: 3
 ```
 
+- **`[^Modified]`** — when the note was last changed, same formats as
+  `[^Date]`. Shown as "· Modified …" after the posted date on the post list and
+  the post page (left out when it is the same day as `[^Date]`).
 - **`[^Summary]`** — the excerpt on the post list, rendered like the body
   (markdown and maths) and shown in full however long it is. Without it (or
   when it is empty) the list shows the opening text of the note, cut off after
@@ -72,6 +72,9 @@ every `[^Key]: value` line at the top, in any order):
 - **`[^Order]`** — an integer. Within one category, notes with an `[^Order]`
   come first, smallest first; notes without one follow, by title. Ties are
   broken by title too.
+
+Older notes may still have `[^Author]` and `[^ERT ]` lines; they are accepted
+and ignored.
 
 ### Category order
 

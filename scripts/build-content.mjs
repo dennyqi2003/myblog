@@ -69,6 +69,7 @@ for (const relPath of notePaths) {
     continue
   }
   if (meta.orderInvalid) warnings.push(`[^Order] is not an integer, ignored: ${relPath}`)
+  if (meta.modifiedInvalid) warnings.push(`[^Modified] is not a date, ignored: ${relPath}`)
 
   // Tags used as workflow markers are dropped from the tag list but do not
   // hide the note: drafts under tmp/ and old/ stay published, as before.
@@ -79,8 +80,7 @@ for (const relPath of notePaths) {
     file: relPath,
     title: meta.title,
     date: meta.date,
-    ert: meta.ert,
-    author: meta.author,
+    modified: meta.modified,
     tags,
     hiddenTagCount: meta.tags.length - tags.length,
     summary: meta.summary,
@@ -114,8 +114,8 @@ for (const post of posts) {
     hash: post.hash,
     title: post.title,
     date: post.date,
-    ert: post.ert,
-    author: post.author,
+    // [^Modified]: last-modified date, '' when not given.
+    modified: post.modified,
     tags: post.tags,
     // The list excerpt: the author's [^Summary], rendered like the body
     // (markdown + maths) and shown in full; otherwise the opening text of the
