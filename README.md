@@ -1,5 +1,7 @@
 # DennyQi's Blog
 
+English · [中文](README-CN.md)
+
 A static blog built from the `notes/` folder. Vue 3 + Vite, pre-rendered to plain
 HTML at build time — no server, no runtime framework, no database. Publishing a
 note means adding a markdown file and running one command.
@@ -185,9 +187,10 @@ mode. Both choices are remembered in `localStorage`.
 
 ## Notes on the build
 
-- Route output is deterministic: a post's URL is a 6-character hash of its file
-  name, so renaming a note is the only thing that changes its link.
-- The build fails loudly on an unreadable note, but a note with a malformed file
-  name is reported and skipped.
+- Route output is deterministic: a post's URL is a 6-character hash of its path
+  relative to `notes/`, so renaming or moving a note is the only thing that
+  changes its link.
+- The build fails loudly on an unreadable note, but a note with a missing or
+  malformed header is reported and skipped.
 - `dist/` is roughly the size of the corpus, because the notes are image-heavy
   and every referenced image is copied. It is not committed.
