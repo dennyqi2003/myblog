@@ -1010,6 +1010,11 @@ html:not([data-bg='on']) .corner-button[aria-label='Toggle background image'] .f
   margin: 12px 0 0;
 }
 
+/* Formulas in an excerpt match the size they have in the article body. */
+.post-item-excerpt .katex {
+  font-size: 1.05em;
+}
+
 /* A [^Summary] is the author's own words: shown whole, never clamped. */
 .post-item-summary > :first-child {
   margin-top: 0;

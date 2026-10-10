@@ -35,7 +35,11 @@ function marked(text) {
 }
 
 const titleHtml = computed(() => marked(props.post.title))
-const excerptHtml = computed(() => marked(excerpt.value))
+// A search snippet is plain text with marked terms; otherwise the opening
+// text arrives as HTML with its formulas already typeset at build time.
+const excerptHtml = computed(() =>
+  props.snippet || !props.post.excerptHtml ? marked(excerpt.value) : props.post.excerptHtml,
+)
 
 // Past a handful of rows the delay would start to be felt rather than seen.
 const stagger = computed(() => Math.min(props.index, 8))

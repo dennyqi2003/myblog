@@ -21,6 +21,7 @@ import rehypeKatex from 'rehype-katex'
 import rehypeHighlight from 'rehype-highlight'
 import rehypeStringify from 'rehype-stringify'
 import { visit } from 'unist-util-visit'
+import katex from 'katex'
 
 /** Tags used as workflow markers rather than topics — hidden from the tag tree. */
 export const HIDDEN_TAGS = new Set(['tmp', 'old', 'old1', 'old2', 'Category', 'other'])
@@ -399,4 +400,63 @@ export function toPlainText(source, { limit = Infinity } = {}) {
 export function openingText(source, limit = 300) {
   const text = toPlainText(source, { limit })
   return text.length > limit ? text.slice(0, limit) : text
+}
+
+const escapeHtml = (text) =>
+  text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+
+/**
+ * The same opening as openingText, but as HTML with the maths kept: each
+ * formula is typeset with KaTeX — the engine and options the body uses — in
+ * inline style, so display maths does not break the two-line excerpt. Text
+ * and code come through escaped; images are dropped. `limit` counts visible
+ * characters, a formula by the length of its source.
+ */
+export function openingHtml(source, limit = 300) {
+  const tree = parser.parse(escapeBrackets(source.replace(/\r\n?/g, '\n')))
+  const parts = []
+  let length = 0
+
+  const push = (html, size) => {
+    parts.push(html)
+    length += size
+  }
+  const walk = (node) => {
+    if (length > limit) return
+    switch (node.type) {
+      case 'text':
+      case 'inlineCode':
+      case 'code':
+        return push(escapeHtml(node.value), node.value.length)
+      case 'html': {
+        const text = stripTags(node.value)
+        return push(escapeHtml(text), text.length)
+      }
+      case 'inlineMath':
+      case 'math':
+        return push(
+          katex.renderToString(node.value, {
+            displayMode: false,
+            strict: 'ignore',
+            throwOnError: false,
+          }),
+          node.value.length,
+        )
+      case 'image':
+        return
+      case 'break':
+        return push(' ', 1)
+      case 'tableCell':
+      case 'paragraph':
+      case 'heading':
+      case 'listItem':
+        for (const child of node.children ?? []) walk(child)
+        return push(' ', 1)
+      default:
+        for (const child of node.children ?? []) walk(child)
+    }
+  }
+  walk(tree)
+
+  return parts.join('').replace(/\s+/g, ' ').trim()
 }

@@ -8,6 +8,7 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import {
   HIDDEN_TAGS,
+  openingHtml,
   openingText,
   parseNote,
   renderMarkdown,
@@ -163,7 +164,10 @@ for (const post of posts) {
     // (markdown + maths) and shown in full; otherwise the opening text of the
     // note, which the list clamps to two lines.
     summaryHtml: post.summary ? renderMarkdown(post.summary) : '',
+    // Plain text (search fallback, <meta description>) and the same opening
+    // as HTML with its maths typeset (what the list shows).
     excerpt: openingText(post.body),
+    excerptHtml: openingHtml(post.body),
     // [^Order]: sort key within a category; null when not given.
     order: post.order,
     file: post.file,
