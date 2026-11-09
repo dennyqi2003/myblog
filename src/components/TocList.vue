@@ -29,7 +29,7 @@ const emit = defineEmits(['jump'])
       ]"
     >
       <a class="nav-link" :href="`#${item.id}`" @click.prevent="emit('jump', item.id)">
-        <span class="nav-number">{{ item.number }}</span> <span class="nav-text" v-html="item.html" />
+        <span class="nav-text" v-html="item.html" />
       </a>
       <TocList
         v-if="item.children.length"

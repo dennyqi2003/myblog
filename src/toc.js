@@ -52,7 +52,7 @@ function outlineHtml(inner) {
  * @param {string} html rendered post body
  * @returns {{ html: string, items: Array, flat: Array }}
  *   `html` — the body with an id on every h2–h6;
- *   `items` — nested outline, each node `{ id, level, number, html, children }`;
+ *   `items` — nested outline, each node `{ id, level, html, children }`;
  *   `flat` — the same nodes in document order (what the scroll spy indexes).
  */
 export function buildOutline(html) {
@@ -78,8 +78,7 @@ export function buildOutline(html) {
   })
 
   // Nest by relative level, so a note that skips from h2 to h4 still gets a
-  // child rather than a hole, and a note whose top heading is h3 still starts
-  // at 1.
+  // child rather than a hole.
   const items = []
   const stack = []
   for (const node of flat) {
@@ -89,14 +88,6 @@ export function buildOutline(html) {
     node.parent = stack[stack.length - 1] ?? null
     stack.push(node)
   }
-
-  // Hexo's list_number format: 1. / 1.1. / 1.1.1.
-  const number = (nodes, prefix) =>
-    nodes.forEach((node, i) => {
-      node.number = `${prefix}${i + 1}.`
-      number(node.children, node.number)
-    })
-  number(items, '')
 
   return { html: out, items, flat }
 }
