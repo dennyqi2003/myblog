@@ -223,7 +223,7 @@ body {
   background: var(--body-bg);
   color: var(--text-body);
   font-family: var(--font-sans);
-  font-size: 15px;
+  font-size: 14px;
   line-height: 1.8;
 }
 
@@ -415,7 +415,7 @@ a.site-brand-container:hover {
 }
 
 .site-title {
-  font-size: 22px;
+  font-size: 21px;
   font-weight: 700;
   line-height: 1.5;
   margin: 0;
@@ -423,7 +423,7 @@ a.site-brand-container:hover {
 
 .site-subtitle {
   color: #ddd;
-  font-size: 13px;
+  font-size: 12px;
   margin: 10px 10px 0;
 }
 
@@ -444,7 +444,7 @@ a.site-brand-container:hover {
   border-bottom: 0;
   color: var(--text-body);
   display: flex;
-  font-size: 13px;
+  font-size: 12px;
   padding: 5px 20px;
   position: relative;
   transition: background-color var(--t-next);
@@ -475,7 +475,7 @@ a.site-brand-container:hover {
   color: var(--text-body);
   display: flex;
   flex-direction: column;
-  font-size: 16px;
+  font-size: 15px;
   justify-content: center;
   line-height: 2;
   box-shadow: var(--shadow);
@@ -676,7 +676,7 @@ a.site-brand-container:hover {
   border-bottom: 1px solid var(--rule);
   color: var(--text);
   display: block;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   line-height: 1.5;
   margin: 0 2px 8px 10px;
@@ -748,20 +748,20 @@ a.site-brand-container:hover {
 
 .site-state-item-count {
   display: block;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
 }
 
 .site-state-item-name {
   color: var(--text-muted);
-  font-size: 13px;
+  font-size: 12px;
 }
 
 /* Back to top, docked at the foot of the sidebar card with the reading
    percentage (NexT back2top.sidebar + scrollpercent). */
 .back-to-top {
   background: var(--inset-bg);
-  font-size: 12px;
+  font-size: 11px;
   margin: -4px -10px -18px;
   opacity: 0;
   transition: bottom var(--t-next), margin-top var(--t-next);
@@ -814,7 +814,7 @@ a.site-brand-container:hover {
 
 .site-footer {
   color: var(--text-muted);
-  font-size: 14px;
+  font-size: 13px;
   margin: 0 0 0 var(--layout-left);
   max-width: calc(100% - 20px);
   padding: 20px 0 20px calc(var(--sidebar-width) + var(--sidebar-offset));
@@ -900,7 +900,7 @@ html:not([data-bg='on']) .corner-button[aria-label='Toggle background image'] .f
 
 .view-title {
   color: var(--text);
-  font-size: 26px;
+  font-size: 24px;
   font-weight: 700;
   line-height: 1.35;
   margin: 0;
@@ -908,13 +908,13 @@ html:not([data-bg='on']) .corner-button[aria-label='Toggle background image'] .f
 
 .view-subtitle {
   color: var(--text-muted);
-  font-size: 13px;
+  font-size: 12px;
   margin: 6px 0 0;
 }
 
 .view-footnote {
   color: var(--text-faint);
-  font-size: 12px;
+  font-size: 11px;
   margin-top: 32px;
   text-align: center;
 }
@@ -924,7 +924,7 @@ html:not([data-bg='on']) .corner-button[aria-label='Toggle background image'] .f
   border: 1px solid var(--rule);
   border-radius: var(--radius);
   color: var(--text-muted);
-  font-size: 13px;
+  font-size: 12px;
   padding: 18px 20px;
 }
 
@@ -963,7 +963,7 @@ html:not([data-bg='on']) .corner-button[aria-label='Toggle background image'] .f
 }
 
 .post-item-title {
-  font-size: 24px;
+  font-size: 23px;
   font-weight: 700;
   line-height: 1.45;
   margin: 0;
@@ -999,13 +999,13 @@ html:not([data-bg='on']) .corner-button[aria-label='Toggle background image'] .f
 
 .post-meta {
   color: var(--text-muted);
-  font-size: 12px;
+  font-size: 11px;
   margin-top: 6px;
 }
 
 .post-item-excerpt {
   color: var(--text-soft);
-  font-size: 16px;
+  font-size: 15px;
   line-height: 1.6;
   margin: 12px 0 0;
 }
@@ -1048,7 +1048,7 @@ html:not([data-bg='on']) .corner-button[aria-label='Toggle background image'] .f
   border-radius: 2px;
   color: var(--btn-color);
   display: inline-block;
-  font-size: 14px;
+  font-size: 13px;
   line-height: 2;
   padding: 0 20px;
   transition: background-color var(--t-next);
@@ -1081,7 +1081,7 @@ html:not([data-bg='on']) .corner-button[aria-label='Toggle background image'] .f
   align-items: center;
   border-radius: 6px;
   display: inline-flex;
-  font-size: 14px;
+  font-size: 13px;
   font-variant-numeric: tabular-nums;
   height: 32px;
   justify-content: center;
@@ -1124,7 +1124,7 @@ a.page-number:hover {
 
 .archive-year-label {
   color: var(--text);
-  font-size: 20px;
+  font-size: 19px;
   font-weight: 700;
   margin: 0 0 8px;
 }
@@ -1150,14 +1150,14 @@ a.page-number:hover {
 .archive-date {
   color: var(--text-muted);
   flex: 0 0 62px;
-  font-size: 12px;
+  font-size: 11px;
   font-variant-numeric: tabular-nums;
 }
 
 .archive-title {
   color: var(--text-body);
   flex: 1 1 auto;
-  font-size: 15px;
+  font-size: 14px;
   min-width: 0;
   transition: color var(--t-next);
 }
@@ -1179,7 +1179,7 @@ a.page-number:hover {
   color: var(--text-muted);
   display: flex;
   flex-wrap: wrap;
-  font-size: 13px;
+  font-size: 12px;
   gap: 4px 8px;
   margin-top: 8px;
 }
@@ -1271,7 +1271,7 @@ a.page-number:hover {
 }
 
 .tag-label {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
 }
 
@@ -1283,7 +1283,7 @@ a.page-number:hover {
   background: var(--fill-hover);
   border-radius: 999px;
   color: var(--text-muted);
-  font-size: 12px;
+  font-size: 11px;
   font-variant-numeric: tabular-nums;
   line-height: 1;
   margin-left: auto;
@@ -1317,7 +1317,7 @@ a.page-number:hover {
 .tag-post-title {
   color: var(--text-body);
   display: block;
-  font-size: 15px;
+  font-size: 14px;
   line-height: 1.5;
   transition: color var(--t-next);
 }
@@ -1329,7 +1329,7 @@ a.page-number:hover {
 .tag-post-date {
   color: var(--text-muted);
   display: block;
-  font-size: 12px;
+  font-size: 11px;
   line-height: 1.6;
 }
 
@@ -1353,7 +1353,7 @@ a.page-number:hover {
   border-radius: var(--radius);
   color: var(--text);
   font-family: inherit;
-  font-size: 15px;
+  font-size: 14px;
   padding: 10px 14px;
   width: 100%;
 }
@@ -1373,7 +1373,7 @@ a.page-number:hover {
 
 .search-status {
   color: var(--text-muted);
-  font-size: 12px;
+  font-size: 11px;
   margin: 0 0 12px;
 }
 
@@ -1407,7 +1407,7 @@ a.page-number:hover {
 
 .post-title {
   color: var(--text);
-  font-size: 30px;
+  font-size: 28px;
   font-weight: 700;
   line-height: 1.4;
   margin: 0;
@@ -1427,7 +1427,7 @@ a.page-number:hover {
 
 .post-tags-label {
   color: var(--text-muted);
-  font-size: 13px;
+  font-size: 12px;
   margin-right: 2px;
 }
 
@@ -1438,7 +1438,7 @@ a.page-number:hover {
   border-radius: 999px;
   color: var(--text-body);
   display: inline-flex;
-  font-size: 13px;
+  font-size: 12px;
   gap: 6px;
   line-height: 1;
   padding: 7px 14px;
@@ -1497,7 +1497,7 @@ a.page-number:hover {
 .post-nav-title {
   color: var(--text-body);
   display: block;
-  font-size: 15px;
+  font-size: 14px;
   transition: color var(--t-next);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1515,7 +1515,7 @@ a.page-number:hover {
 .post-nav-date {
   color: var(--text-muted);
   display: block;
-  font-size: 12px;
+  font-size: 11px;
   line-height: 1.6;
 }
 
@@ -1576,7 +1576,7 @@ a.page-number:hover {
 
   .topbar-title {
     color: var(--text);
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 700;
   }
 

@@ -6,7 +6,7 @@
 
 .markdown-body {
   color: var(--text-body);
-  font-size: 16px;
+  font-size: 15px;
   line-height: 1.75;
   overflow-wrap: break-word;
   /* KaTeX's visually hidden MathML copy of a long inline formula can reach
@@ -41,24 +41,24 @@
 }
 
 .markdown-body h1 {
-  font-size: 26px;
-}
-
-.markdown-body h2 {
   font-size: 24px;
 }
 
+.markdown-body h2 {
+  font-size: 23px;
+}
+
 .markdown-body h3 {
-  font-size: 21px;
+  font-size: 20px;
 }
 
 .markdown-body h4 {
-  font-size: 19px;
+  font-size: 18px;
 }
 
 .markdown-body h5,
 .markdown-body h6 {
-  font-size: 17px;
+  font-size: 16px;
 }
 
 .markdown-body a {
@@ -161,7 +161,7 @@
   background: none;
   color: inherit;
   display: block;
-  font-size: 15px;
+  font-size: 14px;
   line-height: 1.7;
   overflow-x: auto;
   padding: 1em 1.1em;
@@ -230,7 +230,7 @@
   background: var(--fill);
   border: 1px solid var(--rule);
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: 11px;
   padding: 12px;
   text-align: left;
   white-space: pre-wrap;
@@ -263,7 +263,7 @@
 .markdown-body th,
 .markdown-body td {
   border: 1px solid var(--border-strong);
-  font-size: 16px;
+  font-size: 15px;
   padding: 7px 12px;
   text-align: left;
 }
